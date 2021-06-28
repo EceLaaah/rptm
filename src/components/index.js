@@ -1,3 +1,6 @@
 export { default as Login } from './Login/Login'
 export { default as Register } from './Register/Register'
+export { default as Textfield } from './Textfield/Textfield'
 export { default as Sheet } from './Sheet/Sheet'
+export { default as PrivateRoute } from './Layout/PrivateRoute'
+export { default as Dashboard } from './Dashboard/Dashboard'
