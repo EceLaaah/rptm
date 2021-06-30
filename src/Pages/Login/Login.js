@@ -3,24 +3,24 @@ import {app} from '../../config/firebase'
 import { Link, withRouter, Redirect } from 'react-router-dom';
 import { AuthContext } from '../../Context/auth'
 import swal from 'sweetalert';
-import { Sheet } from '../'
+import { Sheet } from '../../components'
 
 const Login = () => {
-    const [toggle, setToggle] = useState(false);
+    // const [toggle, setToggle] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState({status : false, errorMessage : ""})
 
     const context = useContext(AuthContext);
 
-    const isToggle = (event) => {
-        event.preventDefault();
-        if (!toggle) {
-            setToggle(true);
-        } else {
-            setToggle(false);
-        }
-    }
+    // const isToggle = (event) => {
+    //     event.preventDefault();
+    //     if (!toggle) {
+    //         setToggle(true);
+    //     } else {
+    //         setToggle(false);
+    //     }
+    // }
 
     const onSubmit = (event) => {
         event.preventDefault();
@@ -67,7 +67,7 @@ const Login = () => {
                         <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="password">Password</label>
                         <input required onChange={(event) => setPassword(event.target.value)} id="password" type="password" name="password" value={password} className="text-sm bg-gray-100 appearance-none rounded w-full py-2 px-3 text-gray-700 mb-1 leading-tight focus:outline-none focus:shadow-outline h-10" placeholder="Your password" />
                     </div>
-                    <div className="relative inline-block w-full">
+                    {/* <div className="relative inline-block w-full">
                         <div>
                             <button onClick={isToggle} className="flex justify-between w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" id="menu-button" aria-expanded="true" aria-haspopup="true">
                                 Role
@@ -85,7 +85,7 @@ const Login = () => {
                                 </div>
                             </div>
                         )}
-                    </div>
+                    </div> */}
                     <div className="mt-5">
                         <span className="text-gray-600 text-sm">Don't have an account?</span>
                         <Link to="/register" className="text-gray-700 ml-1 text-sm font-semibold cursor-pointer">Sign up</Link>

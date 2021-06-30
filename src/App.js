@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import {AuthProvider} from './Context/auth'
-import { Login, Register, PrivateRoute, Dashboard } from './components'
+import { PrivateRoute } from './components'
+import {Dashboard, Login, Register, Profile, Transaction} from './Pages'
 
 function App() {
   return (
@@ -11,6 +12,8 @@ function App() {
         <Route exact path="/" component={Login} />
         <Route exact path="/register" component={Register} />
         <PrivateRoute exact path="/dashboard" component={Dashboard}/>
+        <PrivateRoute exact path="/profile" component={Profile}/>
+        <PrivateRoute exact path="/Transaction" component={Transaction}/>
       </Switch>
     </Router>
     </AuthProvider>

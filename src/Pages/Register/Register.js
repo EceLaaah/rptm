@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {app} from '../../config/firebase'
 import { ChevronLeft } from 'react-feather';
 import { Link } from 'react-router-dom'
-import { Sheet, Textfield } from '../'
+import { Sheet, Textfield } from '../../components'
 import swal from 'sweetalert';
 
 const information = {
@@ -21,17 +21,7 @@ const information = {
 }
 
 const Register = () => {
-    const [toggle, setToggle] = useState(false);
     const [{ firstname, lastname, role, gender, date, contact, barangay, municipality, province, email, password, confirmPassword }, setState] = useState(information);
-
-    const isToggle = (event) => {
-        event.preventDefault();
-        if (!toggle) {
-            setToggle(true);
-        } else {
-            setToggle(false);
-        }
-    }
 
     const onChange = (event) => {
         event.preventDefault();
@@ -46,52 +36,52 @@ const Register = () => {
 
     const onSubmit = (event) => {
         event.preventDefault();
-        
-        // if(password === confirmPassword){
-        //     const document = app.firestore().collection("user");
-        //     app.auth().createUserWithEmailAndPassword(email, password).then((cred) => (
-        //         (async() => {
-        //             if(cred.user){
-        //                 document.doc(cred.user.uid).set({
-        //                     firstname,
-        //                     lastname,
-        //                     role,
-        //                     gender,
-        //                     date,
-        //                     contact,
-        //                     barangay,
-        //                     municipality,
-        //                     province, 
-        //                     email,
-        //                     password
-        //                 }).then(() => {
-        //                     swal({
-        //                         title: "Successfully",
-        //                         text: "successfully registered",
-        //                         icon: "success",
-        //                         button: "proceed",
-        //                       }).then(() => {
-        //                         clearState();
-        //                       });
-        //                 })
-        //             }
-        //         })()
-        //     )).catch((error) => {
-        //         swal({
-        //             title: "Warning",
-        //             text: `${error.message}`,
-        //             icon: "warning",
-        //             button: "Ok",
-        //           });
-        //     })
-        // }else {
-        //     swal({
-        //         title: "Warning",
-        //         text: `Password doesnt match, please try again`,
-        //         icon: "warning",
-        //         button: "Ok",
-        //       });
-        // }
+        console.log({firstname, lastname, role, gender, date, contact, barangay, municipality, province, email, password, confirmPassword })
+        if(password === confirmPassword){
+            const document = app.firestore().collection("user");
+            app.auth().createUserWithEmailAndPassword(email, password).then((cred) => (
+                (async() => {
+                    if(cred.user){
+                        document.doc(cred.user.uid).set({
+                            firstname,
+                            lastname,
+                            role,
+                            gender,
+                            date,
+                            contact,
+                            barangay,
+                            municipality,
+                            province, 
+                            email,
+                            password
+                        }).then(() => {
+                            swal({
+                                title: "Successfully",
+                                text: "successfully registered",
+                                icon: "success",
+                                button: "proceed",
+                              }).then(() => {
+                                clearState();
+                              });
+                        })
+                    }
+                })()
+            )).catch((error) => {
+                swal({
+                    title: "Warning",
+                    text: `${error.message}`,
+                    icon: "warning",
+                    button: "Ok",
+                  });
+            })
+        }else {
+            swal({
+                title: "Warning",
+                text: `Password doesnt match, please try again`,
+                icon: "warning",
+                button: "Ok",
+              });
+        }
     }
 
     return (
@@ -106,9 +96,19 @@ const Register = () => {
                     <h1 className="text-3xl text-center font-bold">Sign up</h1>
                 </Link>
                 <form>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 flex items-center">
                         <Textfield onChange={(event) => onChange(event)} value={firstname} label="First name" type="text" placeholder="firstname" name="firstname" />
                         <Textfield onChange={(event) => onChange(event)} value={lastname} label="Last name" type="text" placeholder="lastname" name="lastname" />
+                        <div className="mt-2">
+                            <label className="block text-sm font-semibold text-gray-700" for="role">Role</label>
+                            <select  id="role" name="role" autoComplete="role" vlaue={role} onChange={(event) => onChange(event)} className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value=""></option>
+                                <option value="Farmer">Farmer</option>
+                                <option value="Trader">Trader</option>
+                                <option value="NFA">NFA</option>
+                            </select>
+                        </div>
+
                         {/* <div className="relative inline-block w-full mt-8">
                         <div>
                             <button onClick={isToggle} className="flex justify-between w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" id="menu-button" aria-expanded="true" aria-haspopup="true">
