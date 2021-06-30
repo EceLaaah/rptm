@@ -68,6 +68,7 @@ const Dashboard = () => {
 
     return(
         <div className="max-w-content mx-auto px-4 bg-gray-100">
+            <h1 className="text-2xl pb-8 font-bold">Market Place</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 flex justify-center">
                 {riceDetails.map((type) => (
                     <Card key={type.key} image={type.image} kilograms={type.kilograms} price={type.price} title={type.title} name={type.name} description={type.description}/>
