@@ -1,53 +1,68 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { Spin } from "antd";
+import { app } from "../../config/firebase";
+import { UserContext } from "../../Context/UserProvider";
 import { AuthContext } from "../../Context/auth";
-import { Home, User, ShoppingCart, FilePlus } from "react-feather";
+import { farmerLinks, TraderLinks, NFA } from "../../mock/data";
+import { LogOut } from "react-feather";
 import { Link } from "react-router-dom";
-import Icon from "../Icon/Logo";
 import { Search } from "../";
 
 const Layout = ({ children }) => {
+  const userContext = useContext(UserContext);
   const context = useContext(AuthContext);
-  const links = [
-    {
-      id: 1,
-      name: "Dashboard",
-      icon: <Home className="w-4 h-4" />,
-      link: "/dashboard",
-    },
-    {
-      id: 2,
-      name: "Profile",
-      icon: <User className="w-4 h-4" />,
-      link: "/profile",
-    },
-    {
-      id: 3,
-      name: "Post Bidding",
-      icon: <FilePlus className="w-4 h-4" />,
-      link: "/Post",
-    },
-    {
-      id: 4,
-      name: "Transaction",
-      icon: <ShoppingCart className="w-4 h-4" />,
-      link: "/transaction",
-    },
-  ];
+  const [info, setInfo] = useState({ name: "", email: "", role: "" });
+  const [links, setLinks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [toggle, setToggle] = useState(false);
 
-  // const signOut = (event) => {
-  //     event.preventDefault();
-  //     app.auth().signOut();
-  //   };
+  const isToggle = (event) => {
+    event.preventDefault();
+    if (!toggle) {
+      setToggle(true);
+    } else {
+      setToggle(false);
+    }
+  };
+
+  const fetchUserInformation = () => {
+    userContext.userInformation.map((user) => {
+      if (user.email === context.email) {
+        user.role === "Farmer" && setLinks(farmerLinks);
+        user.role === "Trader" && setLinks(TraderLinks);
+        user.role === "NFA" && setLinks(NFA);
+        setInfo({
+          name: `${user.firstname} ${user.lastname}`,
+          email: user.email,
+          role: user.role,
+        });
+      }
+    });
+  };
+
+  useEffect(fetchUserInformation, [userContext.userInformation]);
+
+  if (context.length > 0) {
+    return setLoading(false);
+  }
 
   return (
-    <div>
-      <div className="md:flex flex-col md:flex-row md:min-h-screen w-full">
-        <div className="py-8 px-2 flex flex-col h-full w-80 text-gray-700 bg-white dark-mode:text-gray-200 dark-mode:bg-gray-800">
-          <div className="flex items-center justify-center mb-5">
-            <Icon />
-            <span className="ml-2 text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark-mode:text-white focus:outline-none focus:shadow-outline">
-              Procurement
-            </span>
+    <div className="md:flex flex-col md:flex-row md:min-h-screen w-full">
+      <div className="py-8 px-2 flex flex-col h-full w-80 text-gray-700 bg-white dark-mode:text-gray-200 dark-mode:bg-gray-800">
+        <Spin spinning={loading} delay={500}>
+          <div className="flex items-center justify-center flex-col mb-5">
+            <img
+              src="/image/profile-test.jpg"
+              className="w-40 h-40 object-cover rounded-full cursor-pointer border-solid border-4"
+              alt="profile"
+            />
+            <div className="text-center mt-2">
+              <span className="font-bold text-lg">{info.name}</span>
+              <span className="text-sm block mb-2">{info.email}</span>
+              <span className="text-sm bg-green-500 text-white py-1 px-4 rounded-full font-semibold">
+                {info.role}
+              </span>
+            </div>
           </div>
           <nav className="flex-grow md:block md:overflow-y-auto">
             {links.map((type) => (
@@ -61,23 +76,54 @@ const Layout = ({ children }) => {
               </Link>
             ))}
           </nav>
-        </div>
-        {/**Content*/}
-        <section className="bg-gray-100 w-full">
-          {/**Navbar */}
-          <div className="w-full bg-white h-14 flex items-center justify-end">
-            <div>
-              <Search className="px-4" placeholder="Search..." />
-            </div>
-            <div className="mx-4">
-              <span className="py-2 px-4 bg-gray-100 text-gray-600 rounded-full text-sm font-bold">
+        </Spin>
+      </div>
+      {/**Content*/}
+      <section className="bg-gray-100 w-full">
+        {/**Navbar */}
+        <div className="w-full bg-white h-14 flex items-center justify-end">
+          <div>
+            <Search className="px-4" placeholder="Search..." />
+          </div>
+          <div className="mx-4">
+            <div className="relative inline-block text-left">
+              <span
+                onClick={(event) => isToggle(event)}
+                className="py-2 px-4 bg-gray-100 text-gray-600 rounded-full text-sm font-bold cursor-pointer"
+              >
                 {context.email}
               </span>
+              {toggle && (
+                <div
+                  className="origin-top-right z-50 absolute right-0 mt-3 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="menu-button"
+                  tabindex="-1"
+                >
+                  <div
+                    onClick={() => app.auth().signOut()}
+                    className="py-1 px-3 hover:bg-gray-50 cursor-pointer rounded-md flex items-center"
+                    role="none"
+                  >
+                    <LogOut className="text-gray-700 w-4 h-4" />
+                    <button
+                      href="#"
+                      className="text-gray-700 block px-2 py-2 text-sm"
+                      role="menuitem"
+                      tabindex="-1"
+                      id="menu-item-0"
+                    >
+                      Signout
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-          <div className="p-8">{children}</div>
-        </section>
-      </div>
+        </div>
+        <div className="p-8">{children}</div>
+      </section>
     </div>
   );
 };

@@ -1,15 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
+import { objectAssign } from "../../Utils/ReusableSyntax";
 import { UpdateTextField } from "../../components";
 import { app } from "../../config/firebase";
 import swal from "sweetalert";
 import { AuthContext } from "../../Context/auth";
-
-//*Convert Array Object into Object
-const objectAssign = (ObjectArray, obj) => {
-  return ObjectArray.map((info) => {
-    return Object.assign(obj, info);
-  });
-};
 
 const userInformation = {
   firstname: "",
@@ -42,8 +36,6 @@ const Profile = () => {
   const profileInformation = useContext(AuthContext);
 
   information && objectAssign(information, userInformation);
-
-  console.log(userInformation);
 
   //*Returning input value on listen
   const inputListener = (prevState, name, value) => {

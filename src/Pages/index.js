@@ -1,4 +1,7 @@
 export { default as Transaction } from "./Transaction/Transaction";
+export { default as Marketplace } from "./Marketplace/Marketplace";
+export { default as Products } from "./Products/Products";
+export { default as UpdateProduct } from "./Products/UpdateProduct";
 export { default as Dashboard } from "./Dashboard/Dashboard";
 export { default as Register } from "./Register/Register";
 export { default as Profile } from "./Profile/Profile";

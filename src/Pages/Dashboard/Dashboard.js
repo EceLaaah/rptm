@@ -1,96 +1,52 @@
 import React from "react";
-import { FilePlus } from "react-feather";
-import { app } from "../../config/firebase";
-import { Card } from "../../components";
+import { DashboardCards } from "../../components";
+import { DollarSign, Activity, Package, Box } from "react-feather";
 
 const Dashboard = () => {
-  const riceDetails = [
+  const cardData = [
     {
-      id: 1,
-      image: "/image/pictureExample.jpg",
-      kilograms: "100kg",
-      price: "17/kg",
-      title: "Jasmine Rice",
-      name: "Jose Mari Batumbakal",
-      description: `Lorem ipsum dolor sit amet, 
-            consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
+      title: "Daily Total Sales",
+      numberData: 500,
+      icon: <DollarSign color="#FFF" size="25" />,
+      iconColor: "bg-red-300",
+      cardColor: "bg-red-400",
     },
     {
-      id: 1,
-      image: "/image/pictureExample.jpg",
-      kilograms: "100kg",
-      price: "17/kg",
-      title: "Jasmine Rice",
-      name: "Jose Mari Batumbakal",
-      description: `Lorem ipsum dolor sit amet, 
-            consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
+      title: "Products",
+      numberData: 500,
+      icon: <Package color="#FFF" size="25" />,
+      iconColor: "bg-green-300",
+      cardColor: "bg-green-400",
     },
     {
-      id: 1,
-      image: "/image/pictureExample.jpg",
-      kilograms: "100kg",
-      price: "17/kg",
-      title: "Jasmine Rice",
-      name: "Jose Mari Batumbakal",
-      description: `Lorem ipsum dolor sit amet, 
-            consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
+      title: "Total Socks",
+      numberData: 500,
+      icon: <Activity color="#FFF" size="25" />,
+      iconColor: "bg-pink-300",
+      cardColor: "bg-pink-400",
     },
     {
-      id: 1,
-      image: "/image/pictureExample.jpg",
-      kilograms: "100kg",
-      price: "17/kg",
-      title: "Jasmine Rice",
-      name: "Jose Mari Batumbakal",
-      description: `Lorem ipsum dolor sit amet, 
-            consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
-    },
-    {
-      id: 1,
-      image: "/image/pictureExample.jpg",
-      kilograms: "100kg",
-      price: "17/kg",
-      title: "Jasmine Rice",
-      name: "Jose Mari Batumbakal",
-      description: `Lorem ipsum dolor sit amet, 
-            consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
-    },
-    {
-      id: 1,
-      image: "/image/pictureExample.jpg",
-      kilograms: "100kg",
-      price: "17/kg",
-      title: "Jasmine Rice",
-      name: "Jose Mari Batumbakal",
-      description: `Lorem ipsum dolor sit amet, 
-            consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
+      title: "Critical Items",
+      numberData: 500,
+      icon: <Box color="#FFF" size="25" />,
+      iconColor: "bg-blue-300",
+      cardColor: "bg-blue-400",
     },
   ];
 
   return (
     <>
-      <div className="max-w-content mx-auto px-4 bg-gray-100">
-        <div className="flex text-center justify-between">
-          <h1 className="text-2xl pb-8 font-bold">Market Place</h1>
-          <button className="flex items-center  bg-primary hover:bg-primary-slight text-white text-lg py-2 px-4 font-semibold rounded focus:outline-none focus:shadow-outline h-10">
-            <FilePlus className="w-6 h-6" />
-            <span className="mx-3">Post</span>
-          </button>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 flex justify-center">
-          {riceDetails.map((type) => (
-            <Card
-              key={type.key}
-              image={type.image}
-              kilograms={type.kilograms}
-              price={type.price}
-              title={type.title}
-              name={type.name}
-              description={type.description}
-            />
-          ))}
-        </div>
-        <div onClick={() => app.auth().signOut()}>SignOut</div>
+      <div className="grid grid-rows gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4">
+        {cardData.map((data, index) => (
+          <DashboardCards
+            key={index}
+            icon={data.icon}
+            title={data.title}
+            numberData={data.numberData}
+            iconColor={data.iconColor}
+            cardColor={data.cardColor}
+          />
+        ))}
       </div>
     </>
   );
