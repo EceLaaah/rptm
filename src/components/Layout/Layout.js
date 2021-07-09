@@ -6,7 +6,8 @@ import { AuthContext } from "../../Context/auth";
 import { farmerLinks, TraderLinks, NFA } from "../../mock/data";
 import { LogOut } from "react-feather";
 import { Link } from "react-router-dom";
-import { Search } from "../";
+import { Menu, X } from "react-feather";
+//import { Search } from "../";
 
 const Layout = ({ children }) => {
   const userContext = useContext(UserContext);
@@ -15,6 +16,16 @@ const Layout = ({ children }) => {
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [toggle, setToggle] = useState(false);
+  const [sidebarToggle, setSidebarToggle] = useState(false);
+
+  const isSidebar = (event) => {
+    event.preventDefault();
+    if (!sidebarToggle) {
+      setSidebarToggle(true);
+    } else {
+      setSidebarToggle(false);
+    }
+  };
 
   const isToggle = (event) => {
     event.preventDefault();
@@ -47,8 +58,19 @@ const Layout = ({ children }) => {
   }
 
   return (
-    <div className="md:flex flex-col md:flex-row md:min-h-screen w-full">
-      <div className="py-8 px-2 flex flex-col h-full w-80 text-gray-700 bg-white dark-mode:text-gray-200 dark-mode:bg-gray-800">
+    <div className="md:flex flex-col md:flex-row md:min-h-screen relative">
+      {/**Sidebar */}
+      <div
+        className={`absolute inset-y-0 left-0 transform z-50 ${
+          sidebarToggle && "-translate-x-full "
+        } md:relative md:translate-x-0 transition duration-200 ease-in-out py-8 px-2 flex flex-col h-full w-80 text-gray-700 bg-white dark-mode:text-gray-200 dark-mode:bg-gray-800`}
+      >
+        <div
+          onClick={(event) => isSidebar(event)}
+          className="absolute right-0 top-0 p-4 block md:hidden cursor-pointer"
+        >
+          <X />
+        </div>
         <Spin spinning={loading} delay={500}>
           <div className="flex items-center justify-center flex-col mb-5">
             <img
@@ -78,14 +100,21 @@ const Layout = ({ children }) => {
           </nav>
         </Spin>
       </div>
+      {/**Sidebar */}
       {/**Content*/}
       <section className="bg-gray-100 w-full">
         {/**Navbar */}
-        <div className="w-full bg-white h-14 flex items-center justify-end">
-          <div>
+        <div className={`w-full bg-white h-14 flex items-center`}>
+          {/* <div>
             <Search className="px-4" placeholder="Search..." />
+          </div> */}
+          <div
+            className="px-4 py-4 cursor-pointer hover:bg-gray-100 block md:hidden"
+            onClick={(event) => isSidebar(event)}
+          >
+            <Menu />
           </div>
-          <div className="mx-4">
+          <div className="mx-4 absolute right-0">
             <div className="relative inline-block text-left">
               <span
                 onClick={(event) => isToggle(event)}

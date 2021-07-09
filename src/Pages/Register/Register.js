@@ -1,158 +1,274 @@
-import React, { useState } from 'react';
-import {app} from '../../config/firebase'
-import { ChevronLeft } from 'react-feather';
-import { Link } from 'react-router-dom'
-import { Sheet, Textfield } from '../../components'
-import swal from 'sweetalert';
+import React, { useState } from "react";
+import { app } from "../../config/firebase";
+import { ChevronLeft } from "react-feather";
+import { Link } from "react-router-dom";
+import { Sheet, Textfield } from "../../components";
+import { Spin } from "antd";
+import httpRequest from "../../api/httpRequest";
+import swal from "sweetalert";
 
 const information = {
-    firstname: "",
-    lastname: "",
-    role : "",
-    gender: "",
-    date: "",
-    contact: 0,
-    barangay: "",
-    municipality: "",
-    province: "",
-    email: "",
-    password: "",
-    confirmPassword: ""
-}
+  firstname: "",
+  lastname: "",
+  role: "",
+  gender: "",
+  date: "",
+  contact: 0,
+  barangay: "",
+  municipality: "",
+  province: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
 
 const Register = () => {
-    const [{ firstname, lastname, role, gender, date, contact, barangay, municipality, province, email, password, confirmPassword }, setState] = useState(information);
+  const [
+    {
+      firstname,
+      lastname,
+      role,
+      gender,
+      date,
+      contact,
+      barangay,
+      municipality,
+      province,
+      email,
+      password,
+      confirmPassword,
+    },
+    setState,
+  ] = useState(information);
+  const [loading, setLoading] = useState(false);
 
-    const onChange = (event) => {
-        event.preventDefault();
-        const { name, value } = event.target;
-        setState((prevState) => ({ ...prevState, [name]: value }));
-    }
+  const onChange = (event) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+    setState((prevState) => ({ ...prevState, [name]: value }));
+  };
 
-    //clear state
-    const clearState = () => {
-        setState({ ...information });
-      };
+  //clear state
+  const clearState = () => {
+    setState({ ...information });
+  };
 
-    const onSubmit = (event) => {
-        event.preventDefault();
-        console.log({firstname, lastname, role, gender, date, contact, barangay, municipality, province, email, password, confirmPassword })
-        if(password === confirmPassword){
-            const document = app.firestore().collection("user");
-            app.auth().createUserWithEmailAndPassword(email, password).then((cred) => (
-                (async() => {
-                    if(cred.user){
-                        document.doc(cred.user.uid).set({
-                            firstname,
-                            lastname,
-                            role,
-                            gender,
-                            date,
-                            contact,
-                            barangay,
-                            municipality,
-                            province, 
-                            email,
-                            password
-                        }).then(() => {
-                            swal({
-                                title: "Successfully",
-                                text: "successfully registered",
-                                icon: "success",
-                                button: "proceed",
-                              }).then(() => {
-                                clearState();
-                              });
-                        })
-                    }
-                })()
-            )).catch((error) => {
-                swal({
-                    title: "Warning",
-                    text: `${error.message}`,
-                    icon: "warning",
-                    button: "Ok",
+  const Loading = () => setLoading(true);
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+
+    Loading();
+
+    if (password === confirmPassword) {
+      const document = app.firestore().collection("user");
+      app
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then((cred) =>
+          (async () => {
+            if (cred.user) {
+              const config = {
+                firstname,
+                lastname,
+                role,
+                gender,
+                date,
+                contact,
+                barangay,
+                municipality,
+                province,
+                email,
+                password,
+                confirmPassword,
+                uid: cred.user.uid,
+              };
+
+              httpRequest
+                .post(
+                  "/.netlify/functions/index?name=signIn&&component=userInformationComponent",
+                  config
+                )
+                .then(() => {
+                  setLoading(false);
+                  swal({
+                    title: "Successfully",
+                    text: "successfully registered",
+                    icon: "success",
+                    button: "proceed",
+                  }).then(() => {
+                    clearState();
                   });
-            })
-        }else {
-            swal({
-                title: "Warning",
-                text: `Password doesnt match, please try again`,
-                icon: "warning",
-                button: "Ok",
-              });
-        }
+                });
+            }
+          })()
+        )
+        .catch((error) => {
+          swal({
+            title: "Warning",
+            text: `${error.message}`,
+            icon: "warning",
+            button: "Ok",
+          });
+        });
+    } else {
+      swal({
+        title: "Warning",
+        text: `Password doesnt match, please try again`,
+        icon: "warning",
+        button: "Ok",
+      });
     }
+  };
 
-    return (
-        <>
-            <img src="/image/background.png" className="absolute right-0 top-0 w-full h-full" alt="Background" />
-            <Sheet className="max-w-4xl z-50">
-                <Link to="/" className="flex justify-between mb-4">
-                    <div className="flex">
-                        <ChevronLeft className="text-gray-700" />
-                        <span className="ml-1 font-bold text-gray-700 ">Back</span>
-                    </div>
-                    <h1 className="text-3xl text-center font-bold">Sign up</h1>
-                </Link>
-                <form>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 flex items-center">
-                        <Textfield onChange={(event) => onChange(event)} value={firstname} label="First name" type="text" placeholder="firstname" name="firstname" />
-                        <Textfield onChange={(event) => onChange(event)} value={lastname} label="Last name" type="text" placeholder="lastname" name="lastname" />
-                        <div className="mt-2">
-                            <label className="block text-sm font-semibold text-gray-700" for="role">Role</label>
-                            <select  id="role" name="role" autoComplete="role" vlaue={role} onChange={(event) => onChange(event)} className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                <option value=""></option>
-                                <option value="Farmer">Farmer</option>
-                                <option value="Trader">Trader</option>
-                                <option value="NFA">NFA</option>
-                            </select>
-                        </div>
-
-                        {/* <div className="relative inline-block w-full mt-8">
-                        <div>
-                            <button onClick={isToggle} className="flex justify-between w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" id="menu-button" aria-expanded="true" aria-haspopup="true">
-                                Role
-                                <svg className="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                        </div>
-                        {toggle && (
-                            <div role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" className="origin-top-right absolute right-0 w-full mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                <div className="py-1" role="none">
-                                    <span className="text-gray-700 block px-4 py-1 text-sm" value="Farmer" onChange={(event) => onChange(event)}>Farmer</span>
-                                    <span className="text-gray-700 block px-4 py-2 text-sm" value="Trader" onChange={(event) => onChange(event)}>Trader</span>
-                                    <span className="text-gray-700 block px-4 py-2 text-sm" value="NFA" onChange={(event) => onChange(event)}>NFA</span>
-                                </div>
-                            </div>
-                        )}
-                    </div> */}
-                    </div>
-                    <div className="grid grid-cols-1  sm:grid-cols-3 gap-4">
-                        <Textfield onChange={(event) => onChange(event)} value={gender} label="Gender" type="text" placeholder="Gender" name="gender" />
-                        <Textfield onChange={(event) => onChange(event)} value={date} label="Date" type="date" placeholder="date" name="date" />
-                        <Textfield onChange={(event) => onChange(event)} value={contact} label="Contact Number" type="number" placeholder="Contact Number" name="contact" />
-                    </div>
-                    <div className="grid grid-cols-1  sm:grid-cols-3 gap-4">
-                        <Textfield onChange={(event) => onChange(event)} value={barangay} label="Barangay" type="text" placeholder="Barangay" name="barangay" />
-                        <Textfield onChange={(event) => onChange(event)} value={municipality} label="Municipality" type="text" placeholder="Municipality" name="municipality" />
-                        <Textfield onChange={(event) => onChange(event)} value={province} label="Province" type="text" placeholder="Province" name="province" />
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <Textfield onChange={(event) => onChange(event)} value={email} label="email" type="text" placeholder="Email" name="email" />
-                        <Textfield onChange={(event) => onChange(event)} value={password} label="Password" type="password" placeholder="Password" name="password" />
-                        <Textfield onChange={(event) => onChange(event)} value={confirmPassword} label="Confirm Password" type="password" placeholder="Confirm Password" name="confirmPassword" />
-                    </div>
-                    <div>
-                    <div className="w-52 mt-4 mb-2 float-right">
-                        <button onClick={(event) => onSubmit(event)} type="submit" className="w-full bg-primary hover:bg-primary-slight text-white text-sm py-2 px-4 font-semibold rounded-sm focus:outline-none focus:shadow-outline h-10">Sign Up</button>
-                    </div>
-                    </div>
-                </form>
-            </Sheet>
-        </>
-    )
-}
+  return (
+    <Spin spinning={loading}>
+      <img
+        src="/image/background.png"
+        className="absolute right-0 top-0 w-full h-full"
+        alt="Background"
+      />
+      <Sheet className="max-w-4xl z-50">
+        <Link to="/" className="flex justify-between mb-4">
+          <div className="flex">
+            <ChevronLeft className="text-gray-700" />
+            <span className="ml-1 font-bold text-gray-700 ">Back</span>
+          </div>
+          <h1 className="text-3xl text-center font-bold">Sign up</h1>
+        </Link>
+        <form>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 flex items-center">
+            <Textfield
+              onChange={(event) => onChange(event)}
+              value={firstname}
+              label="First name"
+              type="text"
+              placeholder="firstname"
+              name="firstname"
+            />
+            <Textfield
+              onChange={(event) => onChange(event)}
+              value={lastname}
+              label="Last name"
+              type="text"
+              placeholder="lastname"
+              name="lastname"
+            />
+            <div className="mt-2">
+              <label
+                className="block text-sm font-semibold text-gray-700"
+                for="role"
+              >
+                Role
+              </label>
+              <select
+                id="role"
+                name="role"
+                autoComplete="role"
+                vlaue={role}
+                onChange={(event) => onChange(event)}
+                className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              >
+                <option value=""></option>
+                <option value="Farmer">Farmer</option>
+                <option value="Trader">Trader</option>
+                <option value="NFA">NFA</option>
+              </select>
+            </div>
+          </div>
+          <div className="grid grid-cols-1  sm:grid-cols-3 gap-4">
+            <Textfield
+              onChange={(event) => onChange(event)}
+              value={gender}
+              label="Gender"
+              type="text"
+              placeholder="Gender"
+              name="gender"
+            />
+            <Textfield
+              onChange={(event) => onChange(event)}
+              value={date}
+              label="Date Birth"
+              type="date"
+              placeholder="date"
+              name="date"
+            />
+            <Textfield
+              onChange={(event) => onChange(event)}
+              value={contact}
+              label="Contact Number"
+              type="number"
+              placeholder="Contact Number"
+              name="contact"
+            />
+          </div>
+          <div className="grid grid-cols-1  sm:grid-cols-3 gap-4">
+            <Textfield
+              onChange={(event) => onChange(event)}
+              value={barangay}
+              label="Barangay"
+              type="text"
+              placeholder="Barangay"
+              name="barangay"
+            />
+            <Textfield
+              onChange={(event) => onChange(event)}
+              value={municipality}
+              label="Municipality"
+              type="text"
+              placeholder="Municipality"
+              name="municipality"
+            />
+            <Textfield
+              onChange={(event) => onChange(event)}
+              value={province}
+              label="Province"
+              type="text"
+              placeholder="Province"
+              name="province"
+            />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <Textfield
+              onChange={(event) => onChange(event)}
+              value={email}
+              label="email"
+              type="text"
+              placeholder="Email"
+              name="email"
+            />
+            <Textfield
+              onChange={(event) => onChange(event)}
+              value={password}
+              label="Password"
+              type="password"
+              placeholder="Password"
+              name="password"
+            />
+            <Textfield
+              onChange={(event) => onChange(event)}
+              value={confirmPassword}
+              label="Confirm Password"
+              type="password"
+              placeholder="Confirm Password"
+              name="confirmPassword"
+            />
+          </div>
+          <div>
+            <div className="w-52 mt-4 mb-2 float-right">
+              <button
+                onClick={(event) => onSubmit(event)}
+                type="submit"
+                className="w-full bg-primary hover:bg-primary-slight text-white text-sm py-2 px-4 font-semibold rounded-sm focus:outline-none focus:shadow-outline h-10"
+              >
+                Sign Up
+              </button>
+            </div>
+          </div>
+        </form>
+      </Sheet>
+    </Spin>
+  );
+};
 
 export default Register;
