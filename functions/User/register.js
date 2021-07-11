@@ -4,6 +4,7 @@ const callback = require("../callback");
 module.exports = async (event) => {
   try {
     const {
+      imageUrl,
       firstname,
       lastname,
       role,
@@ -21,6 +22,7 @@ module.exports = async (event) => {
     const document = firebaseDb.collection("user").doc(uid);
 
     document.set({
+      imageUrl,
       firstname,
       lastname,
       role,

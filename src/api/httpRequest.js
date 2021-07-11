@@ -15,7 +15,7 @@ const httpRequest = async (method, url, request) => {
   }
 };
 
-export default {
+const request = {
   get(url, request) {
     return httpRequest("GET", url, request);
   },
@@ -32,3 +32,5 @@ export default {
     return httpRequest("PUT", url, request);
   },
 };
+
+export default request;

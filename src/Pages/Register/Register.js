@@ -8,6 +8,7 @@ import httpRequest from "../../api/httpRequest";
 import swal from "sweetalert";
 
 const information = {
+  imageUrl: "",
   firstname: "",
   lastname: "",
   role: "",
@@ -25,6 +26,7 @@ const information = {
 const Register = () => {
   const [
     {
+      imageUrl,
       firstname,
       lastname,
       role,
@@ -61,7 +63,6 @@ const Register = () => {
     Loading();
 
     if (password === confirmPassword) {
-      const document = app.firestore().collection("user");
       app
         .auth()
         .createUserWithEmailAndPassword(email, password)
@@ -69,6 +70,7 @@ const Register = () => {
           (async () => {
             if (cred.user) {
               const config = {
+                imageUrl,
                 firstname,
                 lastname,
                 role,

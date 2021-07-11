@@ -12,7 +12,12 @@ import { Menu, X } from "react-feather";
 const Layout = ({ children }) => {
   const userContext = useContext(UserContext);
   const context = useContext(AuthContext);
-  const [info, setInfo] = useState({ name: "", email: "", role: "" });
+  const [info, setInfo] = useState({
+    name: "",
+    email: "",
+    role: "",
+    imageUrl: null,
+  });
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [toggle, setToggle] = useState(false);
@@ -37,7 +42,7 @@ const Layout = ({ children }) => {
   };
 
   const fetchUserInformation = () => {
-    userContext.userInformation.map((user) => {
+    userContext.userInformation.forEach((user) => {
       if (user.email === context.email) {
         user.role === "Farmer" && setLinks(farmerLinks);
         user.role === "Trader" && setLinks(TraderLinks);
@@ -46,12 +51,13 @@ const Layout = ({ children }) => {
           name: `${user.firstname} ${user.lastname}`,
           email: user.email,
           role: user.role,
+          imageUrl: user.imageUrl,
         });
       }
     });
   };
 
-  useEffect(fetchUserInformation, [userContext.userInformation]);
+  useEffect(fetchUserInformation, [userContext.userInformation, context.email]);
 
   if (context.length > 0) {
     return setLoading(false);
@@ -73,11 +79,19 @@ const Layout = ({ children }) => {
         </div>
         <Spin spinning={loading} delay={500}>
           <div className="flex items-center justify-center flex-col mb-5">
-            <img
-              src="/image/profile-test.jpg"
-              className="w-40 h-40 object-cover rounded-full cursor-pointer border-solid border-4"
-              alt="profile"
-            />
+            {info.imageUrl ? (
+              <img
+                src={info.imageUrl}
+                className="w-40 h-40 object-cover bg-no-repeat rounded-full cursor-pointer border-solid border-4"
+                alt="profile"
+              />
+            ) : (
+              <img
+                src="/image/profile-test.jpg"
+                className="w-40 h-40 object-cover bg-no-repeat rounded-full cursor-pointer border-solid border-4"
+                alt="profile"
+              />
+            )}
             <div className="text-center mt-2">
               <span className="font-bold text-lg">{info.name}</span>
               <span className="text-sm block mb-2">{info.email}</span>

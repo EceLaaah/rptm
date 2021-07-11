@@ -1,6 +1,7 @@
 const addProduct = require("./product/addProduct");
 const updateProduct = require("./product/updateProduct");
 const updateUserInformation = require("./User/updateUserInformation");
+const updateUserProfile = require("./User/updateUserProfile");
 const register = require("./User/register");
 
 const httpRequest = {
@@ -32,6 +33,10 @@ const userInformationComponent = async (event) => {
     case "updateUserInformation":
       if (event.httpMethod === httpRequest.PUT) {
         return await updateUserInformation(event);
+      }
+    case "updateUserProfile":
+      if (event.httpMethod === httpRequest.PUT) {
+        return await updateUserProfile(event);
       }
   }
 };

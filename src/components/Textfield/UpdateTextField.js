@@ -1,9 +1,10 @@
 import React from "react";
 
 const UpdateTextfield = (props) => {
-  const { type, placeholder, name, label, defaultValue, onChange } = props;
+  const { type, placeholder, name, label, defaultValue, onChange, className } =
+    props;
   return (
-    <div className="mb-1 sm:mb-4 mt-1 sm:mt-6">
+    <div className={className}>
       <label
         className="block text-gray-700 text-sm font-semibold mb-2"
         htmlFor="email"
