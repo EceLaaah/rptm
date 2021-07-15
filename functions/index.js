@@ -1,8 +1,13 @@
+const updateUserProfile = require("./User/updateUserProfile");
+const register = require("./User/register");
+const farmLocation = require("./User/farmLocation");
+
+//*Products Functions
 const addProduct = require("./product/addProduct");
 const updateProduct = require("./product/updateProduct");
 const updateUserInformation = require("./User/updateUserInformation");
-const updateUserProfile = require("./User/updateUserProfile");
-const register = require("./User/register");
+const addRiceVariety = require("./product/addRiceVariety");
+const deleteRiceVariety = require("./product/deleteRiceVariety");
 
 const httpRequest = {
   GET: "GET",
@@ -21,6 +26,14 @@ const productComponent = async (event) => {
       if (event.httpMethod === httpRequest.PUT) {
         return await updateProduct(event);
       }
+    case "addRiceVariety":
+      if (event.httpMethod === httpRequest.POST) {
+        return await addRiceVariety(event);
+      }
+    case "deleteRiceVariety":
+      if (event.httpMethod === httpRequest.POST) {
+        return await deleteRiceVariety(event);
+      }
   }
 };
 
@@ -29,6 +42,10 @@ const userInformationComponent = async (event) => {
     case "signIn":
       if (event.httpMethod === httpRequest.POST) {
         return await register(event);
+      }
+    case "farmLocation":
+      if (event.httpMethod === httpRequest.POST) {
+        return await farmLocation(event);
       }
     case "updateUserInformation":
       if (event.httpMethod === httpRequest.PUT) {

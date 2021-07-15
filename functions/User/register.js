@@ -1,6 +1,17 @@
 const { firebaseDb } = require("../firebaseAdmin");
 const callback = require("../callback");
 
+function getAge(dateString) {
+  var today = new Date();
+  var birthDate = new Date(dateString);
+  var age = today.getFullYear() - birthDate.getFullYear();
+  var m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+}
+
 module.exports = async (event) => {
   try {
     const {
@@ -9,7 +20,7 @@ module.exports = async (event) => {
       lastname,
       role,
       gender,
-      date,
+      dateOfBirth,
       contact,
       barangay,
       municipality,
@@ -19,6 +30,8 @@ module.exports = async (event) => {
       uid,
     } = JSON.parse(event.body);
 
+    const age = getAge(dateOfBirth);
+
     const document = firebaseDb.collection("user").doc(uid);
 
     document.set({
@@ -27,7 +40,8 @@ module.exports = async (event) => {
       lastname,
       role,
       gender,
-      date,
+      dateOfBirth,
+      age,
       contact,
       barangay,
       municipality,

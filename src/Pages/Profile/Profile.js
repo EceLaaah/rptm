@@ -3,8 +3,8 @@ import { Divider, Popover } from "antd";
 import { objectAssign } from "../../Utils/ReusableSyntax";
 import { UpdateTextField } from "../../components";
 import { app } from "../../config/firebase";
-import { AuthContext } from "../../Context/auth";
 import { Spin } from "antd";
+import { AuthContext } from "../../Context/auth";
 import httpRequest from "../../api/httpRequest";
 import swal from "sweetalert";
 
@@ -13,8 +13,9 @@ const userInformation = {
   firstname: "",
   lastname: "",
   email: "",
+  monthlyIncome: "",
   gender: "",
-  date: "",
+  dateOfBirth: "",
   contact: "",
   barangay: "",
   municipality: "",
@@ -28,8 +29,9 @@ const Profile = () => {
       firstname,
       lastname,
       email,
+      monthlyIncome,
       gender,
-      date,
+      dateOfBirth,
       contact,
       barangay,
       municipality,
@@ -112,15 +114,20 @@ const Profile = () => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-
     Loading();
+
+    const document = app
+      .firestore()
+      .collection("user")
+      .doc(profileInformation.uid);
 
     const config = {
       firstname,
       lastname,
       email,
+      monthlyIncome,
       gender,
-      date,
+      dateOfBirth,
       contact,
       barangay,
       municipality,
@@ -128,11 +135,21 @@ const Profile = () => {
       id: profileInformation.uid,
     };
 
-    httpRequest
-      .put(
-        "/.netlify/functions/index?name=updateUserInformation&&component=userInformationComponent",
-        config
-      )
+    const income = Number(monthlyIncome);
+
+    await document
+      .update({
+        firstname,
+        lastname,
+        email,
+        monthlyIncome: income,
+        gender,
+        dateOfBirth,
+        contact,
+        barangay,
+        municipality,
+        province,
+      })
       .then(() => {
         setLoading(false);
         swal({
@@ -142,11 +159,27 @@ const Profile = () => {
           button: "Ok",
         });
       });
+
+    // httpRequest
+    //   .put(
+    //     "/.netlify/functions/index?name=updateUserInformation&&component=userInformationComponent",
+    //     config
+    //   )
+    //   .then(() => {
+    // setLoading(false);
+    // swal({
+    //   title: "Success",
+    //   text: `Successfully updated`,
+    //   icon: "success",
+    //   button: "Ok",
+    // });
+    //   });
   };
 
   //*save image to firebase storage
   const updateProfile = async (event) => {
     event.preventDefault();
+
     Loading();
 
     if (profile.status) {
@@ -155,46 +188,72 @@ const Profile = () => {
       await fileRef.put(profile.image);
 
       fileRef.getDownloadURL().then((imageUrl) => {
-        httpApi(imageUrl);
+        app
+          .firestore()
+          .collection("user")
+          .doc(profileInformation.uid)
+          .update({ imageUrl })
+          .then(() => {
+            setLoading(false);
+            swal({
+              title: "Success",
+              text: `Successfully Profile Updated`,
+              icon: "success",
+              button: "Ok",
+            });
+          });
       });
     }
   };
 
-  const httpApi = (imageUrl) => {
-    try {
-      httpRequest
-        .put(
-          "/.netlify/functions/index?name=updateUserProfile&&component=userInformationComponent",
-          { id: profileInformation.uid, imageUrl }
-        )
-        .then(() => {
-          setLoading(false);
-          onRemoveProfile();
-          swal({
-            title: "Success",
-            text: `Successfully Profile Updated`,
-            icon: "success",
-            button: "Ok",
-          });
-        });
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+  // const httpApi = (imageUrl) => {
+  //   try {
+  //     //     httpRequest
+  //     //       .put(
+  //     //         "/.netlify/functions/index?name=updateUserProfile&&component=userInformationComponent",
+  //     //         { id: profileInformation.uid, imageUrl }
+  //     //       )
+  //     //       .then(() => {
+  //     //   setLoading(false);
+  //     //   onRemoveProfile();
+  //     //   swal({
+  //     //     title: "Success",
+  //     //     text: `Successfully Profile Updated`,
+  //     //     icon: "success",
+  //     //     button: "Ok",
+  //     //   });
+  //     // });
+  //   } catch (error) {
+  //     console.log(error.message);
+  //   }
+  // };
 
+  //** Change this in useReducer and dispatch later on */
   useEffect(() => {
-    const array = [];
     const document = app
       .firestore()
       .collection("user")
       .doc(profileInformation.uid);
 
-    document.get().then((doc) => {
-      if (doc.exists) {
-        array.push(doc.data());
+    document.onSnapshot((snapshot) => {
+      const array = [];
+      if (snapshot) {
+        array.push(snapshot.data());
         setInformation(array);
       }
     });
+    // const array = [];
+    // const document = app
+    //   .firestore()
+    //   .collection("user")
+    //   .doc(profileInformation.uid);
+
+    // document.get().then((doc) => {
+    //   if (doc.exists) {
+    //     array.push(doc.data());
+    //     setInformation(array);
+    //   }
+    // });
   }, [profileInformation.uid]);
 
   const PopoverContent = () => {
@@ -337,11 +396,11 @@ const Profile = () => {
                 <UpdateTextField
                   className="mb-1 sm:mb-4 mt-1 sm:mt-6"
                   onChange={(event) => onChange(event)}
-                  defaultValue={date}
+                  defaultValue={dateOfBirth}
                   label="Date of Birth"
                   type="date"
-                  placeholder="Date"
-                  name="date"
+                  placeholder="Date of Birth"
+                  name="dateOfBirth"
                 />
                 <UpdateTextField
                   className="mb-1 sm:mb-4 mt-1 sm:mt-6"
@@ -353,7 +412,7 @@ const Profile = () => {
                   name="contact"
                 />
               </div>
-              <div className="w-full md:w-56">
+              <div className="grid grid-cols-1 sm:grid-cols-3  md:grid-cols-3 gap-4">
                 <UpdateTextField
                   label="Email"
                   onChange={(event) => onChange(event)}
@@ -361,6 +420,13 @@ const Profile = () => {
                   type="email"
                   placeholder="Email"
                   name="email"
+                />
+                <UpdateTextField
+                  label="Monthly Income"
+                  onChange={(event) => onChange(event)}
+                  defaultValue={monthlyIncome}
+                  type="text"
+                  name="monthlyIncome"
                 />
               </div>
               <Divider />
@@ -387,6 +453,7 @@ const Profile = () => {
                   name="municipality"
                 />
                 <UpdateTextField
+                  readOnly={true}
                   className="mb-1 sm:mb-4 mt-1 sm:mt-6"
                   onChange={(event) => onChange(event)}
                   defaultValue={province}

@@ -1,5 +1,16 @@
 import BuildChart from "./BuildCharts";
 
+var MyDate = new Date();
+
+MyDate.setMonth(MyDate.getMonth() + 1);
+
+const MyDateString =
+  MyDate.getFullYear() +
+  "-" +
+  ("0" + MyDate.getMonth()).slice(-2) +
+  "-" +
+  ("0" + MyDate.getDate()).slice(-2);
+
 //*New arrival
 const Months = [
   "January",
@@ -49,4 +60,11 @@ const borderColor = [
   "rgba(255, 159, 64, 1)",
 ];
 
-export { BuildChart, Months, MonthColor, backgroundColor, borderColor };
+export {
+  BuildChart,
+  Months,
+  MonthColor,
+  backgroundColor,
+  borderColor,
+  MyDateString,
+};

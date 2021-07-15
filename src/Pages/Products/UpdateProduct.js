@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import { objectAssign } from "../../Utils/ReusableSyntax";
 import { app } from "../../config/firebase";
 import { Textfield, Card } from "../../components";
-import { Spin } from "antd";
+import { Spin, Popconfirm } from "antd";
 import httpRequest from "../../api/httpRequest";
 import swal from "sweetalert";
 
 const information = {
-  riceName: "",
+  riceVariety: "",
   email: "",
   kilograms: "",
   price: "",
-  quantity: 0,
+  dateHarvested: "",
   description: "",
 };
 
@@ -21,7 +21,7 @@ const UpdateProduct = (props) => {
   const id = params.get("id");
 
   const [
-    { riceName, email, kilograms, price, quantity, description },
+    { riceVariety, email, kilograms, price, dateHarvested, description },
     setState,
   ] = useState(information);
   const [productInformation, setProductInformation] = useState([]);
@@ -49,26 +49,32 @@ const UpdateProduct = (props) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    const qty = Number(quantity);
     const productPrice = Number(price);
 
     Loading();
 
-    const config = {
-      riceName,
-      email,
-      kilograms,
-      price: productPrice,
-      quantity: qty,
-      description,
-      id,
-    };
+    // const config = {
+    //   riceName,
+    //   email,
+    //   kilograms,
+    //   price: productPrice,
+    //   dateHarvested,
+    //   description,
+    //   id,
+    // };
 
-    httpRequest
-      .put(
-        "/.netlify/functions/index?name=updateProduct&&component=productComponent",
-        config
-      )
+    const document = app.firestore().collection("product").doc(id);
+
+    document
+      .update({
+        riceVariety,
+        email,
+        kilograms,
+        price: productPrice,
+        dateHarvested,
+        description,
+        id,
+      })
       .then(() => {
         setLoading(false);
         swal({
@@ -78,6 +84,21 @@ const UpdateProduct = (props) => {
           button: "Ok",
         });
       });
+
+    // httpRequest
+    //   .put(
+    //     "/.netlify/functions/index?name=updateProduct&&component=productComponent",
+    //     config
+    //   )
+    //   .then(() => {
+    // setLoading(false);
+    // swal({
+    //   title: "Success",
+    //   text: `Successfully updated`,
+    //   icon: "success",
+    //   button: "Ok",
+    // });
+    //   });
   };
 
   return (
@@ -86,16 +107,17 @@ const UpdateProduct = (props) => {
         <h1 className="text-2xl font-bold">Update Product</h1>
         <section className="flex md:flex-row flex-col justify-center gap-4">
           <div className="w-full md:w-1/2">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Textfield
-                value={riceName}
+                value={riceVariety}
                 onChange={(event) => onChange(event)}
-                label="Rice Name"
+                label="Rice Variety"
                 type="text"
-                placeholder="Rice Name"
-                name="riceName"
+                placeholder="Rice Variety"
+                name="riceVariety"
               />
               <Textfield
+                readOnly={true}
                 value={email}
                 onChange={(event) => onChange(event)}
                 label="Owner Email"
@@ -103,8 +125,16 @@ const UpdateProduct = (props) => {
                 placeholder="Owner Email"
                 name="email"
               />
+              <Textfield
+                onChange={(event) => onChange(event)}
+                value={dateHarvested}
+                label="Date Harvested"
+                type="date"
+                placeholder="Date Harvested"
+                name="dateHarvested"
+              />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Textfield
                 value={kilograms}
                 onChange={(event) => onChange(event)}
@@ -120,14 +150,6 @@ const UpdateProduct = (props) => {
                 type="number"
                 placeholder="Price"
                 name="price"
-              />
-              <Textfield
-                value={quantity}
-                onChange={(event) => onChange(event)}
-                label="Quantity"
-                type="number"
-                placeholder="Quantity"
-                name="quantity"
               />
             </div>
             <label
@@ -155,7 +177,7 @@ const UpdateProduct = (props) => {
                 image={type.imageUrl}
                 kilograms={type.kilograms}
                 price={type.price}
-                title={type.riceName}
+                title={type.riceVariety}
                 name={type.email}
                 description={type.description}
               />
@@ -163,12 +185,14 @@ const UpdateProduct = (props) => {
           </div>
         </section>
         <div className="flex items-center justify-end gap-4 mt-6">
-          <button
-            onClick={(event) => onSubmit(event)}
-            className="w-24 h-8 bg-primary hover:bg-primary-slight text-white text-sm font-semibold rounded-sm focus:outline-none focus:shadow-outline "
+          <Popconfirm
+            title="Are you sure to edit this product?"
+            onConfirm={(event) => onSubmit(event)}
           >
-            Save
-          </button>
+            <button className="w-24 h-8 bg-primary hover:bg-primary-slight text-white text-sm font-semibold rounded-sm focus:outline-none focus:shadow-outline ">
+              Save
+            </button>
+          </Popconfirm>
         </div>
       </div>
     </Spin>

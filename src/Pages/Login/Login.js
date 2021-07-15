@@ -45,7 +45,7 @@ const Login = () => {
           setEmail("");
           setPassword("");
           setError({ status: false, errorMessage: "" });
-          <Redirect to="/dashboard" />;
+          <Redirect to="/marketplace" />;
         });
       })
       .catch((error) => {
@@ -54,7 +54,7 @@ const Login = () => {
   };
 
   if (context) {
-    return <Redirect to="/dashboard" />;
+    return <Redirect to="/marketplace" />;
   }
 
   //  const signOut = (event) => {

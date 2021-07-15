@@ -2,7 +2,12 @@ import React, { useContext, useState } from "react";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import ReactPaginate from "react-paginate";
 import { Spin } from "antd";
+import { Confirmation } from "../";
+import { AuthContext } from "../../Context/auth";
+import { FarmLocationContext } from "../../Context/FarmLocationProvider";
 import { ProductContext } from "../../Context/ProductProvider";
+
+//import {objectAssign} from '../../Utils/ReusableSyntax'
 import { Card } from "../../components";
 
 const Marketplace = () => {
@@ -11,6 +16,10 @@ const Marketplace = () => {
   const numberOfCards = 6;
   const pagesVisited = pageNumber * numberOfCards;
   const product = useContext(ProductContext);
+  const { fetchFarmLocation } = useContext(FarmLocationContext);
+  const context = useContext(AuthContext);
+
+  console.log(fetchFarmLocation);
 
   const displayCards = product.product.length ? (
     product.product
@@ -22,7 +31,7 @@ const Marketplace = () => {
           image={type.imageUrl}
           kilograms={type.kilograms}
           price={type.price}
-          title={type.riceName}
+          title={type.riceVariety}
           name={type.email}
           description={type.description}
         >
@@ -52,32 +61,35 @@ const Marketplace = () => {
   }
 
   return (
-    <div className="max-w-content mx-auto px-4 bg-gray-100">
-      <div className="flex text-center justify-between">
-        <h1 className="text-2xl pb-8 font-bold">Market Place</h1>
-      </div>
-      <Spin spinning={loading} delay={500}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 flex justify-center relative">
-          {displayCards}
+    <>
+      {/* {fetchFarmLocation.length <= 0 && <Confirmation />} */}
+      <div className="max-w-content mx-auto px-4 bg-gray-100">
+        <div className="flex text-center justify-between">
+          <h1 className="text-2xl pb-8 font-bold">Market Place</h1>
         </div>
-      </Spin>
-      <ReactPaginate
-        previousLabel={<ChevronLeft className="text-gray-500" />}
-        nextLabel={<ChevronRight className="text-gray-500" />}
-        breakLabel={"..."}
-        marginPagesDisplayed={2}
-        pageRangeDisplayed={5}
-        pageCount={pageCount}
-        onPageChange={changePage}
-        containerClassName={
-          "pagination flex sm:justify-end justify-center items-center text-acad-secondary font-bold"
-        }
-        previousLinkClassName={"border-0"}
-        nextLinkClassName={"border-0"}
-        disabledClassName={"paginationDisabled"}
-        activeClassName={"active"}
-      />
-    </div>
+        <Spin spinning={loading} delay={500}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 flex justify-center relative">
+            {displayCards}
+          </div>
+        </Spin>
+        <ReactPaginate
+          previousLabel={<ChevronLeft className="text-gray-500" />}
+          nextLabel={<ChevronRight className="text-gray-500" />}
+          breakLabel={"..."}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          onPageChange={changePage}
+          containerClassName={
+            "pagination flex sm:justify-end justify-center items-center text-acad-secondary font-bold"
+          }
+          previousLinkClassName={"border-0"}
+          nextLinkClassName={"border-0"}
+          disabledClassName={"paginationDisabled"}
+          activeClassName={"active"}
+        />
+      </div>
+    </>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useContext } from "react";
 import { AuthContext } from "../../Context/auth";
+import { RiceVarietyContext } from "../../Context/RiceVarietyProvider";
 import { app } from "../../config/firebase";
 import { useDropzone } from "react-dropzone";
 import { Textfield } from "../../components";
@@ -9,20 +10,20 @@ import httpRequest from "../../api/httpRequest";
 import swal from "sweetalert";
 
 const information = {
-  riceName: "",
-  email: "",
+  riceVariety: "",
   kilograms: "",
   price: "",
-  quantity: 0,
+  dateHarvested: "",
   description: "",
 };
 
 const Post = () => {
   const context = useContext(AuthContext);
+  const { fetchVariety } = useContext(RiceVarietyContext);
   const [loading, setLoading] = useState(false);
   const [myFile, setMyFile] = useState([]);
   const [
-    { riceName, email, kilograms, price, quantity, description },
+    { riceVariety, kilograms, price, dateHarvested, description },
     setState,
   ] = useState(information);
 
@@ -100,6 +101,9 @@ const Post = () => {
 
     loadingState();
 
+    const productPrice = Number(price);
+    const document = app.firestore().collection("product").doc();
+
     acceptedFiles.map(async (file) => {
       if (file) {
         const storageRef = app.storage().ref();
@@ -107,44 +111,50 @@ const Post = () => {
         await fileRef.put(file);
         await fileRef.getDownloadURL().then((imageUrl) => {
           if (imageUrl) {
-            uploadFileHttpRequest(imageUrl);
+            document
+              .set({
+                uid: context.uid,
+                riceVariety: riceVariety,
+                email: context.email,
+                kilograms: kilograms,
+                price: productPrice,
+                dateHarvested,
+                description: description,
+                imageUrl: imageUrl,
+              })
+              .then(() => {
+                setLoading(false);
+                clearState();
+                swal({
+                  title: "Successfully",
+                  text: `Password doesnt match, please try again`,
+                  icon: "success",
+                  button: "Ok",
+                });
+              });
           }
         });
       }
     });
   };
 
-  const uploadFileHttpRequest = (imageUrl) => {
-    const qty = Number(quantity);
-    const productPrice = Number(price);
-
-    const config = {
-      uid: context.uid,
-      riceName: riceName,
-      email: email,
-      kilograms: kilograms,
-      price: productPrice,
-      quantity: qty,
-      description: description,
-      imageUrl: imageUrl,
-    };
-
-    httpRequest
-      .post(
-        "/.netlify/functions/index?name=addProduct&&component=productComponent",
-        config
-      )
-      .then(() => {
-        setLoading(false);
-        clearState();
-        swal({
-          title: "Successfully",
-          text: `Password doesnt match, please try again`,
-          icon: "success",
-          button: "Ok",
-        });
-      });
-  };
+  // const uploadFileHttpRequest = (imageUrl) => {
+  //   // httpRequest
+  //   //   .post(
+  //   //     "/.netlify/functions/index?name=addProduct&&component=productComponent",
+  //   //     config
+  //   //   )
+  //   //   .then(() => {
+  //   // setLoading(false);
+  //   // clearState();
+  //   // swal({
+  //   //   title: "Successfully",
+  //   //   text: `Password doesnt match, please try again`,
+  //   //   icon: "success",
+  //   //   button: "Ok",
+  //   // });
+  //   //   });
+  // };
 
   return (
     <Spin spinning={loading}>
@@ -152,25 +162,46 @@ const Post = () => {
         <h1 className="text-2xl font-bold">Post Bidding</h1>
         <section className="flex flex-col sm:flex-row justify-center gap-4">
           <div className="w-full md:w-1/2">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex items-center grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="mt-2">
+                <label
+                  className="block text-gray-700 text-sm font-semibold mb-2"
+                  htmlFor="riceVariety"
+                >
+                  Rice Variety
+                </label>
+                <select
+                  id="riceVariety"
+                  name="riceVariety"
+                  className=" block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  value={riceVariety}
+                  onChange={(event) => onChange(event)}
+                >
+                  <option value=""></option>
+                  {fetchVariety.map((variety) => (
+                    <option value={variety.variety}>{variety.variety}</option>
+                  ))}
+                </select>
+              </div>
               <Textfield
-                value={riceName}
-                onChange={(event) => onChange(event)}
-                label="Rice Name"
-                type="text"
-                placeholder="Rice Name"
-                name="riceName"
-              />
-              <Textfield
-                value={email}
+                value={context.email}
+                readOnly={true}
                 onChange={(event) => onChange(event)}
                 label="Owner Email"
                 type="email"
                 placeholder="Owner Email"
                 name="email"
               />
+              <Textfield
+                onChange={(event) => onChange(event)}
+                value={dateHarvested}
+                label="Date Harvested"
+                type="date"
+                placeholder="Date Harvested"
+                name="dateHarvested"
+              />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Textfield
                 value={kilograms}
                 onChange={(event) => onChange(event)}
@@ -186,14 +217,6 @@ const Post = () => {
                 type="number"
                 placeholder="Price"
                 name="price"
-              />
-              <Textfield
-                value={quantity}
-                onChange={(event) => onChange(event)}
-                label="Quantity"
-                type="number"
-                placeholder="Quantity"
-                name="quantity"
               />
             </div>
             <label

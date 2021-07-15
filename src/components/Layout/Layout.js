@@ -59,9 +59,15 @@ const Layout = ({ children }) => {
 
   useEffect(fetchUserInformation, [userContext.userInformation, context.email]);
 
+  console.log(context.email);
+
   if (context.length > 0) {
     return setLoading(false);
   }
+
+  links.map((type) => {
+    console.log(type.link);
+  });
 
   return (
     <div className="md:flex flex-col md:flex-row md:min-h-screen relative">
@@ -100,11 +106,11 @@ const Layout = ({ children }) => {
               </span>
             </div>
           </div>
-          <nav className="flex-grow md:block md:overflow-y-auto">
-            {links.map((type) => (
+          <nav className="flex-grow md:block md:overflow-auto">
+            {links.map((type, index) => (
               <Link
                 to={type.link}
-                key={type.id}
+                key={index}
                 className="flex items-center block px-6 py-2 mt-2 text-sm font-semibold text-gray-800 bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
               >
                 <i>{type.icon}</i>

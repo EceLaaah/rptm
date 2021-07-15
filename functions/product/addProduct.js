@@ -9,7 +9,7 @@ module.exports = async (event) => {
       email,
       kilograms,
       price,
-      quantity,
+      dateHarvested,
       description,
       imageUrl,
     } = JSON.parse(event.body);
@@ -22,7 +22,7 @@ module.exports = async (event) => {
       email: email,
       kilograms: kilograms,
       price: price,
-      quantity: quantity,
+      dateHarvested,
       description: description,
       imageUrl: imageUrl,
     });

@@ -7,6 +7,8 @@ import { ProductContext } from "../../Context/ProductProvider";
 import { AuthContext } from "../../Context/auth";
 import { Card } from "../../components";
 import { Spin } from "antd";
+import { Link } from "react-router-dom";
+import { PlusCircle } from "react-feather";
 import ReactPaginate from "react-paginate";
 
 const Products = () => {
@@ -41,7 +43,7 @@ const Products = () => {
             image={type.imageUrl}
             kilograms={type.kilograms}
             price={type.price}
-            title={type.riceName}
+            title={type.riceVariety}
             name={type.email}
             description={type.description}
           >
@@ -54,19 +56,27 @@ const Products = () => {
                   Delete
                 </button>
               </Popconfirm>
-              <button
-                onClick={(event) => getProductId(event, type.id)}
-                className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm"
+              <Popconfirm
+                title="Do you want to Edit this product?"
+                onConfirm={(event) => getProductId(event, type.id)}
               >
-                Edit
-              </button>
+                <button className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm">
+                  Edit
+                </button>
+              </Popconfirm>
             </div>
           </Card>
         )
     )
   ) : (
-    <div className="absolute inset-x-0 py-10 text-center bg-gray-200 font-semibold text-gray-600">
-      Market Place is Empty
+    <div className="absolute inset-x-0 py-10 text-center font-semibold text-gray-600">
+      <h1 className="text-sm font-light mb-4">Empty Products</h1>
+
+      <Link to="/Post">
+        <button className="py-1 px-10 bg-primary text-white font-semibold shadow-lg rounded-sm hover:bg-primary-slight focus:outline-none">
+          Add Products
+        </button>
+      </Link>
     </div>
   );
 
@@ -78,14 +88,17 @@ const Products = () => {
     setPageNumber(selected);
   };
 
-  if (product.length > 0) {
-    return setLoading(true);
-  }
-
   return (
     <div className="max-w-content mx-auto px-4 bg-gray-100">
       <div className="flex text-center justify-between">
         <h1 className="text-2xl pb-8 font-bold">Products Owned</h1>
+        {product.product.length >= 0 ? (
+          <Link to="/post">
+            <button className="h-9 px-6 bg-primary text-white rounded-sm flex items-center justify-center gap-2 font-semibold">
+              <PlusCircle className="w-5 h-5" /> Sell Palay
+            </button>
+          </Link>
+        ) : null}
       </div>
       <Spin spinning={loading} delay={500}>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 flex justify-center relative">

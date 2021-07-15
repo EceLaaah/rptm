@@ -3,8 +3,15 @@ const callback = require("../callback");
 
 module.exports = async (event) => {
   try {
-    const { riceName, email, kilograms, price, quantity, description, id } =
-      JSON.parse(event.body);
+    const {
+      riceName,
+      email,
+      kilograms,
+      price,
+      dateHarvested,
+      description,
+      id,
+    } = JSON.parse(event.body);
 
     const document = firebaseDb.collection("product").doc(id);
 
@@ -13,7 +20,7 @@ module.exports = async (event) => {
       email,
       kilograms,
       price,
-      quantity,
+      dateHarvested,
       description,
     });
 

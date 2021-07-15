@@ -14,7 +14,7 @@ const Card = ({
   return (
     <div
       key={key}
-      className="bg-white shadow-sm w-80 max-w-sm rounded-lg w-full h-auto"
+      className="bg-white shadow-lg w-80 max-w-sm rounded-lg w-full h-auto"
     >
       <div
         className="object-cover w-full h-56 rounded-t-lg bg-cover bg-center relative"

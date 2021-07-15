@@ -1,7 +1,7 @@
 import React from "react";
 
 const Textfield = (props) => {
-  const { type, placeholder, name, label, value, onChange } = props;
+  const { type, readOnly, placeholder, name, label, value, onChange } = props;
   return (
     <div className="mb-1 sm:mb-4 mt-1 sm:mt-6">
       <label
@@ -12,6 +12,7 @@ const Textfield = (props) => {
       </label>
       <input
         required
+        readOnly={readOnly}
         onChange={(event) => onChange(event)}
         type={type}
         placeholder={placeholder}
@@ -19,7 +20,9 @@ const Textfield = (props) => {
         defaultValue={value}
         value={value}
         id={name}
-        className="text-sm appearance-none rounded w-full py-2 px-3 text-gray-700 bg-gray-100 leading-tight focus:outline-none focus:shadow-outline h-10"
+        className={`${
+          readOnly && "bg-gray-300"
+        } text-sm appearance-none rounded w-full py-2 px-3 text-gray-700 bg-gray-100 leading-tight focus:outline-none focus:shadow-outline h-10`}
       />
     </div>
   );

@@ -7,8 +7,9 @@ module.exports = async (event) => {
       firstname,
       lastname,
       email,
+      monthlyIncome,
       gender,
-      date,
+      dateOfBirth,
       contact,
       barangay,
       municipality,
@@ -18,12 +19,15 @@ module.exports = async (event) => {
 
     const document = firebaseDb.collection("user").doc(id);
 
+    const income = Number(monthlyIncome);
+
     await document.update({
       firstname,
       lastname,
       email,
+      monthlyIncome: income,
       gender,
-      date,
+      dateOfBirth,
       contact,
       barangay,
       municipality,

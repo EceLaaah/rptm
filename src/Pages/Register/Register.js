@@ -17,7 +17,7 @@ const information = {
   contact: 0,
   barangay: "",
   municipality: "",
-  province: "",
+  province: "Iloilo",
   email: "",
   password: "",
   confirmPassword: "",
@@ -55,6 +55,17 @@ const Register = () => {
     setState({ ...information });
   };
 
+  function getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
   const Loading = () => setLoading(true);
 
   const onSubmit = (event) => {
@@ -62,47 +73,49 @@ const Register = () => {
 
     Loading();
 
+    const age = getAge(date);
+
+    const userEmail = email.toLowerCase();
+
     if (password === confirmPassword) {
       app
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then((cred) =>
           (async () => {
-            if (cred.user) {
-              const config = {
+            const document = app
+              .firestore()
+              .collection("user")
+              .doc(cred.user.uid);
+
+            document
+              .set({
                 imageUrl,
                 firstname,
                 lastname,
                 role,
                 gender,
-                date,
+                dateOfBirth: date,
+                age,
                 contact,
                 barangay,
                 municipality,
                 province,
-                email,
+                email: userEmail,
                 password,
-                confirmPassword,
-                uid: cred.user.uid,
-              };
-
-              httpRequest
-                .post(
-                  "/.netlify/functions/index?name=signIn&&component=userInformationComponent",
-                  config
-                )
-                .then(() => {
-                  setLoading(false);
-                  swal({
-                    title: "Successfully",
-                    text: "successfully registered",
-                    icon: "success",
-                    button: "proceed",
-                  }).then(() => {
-                    clearState();
-                  });
+              })
+              .then(() => {
+                clearState();
+                setLoading(false);
+                swal({
+                  title: "Successfully",
+                  text: "successfully registered",
+                  icon: "success",
+                  button: "proceed",
+                }).then(() => {
+                  clearState();
                 });
-            }
+              });
           })()
         )
         .catch((error) => {
@@ -190,7 +203,7 @@ const Register = () => {
             <Textfield
               onChange={(event) => onChange(event)}
               value={date}
-              label="Date Birth"
+              label="Date of Birth"
               type="date"
               placeholder="date"
               name="date"
