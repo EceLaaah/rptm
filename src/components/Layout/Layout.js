@@ -65,10 +65,6 @@ const Layout = ({ children }) => {
     return setLoading(false);
   }
 
-  links.map((type) => {
-    console.log(type.link);
-  });
-
   return (
     <div className="md:flex flex-col md:flex-row md:min-h-screen relative">
       {/**Sidebar */}

@@ -6,13 +6,11 @@ import { ChevronLeft, ChevronRight } from "react-feather";
 import { ProductContext } from "../../Context/ProductProvider";
 import { AuthContext } from "../../Context/auth";
 import { Card } from "../../components";
-import { Spin } from "antd";
 import { Link } from "react-router-dom";
 import { PlusCircle } from "react-feather";
 import ReactPaginate from "react-paginate";
 
 const Products = () => {
-  const [loading, setLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
   const numberOfCards = 6;
   const pagesVisited = pageNumber * numberOfCards;
@@ -100,11 +98,9 @@ const Products = () => {
           </Link>
         ) : null}
       </div>
-      <Spin spinning={loading} delay={500}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 flex justify-center relative">
-          {displayCards}
-        </div>
-      </Spin>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 flex justify-center relative">
+        {displayCards}
+      </div>
       <ReactPaginate
         previousLabel={<ChevronLeft className="text-gray-500" />}
         nextLabel={<ChevronRight className="text-gray-500" />}

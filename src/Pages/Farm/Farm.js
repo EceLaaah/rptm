@@ -5,7 +5,7 @@ import { Tag, Space, Popconfirm, Divider, Spin, Input } from "antd";
 import { Edit3, Trash2, PlusCircle } from "react-feather";
 import { MyModal, Textfield, AdminTable } from "../../components";
 import { MyDateString } from "../../Utils";
-import { arraySlice, filtered, onSearch } from "../../Utils/ReusableSyntax";
+import { arraySlice, onSearch } from "../../Utils/ReusableSyntax";
 import httpRequest from "../../api/httpRequest";
 import swal from "sweetalert";
 

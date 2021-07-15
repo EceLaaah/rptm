@@ -4,7 +4,6 @@ import { ChevronLeft } from "react-feather";
 import { Link } from "react-router-dom";
 import { Sheet, Textfield } from "../../components";
 import { Spin } from "antd";
-import httpRequest from "../../api/httpRequest";
 import swal from "sweetalert";
 
 const information = {

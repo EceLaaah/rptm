@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { AuthContext } from "../../Context/auth";
 import { Divider, Spin } from "antd";
 import { MyModal, Textfield } from "../../components";

@@ -3,7 +3,6 @@ import { objectAssign } from "../../Utils/ReusableSyntax";
 import { app } from "../../config/firebase";
 import { Textfield, Card } from "../../components";
 import { Spin, Popconfirm } from "antd";
-import httpRequest from "../../api/httpRequest";
 import swal from "sweetalert";
 
 const information = {

@@ -5,7 +5,6 @@ import { UpdateTextField } from "../../components";
 import { app } from "../../config/firebase";
 import { Spin } from "antd";
 import { AuthContext } from "../../Context/auth";
-import httpRequest from "../../api/httpRequest";
 import swal from "sweetalert";
 
 const userInformation = {
@@ -121,19 +120,19 @@ const Profile = () => {
       .collection("user")
       .doc(profileInformation.uid);
 
-    const config = {
-      firstname,
-      lastname,
-      email,
-      monthlyIncome,
-      gender,
-      dateOfBirth,
-      contact,
-      barangay,
-      municipality,
-      province,
-      id: profileInformation.uid,
-    };
+    // const config = {
+    //   firstname,
+    //   lastname,
+    //   email,
+    //   monthlyIncome,
+    //   gender,
+    //   dateOfBirth,
+    //   contact,
+    //   barangay,
+    //   municipality,
+    //   province,
+    //   id: profileInformation.uid,
+    // };
 
     const income = Number(monthlyIncome);
 

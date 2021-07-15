@@ -2,9 +2,6 @@ import React, { useContext, useState } from "react";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import ReactPaginate from "react-paginate";
 import { Spin } from "antd";
-import { Confirmation } from "../";
-import { AuthContext } from "../../Context/auth";
-import { FarmLocationContext } from "../../Context/FarmLocationProvider";
 import { ProductContext } from "../../Context/ProductProvider";
 
 //import {objectAssign} from '../../Utils/ReusableSyntax'
@@ -16,10 +13,6 @@ const Marketplace = () => {
   const numberOfCards = 6;
   const pagesVisited = pageNumber * numberOfCards;
   const product = useContext(ProductContext);
-  const { fetchFarmLocation } = useContext(FarmLocationContext);
-  const context = useContext(AuthContext);
-
-  console.log(fetchFarmLocation);
 
   const displayCards = product.product.length ? (
     product.product

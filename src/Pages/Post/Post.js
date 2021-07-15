@@ -6,7 +6,6 @@ import { useDropzone } from "react-dropzone";
 import { Textfield } from "../../components";
 import { Trash } from "react-feather";
 import { Spin } from "antd";
-import httpRequest from "../../api/httpRequest";
 import swal from "sweetalert";
 
 const information = {
