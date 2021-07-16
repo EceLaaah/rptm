@@ -1,12 +1,17 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../Context/auth";
 import { RiceVarietyContext } from "../../Context/RiceVarietyProvider";
 import { Tag, Space, Popconfirm, Divider, Spin, Input } from "antd";
-import { Edit3, Trash2, PlusCircle } from "react-feather";
-import { MyModal, Textfield, AdminTable } from "../../components";
+import {
+  MyModal,
+  Textfield,
+  UpdateTextField,
+  AdminTable,
+} from "../../components";
 import { app } from "../../config/firebase";
 import { MyDateString } from "../../Utils";
 import { arraySlice, filtered, onSearch } from "../../Utils/ReusableSyntax";
+import { Edit3, Trash2, PlusCircle } from "react-feather";
 import swal from "sweetalert";
 
 export default function Rice() {
@@ -16,6 +21,7 @@ export default function Rice() {
   const context = useContext(AuthContext);
   const { fetchVariety } = useContext(RiceVarietyContext);
   const [searchFilter, setSearchFilter] = useState(null);
+  const [id, setId] = useState("");
   const [current, setCurrent] = useState(1);
   const filteredVariety = filtered(fetchVariety, context);
 
@@ -24,8 +30,9 @@ export default function Rice() {
   //   Months[today.getMonth()]
   // } ${today.getDate()}, ${today.getFullYear()}`;
 
-  const isToggle = (event) => {
+  const isToggle = (event, id) => {
     event.preventDefault();
+    id && setId(id);
     if (!open) {
       setOpen(true);
     } else {
@@ -35,8 +42,8 @@ export default function Rice() {
 
   const onDelete = (event, id) => {
     event.preventDefault();
-
-    console.log(id);
+    const document = app.firestore().collection("variety").doc(id);
+    id && document.delete();
   };
 
   const columns = [
@@ -83,7 +90,10 @@ export default function Rice() {
       render: (fetchVariety) => {
         return (
           <Space size="middle" key="action">
-            <Popconfirm title="would you like to continue?">
+            <Popconfirm
+              title="would you like to continue?"
+              onConfirm={(event) => isToggle(event, fetchVariety.id)}
+            >
               <Edit3
                 className="text-blue-700 cursor-pointer"
                 size="20"
@@ -102,7 +112,42 @@ export default function Rice() {
     },
   ];
 
+  useEffect(() => {
+    const document = id && app.firestore().collection("variety").doc(id);
+    id &&
+      document.onSnapshot((snapshot) => {
+        if (snapshot) {
+          setVariety(snapshot.data().variety);
+        }
+      });
+  }, [id]);
+
   const Loading = () => setLoading(true);
+
+  const onUpdate = (event) => {
+    event.preventDefault();
+
+    Loading();
+
+    const document = app.firestore().collection("variety").doc(id);
+
+    document
+      .update({
+        variety,
+        date_updated: MyDateString,
+      })
+      .then(() => {
+        setLoading(false);
+        setOpen(false);
+        setVariety("");
+        swal({
+          title: "Success",
+          text: `Successfully Updated`,
+          icon: "success",
+          button: "Ok",
+        });
+      });
+  };
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -145,12 +190,20 @@ export default function Rice() {
             <h1 className="text-lg text-primary font-semibold text-center mt-2">
               Rice Variety
             </h1>
-            <Textfield
-              value={variety}
-              name={variety}
-              onChange={(event) => setVariety(event.target.value)}
-              placeholder="Rice Variety"
-            />
+            {id ? (
+              <UpdateTextField
+                defaultValue={variety}
+                name="variety"
+                onChange={(event) => setVariety(event.target.value)}
+              />
+            ) : (
+              <Textfield
+                value={variety}
+                name="variety"
+                onChange={(event) => setVariety(event.target.value)}
+                placeholder="Rice Variety"
+              />
+            )}
             <Divider />
 
             <div className="flex items-center justify-end gap-2">
@@ -160,12 +213,21 @@ export default function Rice() {
               >
                 Cancel
               </button>
-              <button
-                onClick={(event) => onSubmit(event)}
-                className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm"
-              >
-                Save
-              </button>
+              {id ? (
+                <button
+                  onClick={(event) => onUpdate(event)}
+                  className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm"
+                >
+                  Update
+                </button>
+              ) : (
+                <button
+                  onClick={(event) => onSubmit(event)}
+                  className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm"
+                >
+                  Save
+                </button>
+              )}
             </div>
           </Spin>
         </div>

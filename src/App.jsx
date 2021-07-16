@@ -26,6 +26,38 @@ import {
   Farm,
   Produce,
 } from "./Pages";
+// const Dashboard = lazy(() => import("./Pages/Dashboard"));
+// const Procurement = lazy(() => import("./Pages/Procurement"));
+// const Inventory = lazy(() => import("./Pages/Inventory"));
+// const Distribution = lazy(() => import("./Pages/Distribution"));
+// const Login = lazy(() => import("./Pages/Login"));
+// const Register = lazy(() => import("./Pages/Register"));
+// const Profile = lazy(() => import("./Pages/Profile"));
+// const Transaction = lazy(() => import("./Pages/Transaction"));
+// const Post = lazy(() => import("./Pages/Post"));
+// const Marketplace = lazy(() => import("./Pages/Marketplace"));
+// const Products = lazy(() => import("./Pages/Products"));
+// const UpdateProduct = lazy(() => import("./Pages/UpdateProduct"));
+// const Rice = lazy(() => import("./Pages/Rice"));
+// const Farm = lazy(() => import("./Pages/Farm"));
+// const Produce = lazy(() => import("./Pages/Produce"));
+// const {
+//   Dashboard,
+//   Procurement,
+//   Inventory,
+//   Distribution,
+//   Login,
+//   Register,
+//   Profile,
+//   Transaction,
+//   Post,
+//   Marketplace,
+//   Products,
+//   UpdateProduct,
+//   Rice,
+//   Farm,
+//   Produce,
+// } = lazy(() => import("./Pages"));
 
 function App() {
   return (
