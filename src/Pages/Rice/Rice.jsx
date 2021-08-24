@@ -182,7 +182,7 @@ export default function Rice() {
   return (
     <>
       <MyModal
-        className="max-w-sm w-full h-full md:h-64 mx-auto p-6"
+        className="max-w-sm w-full h-full md:h-64 mx-auto p-6 rounded-sm"
         isOpen={open}
       >
         <div className="max-w-2xl mx-auto">

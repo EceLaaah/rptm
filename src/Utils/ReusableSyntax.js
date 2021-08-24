@@ -1,3 +1,10 @@
+//**return all pending items
+export const pendingItems = (cartItems) => {
+  return cartItems.filter((obj) => {
+    return obj.itemStatus === "pending";
+  });
+};
+
 //*Convert Array Object into Object
 export const objectAssign = (ObjectArray, obj) => {
   return ObjectArray.map((info) => {

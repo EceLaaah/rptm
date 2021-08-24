@@ -1,17 +1,20 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Spin } from "antd";
+import { Spin, Badge } from "antd";
 import { app } from "../../config/firebase";
 import { UserContext } from "../../Context/UserProvider";
 import { AuthContext } from "../../Context/auth";
+import { ProductContext } from "../../Context/ProductProvider";
 import { farmerLinks, TraderLinks, NFA } from "../../mock/data";
 import { LogOut } from "react-feather";
 import { Link } from "react-router-dom";
-import { Menu, X } from "react-feather";
+import { Menu, X, ShoppingCart } from "react-feather";
+import { pendingItems } from "../../Utils/ReusableSyntax";
 //import { Search } from "../";
 
 const Layout = ({ children }) => {
   const userContext = useContext(UserContext);
   const context = useContext(AuthContext);
+  const { fetchTransactionData } = useContext(ProductContext);
   const [info, setInfo] = useState({
     name: "",
     email: "",
@@ -22,6 +25,11 @@ const Layout = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [sidebarToggle, setSidebarToggle] = useState(false);
+
+  const pendingProduct = pendingItems(fetchTransactionData, context.uid);
+  const ownPendingItems = pendingProduct.filter((obj) => {
+    return obj.uid === context.uid;
+  });
 
   const isSidebar = (event) => {
     event.preventDefault();
@@ -57,9 +65,9 @@ const Layout = ({ children }) => {
     });
   };
 
-  useEffect(fetchUserInformation, [userContext.userInformation, context.email]);
+  console.log(info);
 
-  console.log(context.email);
+  useEffect(fetchUserInformation, [userContext.userInformation, context.email]);
 
   if (context.length > 0) {
     return setLoading(false);
@@ -131,39 +139,48 @@ const Layout = ({ children }) => {
             <Menu />
           </div>
           <div className="mx-4 absolute right-0">
-            <div className="relative inline-block text-left">
-              <span
-                onClick={(event) => isToggle(event)}
-                className="py-2 px-4 bg-gray-100 text-gray-600 rounded-full text-sm font-bold cursor-pointer"
-              >
-                {context.email}
-              </span>
-              {toggle && (
-                <div
-                  className="origin-top-right z-50 absolute right-0 mt-3 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="menu-button"
-                  tabindex="-1"
+            <div className="flex items-center gap-4">
+              <Badge count={ownPendingItems.length}>
+                <Link to="/cart">
+                  <span>
+                    <ShoppingCart className="hover:text-gray-600 text-gray-600" />
+                  </span>
+                </Link>
+              </Badge>
+              <div className="inline-block text-left relative">
+                <span
+                  onClick={(event) => isToggle(event)}
+                  className="py-2 px-4 bg-gray-100 text-gray-600 rounded-full text-sm font-bold cursor-pointer"
                 >
+                  {context.email}
+                </span>
+                {toggle && (
                   <div
-                    onClick={() => app.auth().signOut()}
-                    className="py-1 px-3 hover:bg-gray-50 cursor-pointer rounded-md flex items-center"
-                    role="none"
+                    className="origin-top-right z-50 absolute right-0 mt-3 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="menu-button"
+                    tabindex="-1"
                   >
-                    <LogOut className="text-gray-700 w-4 h-4" />
-                    <button
-                      href="#"
-                      className="text-gray-700 block px-2 py-2 text-sm"
-                      role="menuitem"
-                      tabindex="-1"
-                      id="menu-item-0"
+                    <div
+                      onClick={() => app.auth().signOut()}
+                      className="py-1 px-3 hover:bg-gray-50 cursor-pointer rounded-md flex items-center"
+                      role="none"
                     >
-                      Signout
-                    </button>
+                      <LogOut className="text-gray-700 w-4 h-4" />
+                      <button
+                        href="#"
+                        className="text-gray-700 block px-2 py-2 text-sm"
+                        role="menuitem"
+                        tabindex="-1"
+                        id="menu-item-0"
+                      >
+                        Signout
+                      </button>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </div>

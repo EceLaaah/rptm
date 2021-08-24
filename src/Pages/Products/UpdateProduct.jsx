@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { objectAssign } from "../../Utils/ReusableSyntax";
 import { app } from "../../config/firebase";
 import { Textfield, Card } from "../../components";
 import { Spin, Popconfirm } from "antd";
+import { ProductContext } from "../../Context/ProductProvider";
 import swal from "sweetalert";
 
 const information = {
+  imageUrl: "",
   riceVariety: "",
   email: "",
   kilograms: "",
@@ -16,6 +18,7 @@ const information = {
 
 const UpdateProduct = (props) => {
   const [loading, setLoading] = useState(false);
+  const { setId, fetchProd } = useContext(ProductContext);
   const params = new URLSearchParams(props.location.search);
   const id = params.get("id");
 
@@ -23,9 +26,11 @@ const UpdateProduct = (props) => {
     { riceVariety, email, kilograms, price, dateHarvested, description },
     setState,
   ] = useState(information);
-  const [productInformation, setProductInformation] = useState([]);
 
-  productInformation && objectAssign(productInformation, information);
+  fetchProd && objectAssign(fetchProd, information);
+
+  //const [productInformation, setProductInformation] = useState([]);
+  //productInformation && objectAssign(productInformation, information);
 
   const onChange = (event) => {
     event.preventDefault();
@@ -34,14 +39,7 @@ const UpdateProduct = (props) => {
   };
 
   useEffect(() => {
-    const document = app.firestore().collection("product").doc(id);
-    return document.onSnapshot((snapshot) => {
-      const items_array = [];
-      if (snapshot) {
-        items_array.push({ ...snapshot.data() });
-        setProductInformation(items_array);
-      }
-    });
+    id && setId(id);
   }, [id]);
 
   const Loading = () => setLoading(true);
@@ -51,16 +49,6 @@ const UpdateProduct = (props) => {
     const productPrice = Number(price);
 
     Loading();
-
-    // const config = {
-    //   riceName,
-    //   email,
-    //   kilograms,
-    //   price: productPrice,
-    //   dateHarvested,
-    //   description,
-    //   id,
-    // };
 
     const document = app.firestore().collection("product").doc(id);
 
@@ -170,17 +158,14 @@ const UpdateProduct = (props) => {
             />
           </div>
           <div className="w-full md:w-1/2 flex justify-center">
-            {productInformation.map((type, index) => (
-              <Card
-                key={index}
-                image={type.imageUrl}
-                kilograms={type.kilograms}
-                price={type.price}
-                title={type.riceVariety}
-                name={type.email}
-                description={type.description}
-              />
-            ))}
+            <Card
+              image={information.imageUrl}
+              kilograms={kilograms}
+              price={price}
+              title={riceVariety}
+              name={email}
+              description={description}
+            />
           </div>
         </section>
         <div className="flex items-center justify-end gap-4 mt-6">

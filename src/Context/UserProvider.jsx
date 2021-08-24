@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useReducer } from "react";
 import { app } from "../config/firebase";
 
 const UserContext = createContext();
@@ -6,7 +6,7 @@ const UserContext = createContext();
 const UserProvider = ({ children }) => {
   const [userInformation, setUserInformation] = useState([]);
 
-  const fetchUserInformation = () => {
+  const fetchUserInformations = () => {
     const document = app.firestore().collection("user");
 
     return document.onSnapshot((onsnapshot) => {
@@ -18,7 +18,7 @@ const UserProvider = ({ children }) => {
     });
   };
 
-  useEffect(fetchUserInformation, []);
+  useEffect(fetchUserInformations, []);
 
   return (
     <UserContext.Provider value={{ userInformation }}>

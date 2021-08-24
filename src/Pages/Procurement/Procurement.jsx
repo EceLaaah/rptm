@@ -116,7 +116,7 @@ export default function Procurement() {
   const currentData = arraySlice(fetchProcurement, current, dataShowed);
 
   return (
-    <>
+    <div className="max-w-content mx-auto px-4 bg-gray-100">
       {open && (
         <AddProcurement isOpen={open} isClose={(event) => isToggle(event)} />
       )}
@@ -161,6 +161,6 @@ export default function Procurement() {
           dataShowed={dataShowed}
         />
       </div>
-    </>
+    </div>
   );
 }

@@ -84,7 +84,7 @@ export default function AddProcurement({ isOpen, isClose, id }) {
 
   return (
     <MyModal
-      className="max-w-xl w-full h-full md:h-4/6 mx-auto p-6"
+      className="max-w-xl w-full h-full md:h-4/6 mx-auto p-6 rounded-sm"
       isOpen={isOpen}
     >
       <Spin spinning={loading}>

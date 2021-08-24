@@ -101,6 +101,7 @@ const Post = () => {
     loadingState();
 
     const productPrice = Number(price);
+    const kg = Number(kilograms);
     const document = app.firestore().collection("product").doc();
 
     acceptedFiles.map(async (file) => {
@@ -115,7 +116,7 @@ const Post = () => {
                 uid: context.uid,
                 riceVariety: riceVariety,
                 email: context.email,
-                kilograms: kilograms,
+                kilograms: kg,
                 price: productPrice,
                 dateHarvested,
                 description: description,
@@ -205,7 +206,7 @@ const Post = () => {
                 value={kilograms}
                 onChange={(event) => onChange(event)}
                 label="Kilograms"
-                type="text"
+                type="number"
                 placeholder="Kilograms"
                 name="kilograms"
               />

@@ -87,7 +87,7 @@ export default function Transaction() {
   const currentData = arraySlice(transactionFarmer, current, dataShowed);
 
   return (
-    <div>
+    <div className="max-w-content mx-auto px-4 bg-gray-100">
       <h1 className="text-2xl mb-4 font-semibold">Transaction History</h1>
       <div className="text-right mb-4">
         <Input.Search

@@ -23,8 +23,8 @@ import {
   Products,
   UpdateProduct,
   Rice,
-  Farm,
   Produce,
+  Cart,
 } from "./Pages";
 // const Dashboard = lazy(() => import("./Pages/Dashboard"));
 // const Procurement = lazy(() => import("./Pages/Procurement"));
@@ -131,7 +131,7 @@ function App() {
                           component={Products}
                         />
                         <PrivateRoute exact path="/rice" component={Rice} />
-                        <PrivateRoute exact path="/farm" component={Farm} />
+                        <PrivateRoute exact path="/cart" component={Cart} />
                       </Switch>
                     </Router>
                   </AuthProvider>

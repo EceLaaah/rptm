@@ -5,6 +5,7 @@ import { UpdateTextField } from "../../components";
 import { app } from "../../config/firebase";
 import { Spin } from "antd";
 import { AuthContext } from "../../Context/auth";
+import { UserContext } from "../../Context/UserProvider";
 import swal from "sweetalert";
 
 const userInformation = {
@@ -19,6 +20,7 @@ const userInformation = {
   barangay: "",
   municipality: "",
   province: "",
+  role: "",
 };
 
 const Profile = () => {
@@ -41,9 +43,9 @@ const Profile = () => {
   const [visible, setVisible] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
   const [profile, setProfilePicture] = useState({ status: false, image: null });
-  const [information, setInformation] = useState([]);
   const [loading, setLoading] = useState(false);
   const [toggle, setToggle] = useState(false);
+  const [information, setInformation] = useState([]);
   const profileInformation = useContext(AuthContext);
 
   information && objectAssign(information, userInformation);
@@ -120,20 +122,6 @@ const Profile = () => {
       .collection("user")
       .doc(profileInformation.uid);
 
-    // const config = {
-    //   firstname,
-    //   lastname,
-    //   email,
-    //   monthlyIncome,
-    //   gender,
-    //   dateOfBirth,
-    //   contact,
-    //   barangay,
-    //   municipality,
-    //   province,
-    //   id: profileInformation.uid,
-    // };
-
     const income = Number(monthlyIncome);
 
     await document
@@ -158,21 +146,6 @@ const Profile = () => {
           button: "Ok",
         });
       });
-
-    // httpRequest
-    //   .put(
-    //     "/.netlify/functions/index?name=updateUserInformation&&component=userInformationComponent",
-    //     config
-    //   )
-    //   .then(() => {
-    // setLoading(false);
-    // swal({
-    //   title: "Success",
-    //   text: `Successfully updated`,
-    //   icon: "success",
-    //   button: "Ok",
-    // });
-    //   });
   };
 
   //*save image to firebase storage
@@ -205,54 +178,19 @@ const Profile = () => {
     }
   };
 
-  // const httpApi = (imageUrl) => {
-  //   try {
-  //     //     httpRequest
-  //     //       .put(
-  //     //         "/.netlify/functions/index?name=updateUserProfile&&component=userInformationComponent",
-  //     //         { id: profileInformation.uid, imageUrl }
-  //     //       )
-  //     //       .then(() => {
-  //     //   setLoading(false);
-  //     //   onRemoveProfile();
-  //     //   swal({
-  //     //     title: "Success",
-  //     //     text: `Successfully Profile Updated`,
-  //     //     icon: "success",
-  //     //     button: "Ok",
-  //     //   });
-  //     // });
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
-
   //** Change this in useReducer and dispatch later on */
   useEffect(() => {
     const document = app
       .firestore()
       .collection("user")
       .doc(profileInformation.uid);
-
-    document.onSnapshot((snapshot) => {
-      const array = [];
+    return document.onSnapshot((snapshot) => {
+      const dataArray = [];
       if (snapshot) {
-        array.push(snapshot.data());
-        setInformation(array);
+        dataArray.push({ ...snapshot.data(), id: snapshot.id });
+        setInformation(dataArray);
       }
     });
-    // const array = [];
-    // const document = app
-    //   .firestore()
-    //   .collection("user")
-    //   .doc(profileInformation.uid);
-
-    // document.get().then((doc) => {
-    //   if (doc.exists) {
-    //     array.push(doc.data());
-    //     setInformation(array);
-    //   }
-    // });
   }, [profileInformation.uid]);
 
   const PopoverContent = () => {
@@ -420,13 +358,15 @@ const Profile = () => {
                   placeholder="Email"
                   name="email"
                 />
-                <UpdateTextField
-                  label="Monthly Income"
-                  onChange={(event) => onChange(event)}
-                  defaultValue={monthlyIncome}
-                  type="text"
-                  name="monthlyIncome"
-                />
+                {userInformation.role === "Farmer" && (
+                  <UpdateTextField
+                    label="Monthly Income"
+                    onChange={(event) => onChange(event)}
+                    defaultValue={monthlyIncome}
+                    type="text"
+                    name="monthlyIncome"
+                  />
+                )}
               </div>
               <Divider />
               <h1 className="text-2xl font-bold text-gray-400">

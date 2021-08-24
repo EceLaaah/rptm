@@ -1,39 +1,61 @@
 import React, { useContext, useState } from "react";
-import { ChevronLeft, ChevronRight } from "react-feather";
 import ReactPaginate from "react-paginate";
-import { Spin } from "antd";
+import { AuthContext } from "../../Context/auth";
+import { ChevronLeft, ChevronRight } from "react-feather";
+import { Spin, Popconfirm } from "antd";
 import { ProductContext } from "../../Context/ProductProvider";
-
-//import {objectAssign} from '../../Utils/ReusableSyntax'
-import { Card } from "../../components";
+import { Card, Bidding } from "../../components";
 
 const Marketplace = () => {
   const [loading, setLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
+  const [id, setId] = useState("");
+
   const numberOfCards = 6;
   const pagesVisited = pageNumber * numberOfCards;
   const product = useContext(ProductContext);
+  const context = useContext(AuthContext);
+
+  const isToggle = (event, id) => {
+    event.preventDefault();
+    setId(id);
+    if (!openModal) {
+      setOpenModal(true);
+    } else {
+      setOpenModal(false);
+    }
+  };
 
   const displayCards = product.product.length ? (
     product.product
       .slice(pagesVisited, pagesVisited + numberOfCards)
       .map((type, index) => (
-        <Card
-          cardStyle="truncate"
-          key={index}
-          image={type.imageUrl}
-          kilograms={type.kilograms}
-          price={type.price}
-          title={type.riceVariety}
-          name={type.email}
-          description={type.description}
-        >
-          <div className="text-right">
-            <button className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm">
-              Bid
-            </button>
-          </div>
-        </Card>
+        <>
+          {type.uid === context.uid ? null : (
+            <Card
+              cardStyle="truncate"
+              key={index}
+              image={type.imageUrl}
+              kilograms={type.kilograms}
+              price={type.price}
+              title={type.riceVariety}
+              name={type.email}
+              description={type.description}
+            >
+              <div className="text-right">
+                <Popconfirm
+                  title="Are you sure you want to bid?"
+                  onConfirm={(event) => isToggle(event, type.id)}
+                >
+                  <button className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm">
+                    Bid
+                  </button>
+                </Popconfirm>
+              </div>
+            </Card>
+          )}
+        </>
       ))
   ) : (
     <div className="absolute inset-x-0 py-10 text-center bg-gray-200 font-semibold text-gray-600">
@@ -49,12 +71,15 @@ const Marketplace = () => {
     setPageNumber(selected);
   };
 
-  if (product.length > 0) {
-    return setLoading(true);
-  }
-
   return (
     <>
+      {openModal && (
+        <Bidding
+          open={openModal}
+          onClose={(event) => isToggle(event)}
+          id={id}
+        />
+      )}
       {/* {fetchFarmLocation.length <= 0 && <Confirmation />} */}
       <div className="max-w-content mx-auto px-4 bg-gray-100">
         <div className="flex text-center justify-between">
