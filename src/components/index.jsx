@@ -11,4 +11,5 @@ export { default as AddProcurement } from "./ProcurementFunctionality/AddProcure
 export { default as UpdateProcurement } from "./ProcurementFunctionality/UpdateProcurement";
 export { default as AddDistribution } from "./DistributionFuncionality/AddDistribution";
 export { default as UpdateDistribution } from "./DistributionFuncionality/UpdateDistribution";
-export {default as Bidding} from './Bidding/Bidding'
+export { default as Bidding } from './Bidding/Bidding'
+export { default as TransactionHistory } from './TransactionHistory/TransactionHistory'

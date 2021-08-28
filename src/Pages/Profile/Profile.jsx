@@ -5,7 +5,6 @@ import { UpdateTextField } from "../../components";
 import { app } from "../../config/firebase";
 import { Spin } from "antd";
 import { AuthContext } from "../../Context/auth";
-import { UserContext } from "../../Context/UserProvider";
 import swal from "sweetalert";
 
 const userInformation = {

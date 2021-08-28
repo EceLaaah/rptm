@@ -12,4 +12,4 @@ export { default as Inventory } from "./Inventory/Inventory";
 export { default as Distribution } from "./Distribution/Distribution";
 export { default as Procurement } from "./Procurement/Procurement";
 export { default as Produce } from "./Produce/Produce";
-export { default as Cart } from "./Cart/Cart";
+//export { default as BiddingReview } from "./BiddingReview/BiddingReview";

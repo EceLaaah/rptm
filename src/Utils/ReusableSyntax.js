@@ -1,7 +1,19 @@
+//*Table Sorting
+export const sortTypes = ["descend", "ascend"];
+export const sortRiceVariety = (a, b) =>
+  a.riceVariety < b.riceVariety ? 1 : -1;
+
 //**return all pending items
 export const pendingItems = (cartItems) => {
   return cartItems.filter((obj) => {
     return obj.itemStatus === "pending";
+  });
+};
+
+//*Filter Transaction by Rice Variety
+export const filterTransaction = (transaction, riceVariety) => {
+  return transaction.filter((obj) => {
+    return obj.riceVariety === riceVariety;
   });
 };
 
@@ -16,6 +28,24 @@ export const objectAssign = (ObjectArray, obj) => {
 export const filtered = (productItems, currentUseriId) => {
   return productItems.filter((obj) => {
     return obj.uid === currentUseriId.uid;
+  });
+};
+
+//**filtered transaction by owners id and biddingStatus equal to true */
+export const filteredTransaction = (transaction, currentUseriId) => {
+  return transaction.filter((obj) => {
+    return obj.farmerId === currentUseriId.uid && obj.biddingStatus === true;
+  });
+};
+
+//**filtered transaction by owners id and BiddingStatus Equal to false */
+export const filteredDoneTransaction = (transaction, currentUseriId) => {
+  return transaction.filter((obj) => {
+    return (
+      obj.farmerId === currentUseriId.uid &&
+      obj.biddingStatus === false &&
+      obj.owned === "won"
+    );
   });
 };
 
@@ -35,4 +65,10 @@ export const onSearch = (value, items) => {
       return String(data[key]).toLowerCase().includes(value.toLowerCase());
     });
   });
+};
+
+export const filterTotal = (dataArray) => {
+  const subTotal = dataArray.reduce((a, b) => a + b.biddingPrice, 0);
+
+  return subTotal;
 };

@@ -9,6 +9,8 @@ import { AuthContext } from "../../Context/auth";
 import { objectAssign } from "../../Utils/ReusableSyntax";
 import { X } from "react-feather";
 
+//const date = new Date();
+
 const inputStyle =
   "text-sm appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-10";
 
@@ -37,7 +39,7 @@ export default function Bidding({ open, onClose, id }) {
 
   useEffect(() => {
     id && setId(id);
-  }, [id]);
+  }, [id, setId]);
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -48,21 +50,21 @@ export default function Bidding({ open, onClose, id }) {
       Loading();
       document
         .set({
+          owned: null,
           imageUrl,
           kilograms,
-          price,
-          riceVariety,
-          onwersEmail: email,
-          biddingPrice: bidding,
+          tradersEmail: context.email,
+          productId: fetchProd[0].id,
+          riceVariety: riceVariety,
+          biddingPrice: Number(bidding),
           reviewStatus: true,
           biddingStatus: true,
           uid: context.uid,
           farmerId: uid,
-          itemStatus: "pending",
-          description,
         })
         .then(() => {
           setLoading(false);
+          setBidding(0);
           swal({
             title: "Successfully",
             text: `Successfully added your bid`,

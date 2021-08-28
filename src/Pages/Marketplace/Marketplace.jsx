@@ -2,12 +2,11 @@ import React, { useContext, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { AuthContext } from "../../Context/auth";
 import { ChevronLeft, ChevronRight } from "react-feather";
-import { Spin, Popconfirm } from "antd";
+import { Popconfirm } from "antd";
 import { ProductContext } from "../../Context/ProductProvider";
 import { Card, Bidding } from "../../components";
 
 const Marketplace = () => {
-  const [loading, setLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
   const [openModal, setOpenModal] = useState(false);
   const [id, setId] = useState("");
@@ -85,11 +84,9 @@ const Marketplace = () => {
         <div className="flex text-center justify-between">
           <h1 className="text-2xl pb-8 font-bold">Market Place</h1>
         </div>
-        <Spin spinning={loading} delay={500}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 flex justify-center relative">
-            {displayCards}
-          </div>
-        </Spin>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 flex justify-center relative">
+          {displayCards}
+        </div>
         <ReactPaginate
           previousLabel={<ChevronLeft className="text-gray-500" />}
           nextLabel={<ChevronRight className="text-gray-500" />}

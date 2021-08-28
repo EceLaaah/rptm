@@ -57,11 +57,6 @@ const Login = () => {
     return <Redirect to="/marketplace" />;
   }
 
-  //  const signOut = (event) => {
-  //     event.preventDefault();
-  //     app.auth().signOut().then(() => console.log("sign out"));
-  //   };
-
   return (
     <>
       <Spin spinning={loading}>

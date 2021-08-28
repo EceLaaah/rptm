@@ -5,7 +5,6 @@ const Card = ({
   key,
   image,
   kilograms,
-  price,
   title,
   name,
   description,
@@ -21,7 +20,7 @@ const Card = ({
         style={{ backgroundImage: `url(${image})` }}
       >
         <span className="absolute top-2 left-2 rounded-full py-4 px-2 bg-primary text-white font-semibold text-sm">
-          {price}/kg
+          {kilograms}/kg
         </span>
       </div>
       <div className="py-2 px-5 h-auto">

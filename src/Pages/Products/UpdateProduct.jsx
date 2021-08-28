@@ -40,7 +40,7 @@ const UpdateProduct = (props) => {
 
   useEffect(() => {
     id && setId(id);
-  }, [id]);
+  }, [id, setId]);
 
   const Loading = () => setLoading(true);
 
