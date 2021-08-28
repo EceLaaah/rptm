@@ -12,7 +12,6 @@ const information = {
   email: "",
   kilograms: "",
   price: "",
-  dateHarvested: "",
   description: "",
 };
 
@@ -23,7 +22,7 @@ const UpdateProduct = (props) => {
   const id = params.get("id");
 
   const [
-    { riceVariety, email, kilograms, price, dateHarvested, description },
+    { riceVariety, email, kilograms, price, description },
     setState,
   ] = useState(information);
 
@@ -58,7 +57,6 @@ const UpdateProduct = (props) => {
         email,
         kilograms,
         price: productPrice,
-        dateHarvested,
         description,
         id,
       })
@@ -94,7 +92,7 @@ const UpdateProduct = (props) => {
         <h1 className="text-2xl font-bold">Update Product</h1>
         <section className="flex md:flex-row flex-col justify-center gap-4">
           <div className="w-full md:w-1/2">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Textfield
                 value={riceVariety}
                 onChange={(event) => onChange(event)}
@@ -112,14 +110,14 @@ const UpdateProduct = (props) => {
                 placeholder="Owner Email"
                 name="email"
               />
-              <Textfield
+              {/* <Textfield
                 onChange={(event) => onChange(event)}
                 value={dateHarvested}
                 label="Date Harvested"
                 type="date"
                 placeholder="Date Harvested"
                 name="dateHarvested"
-              />
+              /> */}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Textfield
