@@ -14,7 +14,7 @@ import {
 const NFA = [
   {
     id: 1,
-    name: "Dashbaoard",
+    name: "Dashboard",
     icon: <Home className="w-4 h-4" />,
     link: "/dashboard",
   },

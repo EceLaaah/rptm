@@ -13,3 +13,5 @@ export { default as AddDistribution } from "./DistributionFuncionality/AddDistri
 export { default as UpdateDistribution } from "./DistributionFuncionality/UpdateDistribution";
 export { default as Bidding } from './Bidding/Bidding'
 export { default as TransactionHistory } from './TransactionHistory/TransactionHistory'
+export { default as FilterCategory } from "./Filters/FilterCategory"
+export { default as FilterIncome } from "./Filters/FilterIncome"

@@ -102,6 +102,7 @@ const Register = () => {
                 province,
                 email: userEmail,
                 password,
+                monthlyIncome: 0
               })
               .then(() => {
                 clearState();

@@ -7,6 +7,7 @@ const ProductProvider = ({ children }) => {
   const [product, setProduct] = useState([]);
   const [fetchProd, setFetchProd] = useState([]);
   const [fetchTransactionData, setTransactionData] = useState([]);
+  //const [userInfo, setUserInfo] = useState([]);
   const [id, setId] = useState("");
 
   const fetchTransaction = () => {
@@ -24,9 +25,11 @@ const ProductProvider = ({ children }) => {
   useEffect(fetchTransaction, []);
 
   const fetchProduct = () => {
-    const document = app.firestore().collection("product");
+    const document = app.firestore();
+    //const documentUser = document.collection("user");
+    const documentProduct = document.collection("product");
 
-    return document.onSnapshot((onsnapshot) => {
+    return documentProduct.onSnapshot((onsnapshot) => {
       const productData = [];
       onsnapshot.forEach((item) => {
         productData.push({ ...item.data(), id: item.id });

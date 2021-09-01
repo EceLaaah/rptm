@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useContext } from "react";
 import { AuthContext } from "../../Context/auth";
 import { RiceVarietyContext } from "../../Context/RiceVarietyProvider";
+import RolesHooks from '../../lib/RolesHook'
 import { app } from "../../config/firebase";
 import { useDropzone } from "react-dropzone";
 import { Textfield } from "../../components";
@@ -24,6 +25,8 @@ const Post = () => {
     { riceVariety, kilograms, price, description },
     setState,
   ] = useState(information);
+
+  const { info } = RolesHooks();
 
   //put file in a state so that we have access to remove it
   const onDrop = useCallback(
@@ -122,6 +125,7 @@ const Post = () => {
                 dateHarvested: date,
                 description: description,
                 imageUrl: imageUrl,
+                farmerIncome: info.income == undefined ? 0 : info.income
               })
               .then(() => {
                 setLoading(false);

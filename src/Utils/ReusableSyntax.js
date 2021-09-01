@@ -1,3 +1,14 @@
+export const sortIncome = ["kilograms", "riceVariety", "farmerIncome"];
+
+export const sortFarmerIncome = (product, sortType) => {
+  const sortedData = product.sort((a, b) => {
+    if (sortType === "farmerIncome" || sortType === "kilograms") {
+      return a[sortTypes] - b[sortTypes];
+    }
+  });
+  return sortedData;
+};
+
 //*Table Sorting
 export const sortTypes = ["descend", "ascend"];
 export const sortRiceVariety = (a, b) =>
@@ -72,3 +83,11 @@ export const filterTotal = (dataArray) => {
 
   return subTotal;
 };
+
+// //* return numerica and alphabetical sorted data
+// export const sortedIncome = (filterProduct, sortTypes) => {
+//   const sortedData = filterProduct.sort((a, b) => {
+//     return b[sortTypes] - a[sortTypes];
+//   });
+//   return sortedData;
+// };

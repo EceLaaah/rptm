@@ -2,6 +2,27 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+.scrollbar {
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar-track {
+  padding: 10px 0;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  height: 5px;
+  margin-top: 5px;
+  border-radius: 8px;
+  background-color: #c4c4c4;
+}
+
 .pagination a {
   padding: 5px;
   /* border: 1px solid #ffd303; */
@@ -14,4 +35,9 @@
 .active a {
   color: #43454b;
   background: #c7c4b6;
+}
+
+.animate-on-transforms {
+  /* animate list item reorder */
+  transition: transform 300ms ease;
 }

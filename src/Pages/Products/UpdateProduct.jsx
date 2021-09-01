@@ -157,11 +157,11 @@ const UpdateProduct = (props) => {
           </div>
           <div className="w-full md:w-1/2 flex justify-center">
             <Card
-              image={information.imageUrl}
+              imageUrl={information.imageUrl}
               kilograms={kilograms}
               price={price}
-              title={riceVariety}
-              name={email}
+              riceVariety={riceVariety}
+              email={email}
               description={description}
             />
           </div>

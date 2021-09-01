@@ -95,11 +95,11 @@ export default function Bidding({ open, onClose, id }) {
         <section className="md:flex gap-4 mt-60 md:mt-0">
           <Card
             cardStyle="truncate"
-            image={imageUrl}
+            imageUrl={imageUrl}
             kilograms={kilograms}
             price={price}
-            title={riceVariety}
-            name={email}
+            riceVariety={riceVariety}
+            email={email}
             description={description}
           />
           <div className="w-full mt-4 md:mt-0">

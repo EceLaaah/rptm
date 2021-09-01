@@ -12,6 +12,7 @@ export default function RolesHook() {
         email: "",
         role: "",
         imageUrl: null,
+        income: 0
     });
 
     const fetchUserInformation = () => {
@@ -25,6 +26,7 @@ export default function RolesHook() {
                     email: user.email,
                     role: user.role,
                     imageUrl: user.imageUrl,
+                    income: user.monthlyIncome
                 });
             }
         });
