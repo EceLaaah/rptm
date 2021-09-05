@@ -13,15 +13,17 @@ const Card = ({
   return (
     <li
       key={key}
-      className="bg-white shadow-lg w-80 max-w-sm rounded-lg w-full h-auto"
+      className="bg-white shadow-lg w-80 max-w-sm rounded-lg w-full h-auto list-none h-auto"
     >
       <div
         className="w-full h-56 rounded-t-lg bg-cover bg-center relative"
         style={{ backgroundImage: `url(${imageUrl})` }}
       >
-        <span className="absolute top-2 left-2 rounded-full py-4 px-2 bg-primary text-white font-semibold text-sm">
-          {kilograms}/kg
-        </span>
+        {kilograms !== 0 && (
+          <span className="absolute top-2 left-2 rounded-full py-4 px-2 bg-primary text-white font-semibold text-sm">
+            {kilograms}/kg
+          </span>
+        )}
       </div>
       <div className="py-2 px-5 h-auto">
         <div className="flex justify-between items-center">

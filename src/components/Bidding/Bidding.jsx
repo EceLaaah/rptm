@@ -16,7 +16,7 @@ const inputStyle =
 
 const initialState = {
   imageUrl: "",
-  kilograms: "",
+  socks: "",
   price: "",
   riceVariety: "",
   email: "",
@@ -25,10 +25,11 @@ const initialState = {
 };
 
 export default function Bidding({ open, onClose, id }) {
-  const { imageUrl, kilograms, price, riceVariety, email, description, uid } =
+  const { imageUrl, socks, price, riceVariety, email, description, uid } =
     initialState;
 
   const [bidding, setBidding] = useState(0);
+  const [getSocks, setSocks] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const { fetchProd, setId } = useContext(ProductContext);
@@ -41,18 +42,44 @@ export default function Bidding({ open, onClose, id }) {
     id && setId(id);
   }, [id, setId]);
 
+  const clearState = () => {
+    setBidding(0);
+    setSocks(0);
+  }
+
   const onSubmit = (event) => {
     event.preventDefault();
 
     const document = app.firestore().collection("transaction").doc();
 
-    if (bidding !== 0) {
+    const checkSocks = Number(getSocks) > Number(socks);
+    const checkBidding = Number(bidding) === 0;
+
+    if (checkSocks) {
+      return swal({
+        title: "Warning!!!",
+        text: `Invalid attempt socks`,
+        icon: "warning",
+        button: "Ok",
+      });
+    }
+
+    if (checkBidding) {
+      return swal({
+        title: "Warning!!!",
+        text: `Invalid attempt Bidding`,
+        icon: "warning",
+        button: "Ok",
+      });
+    }
+
+    if (!checkSocks && !checkBidding) {
       Loading();
       document
         .set({
           owned: null,
           imageUrl,
-          kilograms,
+          socks: Number(getSocks),
           tradersEmail: context.email,
           productId: fetchProd[0].id,
           riceVariety: riceVariety,
@@ -64,7 +91,7 @@ export default function Bidding({ open, onClose, id }) {
         })
         .then(() => {
           setLoading(false);
-          setBidding(0);
+          clearState();
           swal({
             title: "Successfully",
             text: `Successfully added your bid`,
@@ -72,19 +99,12 @@ export default function Bidding({ open, onClose, id }) {
             button: "Ok",
           });
         });
-    } else {
-      swal({
-        title: "Warning!!!",
-        text: `Bidding price shouldn't be equal to 0`,
-        icon: "warning",
-        button: "Ok",
-      });
     }
   };
 
   return (
     <MyModal
-      className="max-w-7xl h-auto mx-auto rounded-lg p-10 relative"
+      className="max-w-4xl h-auto mx-auto rounded-lg p-10 relative h-auto"
       isOpen={open}
     >
       <X
@@ -94,9 +114,9 @@ export default function Bidding({ open, onClose, id }) {
       <Spin spinning={loading}>
         <section className="md:flex gap-4 mt-60 md:mt-0">
           <Card
-            cardStyle="truncate"
+
             imageUrl={imageUrl}
-            kilograms={kilograms}
+            kilograms={socks}
             price={price}
             riceVariety={riceVariety}
             email={email}
@@ -120,13 +140,13 @@ export default function Bidding({ open, onClose, id }) {
                   name="email"
                 />
                 <input
-                  value={kilograms}
+                  value={socks}
                   readOnly={true}
                   required
                   type="number"
                   className={`${inputStyle} bg-gray-200 `}
-                  placeholder="kilograms"
-                  name="kilograms"
+                  placeholder="socks"
+                  name="socks"
                 />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
@@ -161,15 +181,32 @@ export default function Bidding({ open, onClose, id }) {
                   cols={20}
                   rows={2}
                 />
-                <input
-                  required
-                  onChange={(event) => setBidding(event.target.value)}
-                  value={bidding}
-                  type="number"
-                  className={`${inputStyle} bg-gray-100 mt-2`}
-                  placeholder="Bidding price"
-                  name="biddingPrice"
-                />
+                <div className="mt-2 grid grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="" className="font-bold text-sm">Number of Socks</label>
+                    <input
+                      required
+                      onChange={(event) => setSocks(event.target.value)}
+                      value={getSocks}
+                      type="number"
+                      className={`${inputStyle} bg-gray-100 mt-2`}
+                      placeholder="Bidding price"
+                      name="biddingPrice"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="" className="font-bold text-sm">Bidding</label>
+                    <input
+                      required
+                      onChange={(event) => setBidding(event.target.value)}
+                      value={bidding}
+                      type="number"
+                      className={`${inputStyle} bg-gray-100 mt-2`}
+                      placeholder="Bidding price"
+                      name="biddingPrice"
+                    />
+                  </div>
+                </div>
               </div>
               <button className="mt-4 w-full bg-primary hover:bg-primary-slight text-white text-sm py-2 font-semibold rounded-sm focus:outline-none focus:shadow-outline h-10">
                 Place your bid

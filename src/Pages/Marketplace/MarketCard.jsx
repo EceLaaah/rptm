@@ -31,50 +31,52 @@ export default function MarkerCard(props) {
                     {props.productData
                         .slice(pagesVisited, pagesVisited + numberOfCards)
                         .map((type) => (
-                            <li
-                                key={type.id}
-                                className="bg-white shadow-lg w-80 max-w-sm rounded-lg w-full h-auto"
-                            >
-                                <div
-                                    className="w-full h-56 rounded-t-lg bg-cover bg-center relative"
-                                    style={{ backgroundImage: `url(${type.imageUrl})` }}
+                            type.socks !== 0 && (
+                                <li
+                                    key={type.id}
+                                    className="bg-white shadow-lg w-80 max-w-sm rounded-lg w-full h-auto"
                                 >
-                                    <span className="absolute top-2 left-2 rounded-full py-4 px-2 bg-primary text-white font-semibold text-sm">
-                                        {type.kilograms}/kg
-                                    </span>
-                                </div>
-                                <div className="py-2 px-5 h-auto">
-                                    <div className="flex justify-between items-center">
-                                        <h1 className="text-xl font-bold">{type.riceVariety}</h1>
-                                        <h2 className="text-sm text-gray-400">{type.kilograms}kg</h2>
+                                    <div
+                                        className="w-full h-56 rounded-t-lg bg-cover bg-center relative"
+                                        style={{ backgroundImage: `url(${type.imageUrl})` }}
+                                    >
+                                        <span className="absolute top-2 left-2 rounded-full py-4 px-2 bg-primary text-white font-semibold text-sm">
+                                            {type.socks}/kg
+                                        </span>
                                     </div>
-                                    <section>
-                                        <span className="text-sm text-gray-400">{type.email}</span>
-                                        <div
-                                            className={`text-sm text-gray-400 my-2 truncate`}
-                                            dangerouslySetInnerHTML={{ __html: type.description }}
-                                        />
-                                        <div className="text-right">
-                                            {info.role === "NFA" ? (
-                                                <Popconfirm title="Would you like to purchase this item?">
-                                                    <button className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm">
-                                                        Buy
-                                                    </button>
-                                                </Popconfirm>
-                                            ) : (
-                                                <Popconfirm
-                                                    title="Are you sure you want to bid?"
-                                                    onConfirm={(event) => props.isToggle(event, type.id)}
-                                                >
-                                                    <button className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm">
-                                                        Bid
-                                                    </button>
-                                                </Popconfirm>
-                                            )}
+                                    <div className="py-2 px-5 h-auto">
+                                        <div className="flex justify-between items-center">
+                                            <h1 className="text-xl font-bold">{type.riceVariety}</h1>
+                                            <h2 className="text-sm text-gray-400">{type.socks}kg</h2>
                                         </div>
-                                    </section>
-                                </div>
-                            </li>
+                                        <section>
+                                            <span className="text-sm text-gray-400">{type.email}</span>
+                                            <div
+                                                className={`text-sm text-gray-400 my-2 truncate`}
+                                                dangerouslySetInnerHTML={{ __html: type.description }}
+                                            />
+                                            <div className="text-right">
+                                                {info.role === "NFA" ? (
+                                                    <Popconfirm title="Would you like to purchase this item?">
+                                                        <button className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm">
+                                                            Buy
+                                                        </button>
+                                                    </Popconfirm>
+                                                ) : (
+                                                    <Popconfirm
+                                                        title="Are you sure you want to bid?"
+                                                        onConfirm={(event) => props.isToggle(event, type.id)}
+                                                    >
+                                                        <button className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm">
+                                                            Bid
+                                                        </button>
+                                                    </Popconfirm>
+                                                )}
+                                            </div>
+                                        </section>
+                                    </div>
+                                </li>
+                            )
                         ))}
                 </FlipMove>
             )}

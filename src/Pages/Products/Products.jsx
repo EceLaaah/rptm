@@ -45,24 +45,30 @@ const Products = () => {
             email={type.email}
             description={type.description}
           >
-            <div className="text-right">
-              <Popconfirm
-                title="Do you want to delete this product?"
-                onConfirm={(event) => deleteProduct(event, type.id)}
-              >
-                <button className="px-6 py-1 mr-2 border border-primary bg-gray-100 hover:bg-gray-200 text-black text-sm rounded-sm focus:outline-none focus:shadow-outline ">
-                  Delete
-                </button>
-              </Popconfirm>
-              <Popconfirm
-                title="Do you want to Edit this product?"
-                onConfirm={(event) => getProductId(event, type.id)}
-              >
-                <button className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm">
-                  Edit
-                </button>
-              </Popconfirm>
-            </div>
+            {type.socks !== 0 ? (
+              <div className="text-right">
+                <Popconfirm
+                  title="Do you want to delete this product?"
+                  onConfirm={(event) => deleteProduct(event, type.id)}
+                >
+                  <button className="px-6 py-1 mr-2 border border-primary bg-gray-100 hover:bg-gray-200 text-black text-sm rounded-sm focus:outline-none focus:shadow-outline ">
+                    Delete
+                  </button>
+                </Popconfirm>
+                <Popconfirm
+                  title="Do you want to Edit this product?"
+                  onConfirm={(event) => getProductId(event, type.id)}
+                >
+                  <button className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm">
+                    Edit
+                  </button>
+                </Popconfirm>
+              </div>
+            ) : (
+              <div onClick={(event) => getProductId(event, type.id)} className="text-center py-2 my-2 bg-primary opacity-80 hover:opacity-50 font-bold text-white rounded-lg cursor-pointer">
+                Empty Socks :(
+              </div>
+            )}
           </Card>
         )
     )

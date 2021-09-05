@@ -56,8 +56,36 @@ const Transaction = () => {
     }
   };
 
-  const onSubmit = async (event, id, riceVariety) => {
+  const onUpdateProduct = (productId, NumOfSocks) => {
+    try {
+      (async () => {
+        const document = app.firestore().collection("product").doc(productId);
+
+        const getValue = await document.get();
+
+        if (getValue) {
+          const newSocks = getValue.data().socks - NumOfSocks;
+
+          console.log(newSocks)
+
+          await document.update({
+            socks: newSocks
+          })
+        }
+      })()
+
+      // document.update({
+      //   socks : 
+      // })
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  const onSubmit = async (event, id, riceVariety, productId, socks) => {
     event.preventDefault();
+
+    console.log(productId, socks)
 
     try {
       const document = app
@@ -74,6 +102,7 @@ const Transaction = () => {
           if (Review) {
             if (snapshot.id === id) {
               onUpdateData(id, "won", riceVariety);
+              onUpdateProduct(productId, socks);
             } else {
               onUpdateData(snapshot.id, "lose", riceVariety);
             }
@@ -86,6 +115,8 @@ const Transaction = () => {
       console.log(error.message);
     }
   };
+
+
 
   const filterTransactions = () => {
     const filter = filteredTransact.filter((obj) => {
@@ -109,6 +140,7 @@ const Transaction = () => {
     setBiddingReview(biddingReview[0]);
   }, [getVariety]);
 
+  //*Bidding Transaction
   const columns = [
     {
       title: "Unique Identification",
@@ -128,11 +160,16 @@ const Transaction = () => {
       sorter: sortRiceVariety,
     },
     {
-      title: "Kilograms",
-      dataIndex: "kilograms",
-      key: "kilograms",
+      title: "Number of Socks",
+      dataIndex: "socks",
+      key: "socks",
       setDirections: sortTypes,
       sorter: sortRiceVariety,
+      render: (socks) => {
+        return (
+          <span>{socks} pieces</span>
+        )
+      }
     },
 
     {
@@ -177,7 +214,7 @@ const Transaction = () => {
           <Popconfirm
             title="Would you like to continue?"
             onConfirm={(event) =>
-              onSubmit(event, transaction.id, transaction.riceVariety)
+              onSubmit(event, transaction.id, transaction.riceVariety, transaction.productId, transaction.socks)
             }
           >
             <button className="bg-green-500 hover:bg-green-400 rounded-sm py-1 px-4 text-white">
@@ -192,9 +229,9 @@ const Transaction = () => {
   //*Traders Transaction
   const transactionColumn = [
     {
-      title: "Unique Identification",
-      dataIndex: "id",
-      key: "id",
+      title: "Product Identification",
+      dataIndex: "productId",
+      key: "productId",
       setDirections: sortTypes,
       sorter: sortRiceVariety,
       render: (text) => {
@@ -209,9 +246,9 @@ const Transaction = () => {
       sorter: sortRiceVariety,
     },
     {
-      title: "Kilograms",
-      dataIndex: "kilograms",
-      key: "kilograms",
+      title: "Socks",
+      dataIndex: "socks",
+      key: "socks",
       setDirections: sortTypes,
       sorter: sortRiceVariety,
     },
