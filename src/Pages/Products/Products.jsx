@@ -38,11 +38,11 @@ const Products = () => {
           <Card
             cardStyle="truncate"
             key={index}
-            image={type.imageUrl}
-            kilograms={type.kilograms}
+            imageUrl={type.imageUrl}
+            kilograms={type.socks}
             price={type.price}
-            title={type.riceVariety}
-            name={type.email}
+            riceVariety={type.riceVariety}
+            email={type.email}
             description={type.description}
           >
             <div className="text-right">

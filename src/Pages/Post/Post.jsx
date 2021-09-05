@@ -11,7 +11,7 @@ import swal from "sweetalert";
 
 const information = {
   riceVariety: "",
-  kilograms: "",
+  socks: "",
   price: "",
   dateHarvested: null,
 };
@@ -22,7 +22,7 @@ const Post = () => {
   const [loading, setLoading] = useState(false);
   const [myFile, setMyFile] = useState([]);
   const [
-    { riceVariety, kilograms, price, description },
+    { riceVariety, socks, price, description },
     setState,
   ] = useState(information);
 
@@ -104,8 +104,6 @@ const Post = () => {
 
     loadingState();
 
-    const productPrice = Number(price);
-    const kg = Number(kilograms);
     const document = app.firestore().collection("product").doc();
 
     acceptedFiles.map(async (file) => {
@@ -120,12 +118,12 @@ const Post = () => {
                 uid: context.uid,
                 riceVariety: riceVariety,
                 email: context.email,
-                kilograms: kg,
-                price: productPrice,
+                socks: Number(socks),
+                price: Number(price),
                 dateHarvested: date,
                 description: description,
                 imageUrl: imageUrl,
-                farmerIncome: info.income == undefined ? 0 : info.income
+                farmerIncome: info.income === undefined ? 0 : info.income
               })
               .then(() => {
                 setLoading(false);
@@ -190,12 +188,12 @@ const Post = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Textfield
-                value={kilograms}
+                value={socks}
                 onChange={(event) => onChange(event)}
-                label="Kilograms"
+                label="Number of Socks"
                 type="number"
-                placeholder="Kilograms"
-                name="kilograms"
+                placeholder="Socks"
+                name="socks"
               />
               <Textfield
                 value={price}

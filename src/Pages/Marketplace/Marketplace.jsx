@@ -7,7 +7,7 @@ import { Search, } from "react-feather";
 //import { notification } from 'antd';
 import { onSearch } from "../../Utils/ReusableSyntax";
 import RolesHook from '../../lib/RolesHook'
-import { sortFarmerIncome } from '../../Utils/ReusableSyntax'
+//import { sortFarmerIncome } from '../../Utils/ReusableSyntax'
 
 const Marketplace = () => {
   const [openModal, setOpenModal] = useState(false);

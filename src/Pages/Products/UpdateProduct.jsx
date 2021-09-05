@@ -10,7 +10,7 @@ const information = {
   imageUrl: "",
   riceVariety: "",
   email: "",
-  kilograms: "",
+  socks: "",
   price: "",
   description: "",
 };
@@ -22,7 +22,7 @@ const UpdateProduct = (props) => {
   const id = params.get("id");
 
   const [
-    { riceVariety, email, kilograms, price, description },
+    { riceVariety, email, socks, price, description },
     setState,
   ] = useState(information);
 
@@ -45,7 +45,6 @@ const UpdateProduct = (props) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    const productPrice = Number(price);
 
     Loading();
 
@@ -55,8 +54,8 @@ const UpdateProduct = (props) => {
       .update({
         riceVariety,
         email,
-        kilograms,
-        price: productPrice,
+        socks: Number(socks),
+        price: Number(price),
         description,
         id,
       })
@@ -121,12 +120,12 @@ const UpdateProduct = (props) => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Textfield
-                value={kilograms}
+                value={socks}
                 onChange={(event) => onChange(event)}
-                label="Kilograms"
-                type="text"
-                placeholder="Kilograms"
-                name="kilograms"
+                label="Number of Socks"
+                type="number"
+                placeholder="Socks"
+                name="socks"
               />
               <Textfield
                 value={price}
@@ -158,7 +157,7 @@ const UpdateProduct = (props) => {
           <div className="w-full md:w-1/2 flex justify-center">
             <Card
               imageUrl={information.imageUrl}
-              kilograms={kilograms}
+              kilograms={socks}
               price={price}
               riceVariety={riceVariety}
               email={email}
