@@ -7,6 +7,7 @@ import { Spin } from "antd";
 import { ProductContext } from "../../Context/ProductProvider";
 import { AuthContext } from "../../Context/auth";
 import { objectAssign } from "../../Utils/ReusableSyntax";
+import RolesHook from "../../lib/RolesHook";
 import { X } from "react-feather";
 
 //const date = new Date();
@@ -36,6 +37,8 @@ export default function Bidding({ open, onClose, id }) {
   const context = useContext(AuthContext);
   fetchProd && objectAssign(fetchProd, initialState);
 
+  const { info } = RolesHook();
+
   const Loading = () => setLoading(true);
 
   useEffect(() => {
@@ -45,7 +48,57 @@ export default function Bidding({ open, onClose, id }) {
   const clearState = () => {
     setBidding(0);
     setSocks(0);
-  }
+  };
+
+  const onSubmitNFA = (event) => {
+    event.preventDefault();
+
+    const document = app.firestore().collection("transaction").doc();
+
+    const checkSocks = Number(getSocks) > Number(socks);
+    const isZero = Number(getSocks) === 0;
+
+    const total = price * getSocks
+
+    if (checkSocks || isZero) {
+      return swal({
+        title: "Warning!!!",
+        text: `Invalid attempt socks`,
+        icon: "warning",
+        button: "Ok",
+      });
+    }
+
+    if (!checkSocks && !isZero) {
+      Loading();
+      document
+        .set({
+          owned: "won",
+          imageUrl,
+          socks: Number(getSocks),
+          userEmail: context.email,
+          productId: fetchProd[0].id,
+          riceVariety: riceVariety,
+          price: Number(price),
+          total: Number(total),
+          reviewStatus: false,
+          biddingStatus: false,
+          uid: context.uid,
+          farmerId: uid,
+          status: "pending",
+        })
+        .then(() => {
+          setLoading(false);
+          clearState();
+          swal({
+            title: "Successfully",
+            text: `Successfully added your bid`,
+            icon: "success",
+            button: "Ok",
+          });
+        });
+    }
+  };
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -80,14 +133,15 @@ export default function Bidding({ open, onClose, id }) {
           owned: null,
           imageUrl,
           socks: Number(getSocks),
-          tradersEmail: context.email,
+          userEmail: context.email,
           productId: fetchProd[0].id,
           riceVariety: riceVariety,
-          biddingPrice: Number(bidding),
+          price: Number(bidding),
           reviewStatus: true,
           biddingStatus: true,
           uid: context.uid,
           farmerId: uid,
+          status: "pending",
         })
         .then(() => {
           setLoading(false);
@@ -114,7 +168,6 @@ export default function Bidding({ open, onClose, id }) {
       <Spin spinning={loading}>
         <section className="md:flex gap-4 mt-60 md:mt-0">
           <Card
-
             imageUrl={imageUrl}
             kilograms={socks}
             price={price}
@@ -128,7 +181,12 @@ export default function Bidding({ open, onClose, id }) {
               Traders Email :{" "}
               <strong className="text-red-500">{context.email}</strong>
             </h2>
-            <form action="" onSubmit={(event) => onSubmit(event)}>
+            <form
+              action=""
+              onSubmit={(event) =>
+                info.role === "NFA" ? onSubmitNFA(event) : onSubmit(event)
+              }
+            >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                 <input
                   value={email}
@@ -181,9 +239,11 @@ export default function Bidding({ open, onClose, id }) {
                   cols={20}
                   rows={2}
                 />
-                <div className="mt-2 grid grid-cols-2 gap-4">
+                <div className={`${info.role === "NFA" ? "w-full mt-3" : "mt-2 grid grid-cols-2 gap-4"}`}>
                   <div>
-                    <label htmlFor="" className="font-bold text-sm">Number of Socks</label>
+                    <label htmlFor="" className="font-bold text-sm">
+                      Number of Socks
+                    </label>
                     <input
                       required
                       onChange={(event) => setSocks(event.target.value)}
@@ -194,22 +254,26 @@ export default function Bidding({ open, onClose, id }) {
                       name="biddingPrice"
                     />
                   </div>
-                  <div>
-                    <label htmlFor="" className="font-bold text-sm">Bidding</label>
-                    <input
-                      required
-                      onChange={(event) => setBidding(event.target.value)}
-                      value={bidding}
-                      type="number"
-                      className={`${inputStyle} bg-gray-100 mt-2`}
-                      placeholder="Bidding price"
-                      name="biddingPrice"
-                    />
-                  </div>
+                  {info.role !== "NFA" && (
+                    <div>
+                      <label htmlFor="" className="font-bold text-sm">
+                        Bidding
+                      </label>
+                      <input
+                        required
+                        onChange={(event) => setBidding(event.target.value)}
+                        value={bidding}
+                        type="number"
+                        className={`${inputStyle} bg-gray-100 mt-2`}
+                        placeholder="Bidding price"
+                        name="biddingPrice"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
               <button className="mt-4 w-full bg-primary hover:bg-primary-slight text-white text-sm py-2 font-semibold rounded-sm focus:outline-none focus:shadow-outline h-10">
-                Place your bid
+                {info.role === "NFA" ? "Purchase Rice" : "Place your bid"}
               </button>
             </form>
           </div>

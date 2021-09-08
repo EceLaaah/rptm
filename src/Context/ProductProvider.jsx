@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
+import { monthDiff } from '../Utils/ReusableSyntax'
 import { app } from "../config/firebase";
 
 const ProductContext = createContext();
@@ -28,11 +29,13 @@ const ProductProvider = ({ children }) => {
     const document = app.firestore();
     //const documentUser = document.collection("user");
     const documentProduct = document.collection("product");
+    const dateToday = new Date();
 
     return documentProduct.onSnapshot((onsnapshot) => {
       const productData = [];
       onsnapshot.forEach((item) => {
-        productData.push({ ...item.data(), id: item.id });
+        const date = new Date(item.data().dateHarvested.seconds * 1000)
+        productData.push({ ...item.data(), id: item.id, productAge: monthDiff(date, dateToday) });
       });
       setProduct(productData);
     });

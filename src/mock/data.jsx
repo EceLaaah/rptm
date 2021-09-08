@@ -26,9 +26,9 @@ const NFA = [
   },
   {
     id: 3,
-    name: "Produce",
+    name: "Target Procurement",
     icon: <ShoppingBag className="w-4 h-4" />,
-    link: "/produce",
+    link: "/targetProcurement",
   },
   {
     id: 4,

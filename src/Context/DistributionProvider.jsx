@@ -7,11 +7,13 @@ const DistributionProvider = ({ children }) => {
   const [distribution, setDistribution] = useState([]);
 
   const fetchDistribution = () => {
-    const document = app.firestore().collection("distribution");
-    return document.onSnapshot((snapshot) => {
+    const document = app.firestore();
+    const documentDistribution = document.collection("distribution")
+
+    return documentDistribution.onSnapshot((snapshot) => {
       const distributionArray = [];
 
-      snapshot.forEach((distributionData) => {
+      snapshot.forEach(async (distributionData) => {
         distributionArray.push({
           ...distributionData.data(),
           id: distributionData.id,

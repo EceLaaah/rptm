@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { Popconfirm } from 'antd';
-//import { Card } from '../../components'
 import ReactPaginate from "react-paginate";
-import RolesHooks from '../../lib/RolesHook'
-//import { AuthContext } from '../../Context/auth'
 import { ChevronLeft, ChevronRight } from 'react-feather'
 import FlipMove from 'react-flip-move'
 
@@ -11,7 +8,6 @@ export default function MarkerCard(props) {
 
     const [pageNumber, setPageNumber] = useState(0);
     //const context = useContext(AuthContext);
-    const { info } = RolesHooks();
 
     const numberOfCards = 6;
     const pagesVisited = pageNumber * numberOfCards;
@@ -55,23 +51,16 @@ export default function MarkerCard(props) {
                                                 className={`text-sm text-gray-400 my-2 truncate`}
                                                 dangerouslySetInnerHTML={{ __html: type.description }}
                                             />
-                                            <div className="text-right">
-                                                {info.role === "NFA" ? (
-                                                    <Popconfirm title="Would you like to purchase this item?">
-                                                        <button className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm">
-                                                            Buy
-                                                        </button>
-                                                    </Popconfirm>
-                                                ) : (
-                                                    <Popconfirm
-                                                        title="Are you sure you want to bid?"
-                                                        onConfirm={(event) => props.isToggle(event, type.id)}
-                                                    >
-                                                        <button className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm">
-                                                            Bid
-                                                        </button>
-                                                    </Popconfirm>
-                                                )}
+                                            <div className="flex items-center justify-between">
+                                                <h1 className="text-gray-400">{type.productAge} Months Old</h1>
+                                                <Popconfirm
+                                                    title="Do you want to proceed?"
+                                                    onConfirm={(event) => props.isToggle(event, type.id)}
+                                                >
+                                                    <button className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm">
+                                                        Buy
+                                                    </button>
+                                                </Popconfirm>
                                             </div>
                                         </section>
                                     </div>

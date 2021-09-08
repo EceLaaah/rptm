@@ -9,6 +9,19 @@ import { arraySlice, onSearch } from "../../Utils/ReusableSyntax";
 import { Edit3, Trash2, PlusCircle } from "react-feather";
 import { app } from "../../config/firebase";
 import { DistributionContext } from "../../Context/DistributionProvider";
+import swal from 'sweetalert'
+
+const typeName = {
+  MARKET: "Market",
+  POLICE: "Police",
+  RELIEF: "Relief Operation"
+}
+
+const collectionName = {
+  MARKET: "marketDistribution",
+  POLICE: "policeDistribution",
+  RELIEF: "reliefDistribution"
+}
 
 export default function Distribution() {
   const [open, setOpen] = useState(false);
@@ -44,10 +57,34 @@ export default function Distribution() {
     }
   };
 
-  const deleteProcure = (event, id) => {
+  const deleteProcure = async (event, id) => {
     event.preventDefault();
-    const document = app.firestore().collection("distribution").doc(id);
-    id && document.delete();
+    const documentDistribution = app.firestore().collection("distribution").doc(id);
+    const documentTypes = app.firestore();
+
+    const getDistributionType = await documentDistribution.get();
+
+    id && documentDistribution.delete().then(() => {
+      swal({
+        title: "Successfully Deleted",
+        text: `Click Ok to proceed`,
+        icon: "success",
+        button: "Ok",
+      });
+    });
+
+    if (getDistributionType.data().distributionType === typeName.MARKET) {
+      return documentTypes.collection(collectionName.MARKET).doc(getDistributionType.data().distributionTypeId).delete();
+    }
+
+    if (getDistributionType.data().distributionType === typeName.POLICE) {
+      return documentTypes.collection(collectionName.POLICE).doc(getDistributionType.data().distributionTypeId).delete();
+    }
+
+    if (getDistributionType.data().distributionType === typeName.RELIEF) {
+      return documentTypes.collection(collectionName.RELIEF).doc(getDistributionType.data().distributionTypeId).delete();
+    }
+
   };
 
   const columns = [

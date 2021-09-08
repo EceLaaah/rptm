@@ -1,13 +1,17 @@
 import React, { useContext, useState, useEffect } from "react";
 import { ProductContext } from "../../Context/ProductProvider";
-import { RiceVarietyContext } from '../../Context/RiceVarietyProvider'
-import { Bidding, FilterCategory, FilterIncome } from "../../components";
+import { RiceVarietyContext } from "../../Context/RiceVarietyProvider";
+import {
+  Bidding,
+  FilterCategory,
+  FilterIncome,
+  TargetProcurementModal,
+} from "../../components";
 import MarketCard from "./MarketCard";
-import { Search, } from "react-feather";
-//import { notification } from 'antd';
+import { Search, PlusCircle } from "react-feather";
 import { onSearch } from "../../Utils/ReusableSyntax";
-import RolesHook from '../../lib/RolesHook'
-//import { sortFarmerIncome } from '../../Utils/ReusableSyntax'
+import RolesHook from "../../lib/RolesHook";
+import UseTargetPocurement from "../../lib/UseTargetPocurement";
 
 const Marketplace = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -15,17 +19,19 @@ const Marketplace = () => {
   const [doSearch, setSearch] = useState([]);
   const [toggleCategory, setToggleCategory] = useState(false);
   const [toggleIncome, setToggleIncome] = useState(false);
+  const [isTarget, setTarget] = useState(false);
   const [sortData, setSortData] = useState(null);
-  //const [variety, setVariety] = useState("");
+
   const [id, setId] = useState("");
 
   const { product } = useContext(ProductContext);
   const { fetchVariety } = useContext(RiceVarietyContext);
-  //const { userInformation } = useContext(UserContext)
-  const { info } = RolesHook();
-  //const context = useContext(AuthContext);
 
-  const isCategoryToggle = () => setToggleCategory((toggleCategory) => !toggleCategory);
+  const { getTarget } = UseTargetPocurement();
+  const { info } = RolesHook();
+
+  const isCategoryToggle = () =>
+    setToggleCategory((toggleCategory) => !toggleCategory);
   const isIncomeToggle = () => setToggleIncome((toggleIncome) => !toggleIncome);
 
   const sortProduct = (event, variety) => {
@@ -34,12 +40,12 @@ const Marketplace = () => {
     //**Sort by category */
     if (variety !== undefined) {
       const sortCategory = product.filter((obj) => {
-        return obj.riceVariety === variety
-      })
+        return obj.riceVariety === variety;
+      });
 
-      setSortData(sortCategory)
+      setSortData(sortCategory);
     }
-  }
+  };
 
   const sortIncome = (event, types) => {
     event.preventDefault();
@@ -47,21 +53,30 @@ const Marketplace = () => {
     const map = {
       kilograms: "kilograms",
       riceVariety: "riceVariety",
-      farmerIncome: "farmerIncome"
-    }
+      farmerIncome: "farmerIncome",
+      productAge: "productAge",
+    };
 
-    const sortType = map[types]
+    const sortType = map[types];
 
     const sorted = product.sort((a, b) => {
-      if (sortType === "farmerIncome" || sortType === "kilograms") {
-        return a[sortType] - b[sortType]
+      if (
+        sortType === "farmerIncome" ||
+        sortType === "kilograms" ||
+        sortType === "productAge"
+      ) {
+        return a[sortType] - b[sortType];
       } else {
-        return a.riceVariety !== b.riceVariety ? a.riceVariety < b.riceVariety ? -1 : 1 : 0;
+        return a.riceVariety !== b.riceVariety
+          ? a.riceVariety < b.riceVariety
+            ? -1
+            : 1
+          : 0;
       }
-    })
+    });
     setToggleIncome(false);
-    setSortData(sorted)
-  }
+    setSortData(sorted);
+  };
 
   useEffect(() => {
     const search = doSearch.length > 0 && onSearch(doSearch, product);
@@ -71,6 +86,8 @@ const Marketplace = () => {
       setProductData(product);
     }
   }, [doSearch, product]);
+
+  const onTarget = () => setTarget((isTarget) => !isTarget);
 
   const isToggle = (event, id) => {
     event.preventDefault();
@@ -85,6 +102,7 @@ const Marketplace = () => {
 
   return (
     <>
+      <TargetProcurementModal isOpen={isTarget} isClose={onTarget} />
       {openModal && (
         <Bidding
           open={openModal}
@@ -93,8 +111,29 @@ const Marketplace = () => {
         />
       )}
       <div className="max-w-content mx-auto px-4 bg-gray-100">
-        <div className="flex text-center justify-between">
-          <h1 className="text-2xl pb-8 font-bold">Market Place</h1>
+        <div className="pb-8 ">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold mb-3">Market Place</h1>
+            {info.role === "NFA" && (
+              <button
+                onClick={onTarget}
+                type="button"
+                id="add"
+                className="flex items-center gap-2 py-2 px-5 bg-primary hover:bg-primary-slight text-white font-semibold rounded-sm shadow-lg"
+              >
+                <PlusCircle size="20" />
+                Add Target
+              </button>
+            )}
+          </div>
+          {info.role === "NFA" && (
+            <h1 className="text-sm flex items-center gap-2">
+              <span>Target Procurement :</span>
+              <strong className="px-3 text-blue-500 rounded-lg bg-transparent border border-blue-500">
+                {getTarget.targetNumber}
+              </strong>
+            </h1>
+          )}
         </div>
         <section className="py-2 border border-gray-300 mb-6 flex justify-between items-center px-4">
           <div className="flex items-center justify-between hover:border-blue-500 focus:border-blue-500 rounded-lg py-1 px-5 bg-transparent">
@@ -115,10 +154,19 @@ const Marketplace = () => {
               toggleCategory={toggleCategory}
               sortProduct={sortProduct}
             />
-            {info.role === "NFA" && <FilterIncome isIncomeToggle={isIncomeToggle} toggleIncome={toggleIncome} sortIncome={sortIncome} />}
+            {info.role === "NFA" && (
+              <FilterIncome
+                isIncomeToggle={isIncomeToggle}
+                toggleIncome={toggleIncome}
+                sortIncome={sortIncome}
+              />
+            )}
           </div>
         </section>
-        <MarketCard productData={sortData !== null ? sortData : productData} isToggle={isToggle} />
+        <MarketCard
+          productData={sortData !== null ? sortData : productData}
+          isToggle={isToggle}
+        />
       </div>
     </>
   );

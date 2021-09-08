@@ -58,6 +58,7 @@ const buildChart = (config) => {
       labels,
       datasets: [
         {
+          label: textTitle,
           data,
           backgroundColor,
           borderColor,

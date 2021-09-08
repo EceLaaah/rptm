@@ -25,7 +25,7 @@ const TranscationProvider = ({ children }) => {
   useEffect(fetchTransaction, []);
 
   const fetchDoneBidding = () => {
-    const document = app.firestore().collection("transaction").where("biddingStatus", "==", false);
+    const document = app.firestore().collection("transaction").where("biddingStatus", "==", false)
     return document.onSnapshot((snapshot) => {
       const transactionArray = [];
 

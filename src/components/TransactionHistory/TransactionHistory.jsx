@@ -12,8 +12,6 @@ export default function TransactionHistory({ length, Total, column, Transaction 
             return obj.riceVariety === getVariety
         })
 
-        console.log(filteredVariety)
-
         return getVariety !== "" ? setVariety(filteredVariety) : setVariety(Transaction)
     }
 

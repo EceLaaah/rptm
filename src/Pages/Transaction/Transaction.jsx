@@ -42,6 +42,7 @@ const Transaction = () => {
           biddingStatus: false,
           reviewStatus: false,
           owned: owned,
+          status: "success",
         })
         .then(() => {
           swal({
@@ -154,8 +155,8 @@ const Transaction = () => {
     },
     {
       title: "Email",
-      dataIndex: "tradersEmail",
-      key: "tradersEmail",
+      dataIndex: "userEmail",
+      key: "userEmail",
       setDirections: sortTypes,
       sorter: sortRiceVariety,
     },
@@ -197,9 +198,9 @@ const Transaction = () => {
       },
     },
     {
-      title: "Bidding Price",
-      dataIndex: "biddingPrice",
-      key: "biddingPrice",
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
       setDirections: sortTypes,
       sorter: sortRiceVariety,
       render: (text) => {
@@ -217,7 +218,7 @@ const Transaction = () => {
               onSubmit(event, transaction.id, transaction.riceVariety, transaction.productId, transaction.socks)
             }
           >
-            <button className="bg-green-500 hover:bg-green-400 rounded-sm py-1 px-4 text-white">
+            <button className="bg-transparent border border-blue-500 text-blue-900 hover:bg-blue-200 rounded-sm py-1 px-4 text-white">
               Accept
             </button>
           </Popconfirm>
@@ -240,8 +241,8 @@ const Transaction = () => {
     },
     {
       title: "Email",
-      dataIndex: "tradersEmail",
-      key: "tradersEmail",
+      dataIndex: "userEmail",
+      key: "userEmail",
       setDirections: sortTypes,
       sorter: sortRiceVariety,
     },
@@ -310,9 +311,9 @@ const Transaction = () => {
       },
     },
     {
-      title: "Bidding Price",
-      dataIndex: "biddingPrice",
-      key: "biddingPrice",
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
       setDirections: sortTypes,
       sorter: sortRiceVariety,
       render: (text) => {

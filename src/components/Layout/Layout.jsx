@@ -1,33 +1,22 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Spin, notification } from "antd";
+import { Spin, notification, Badge } from "antd";
 import { app } from "../../config/firebase";
-//import { UserContext } from "../../Context/UserProvider";
 import { AuthContext } from "../../Context/auth";
-//import { ProductContext } from "../../Context/ProductProvider";
-//import { farmerLinks, TraderLinks, NFA } from "../../mock/data";
 import { LogOut } from "react-feather";
 import { Link } from "react-router-dom";
-import { Menu, X, Smile } from "react-feather";
-import { filteredTransaction } from "../../Utils/ReusableSyntax";
+import { Menu, X, Smile, ShoppingCart } from "react-feather";
+import { filteredTransaction, filteredPendingTransaction } from "../../Utils/ReusableSyntax";
 import { TransactionContext } from "../../Context/TransactionProvider";
 import RolesHook from '../../lib/RolesHook'
-//import { Search } from "../";
 
 const Layout = ({ children }) => {
-  //const userContext = useContext(UserContext);
   const context = useContext(AuthContext);
-  //const { fetchTransactionData } = useContext(ProductContext);
-  // const [info, setInfo] = useState({
-  //   name: "",
-  //   email: "",
-  //   role: "",
-  //   imageUrl: null,
-  // });
-  // const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [sidebarToggle, setSidebarToggle] = useState(false);
-  const { transaction } = useContext(TransactionContext);
+  const { transaction, finishTransaction } = useContext(TransactionContext);
+
+  const pendingtransaction = filteredPendingTransaction(finishTransaction, context);
 
   const specificTransaction = filteredTransaction(transaction, context);
 
@@ -59,7 +48,7 @@ const Layout = ({ children }) => {
     });
   };
 
-  useEffect(openNotification, [])
+  useEffect(openNotification, [specificTransaction.length, info.role])
 
   if (context.length > 0) {
     return setLoading(false);
@@ -131,13 +120,15 @@ const Layout = ({ children }) => {
           </div>
           <div className="mx-4 absolute right-0">
             <div className="flex items-center gap-4">
-              {/* <Badge count={ownPendingItems.length}>
-                <Link to="/cart">
-                  <span>
-                    <ShoppingCart className="hover:text-gray-600 text-gray-600" />
-                  </span>
-                </Link>
-              </Badge> */}
+              {info.role === "NFA" && (
+                <Badge count={pendingtransaction.length}>
+                  <Link to="/nfacart">
+                    <span>
+                      <ShoppingCart className="hover:text-gray-600 text-gray-600" />
+                    </span>
+                  </Link>
+                </Badge>
+              )}
               <div className="inline-block text-left relative">
                 <span
                   onClick={(event) => isToggle(event)}

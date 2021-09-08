@@ -1,4 +1,19 @@
-export const sortIncome = ["kilograms", "riceVariety", "farmerIncome"];
+export const sortIncome = ["kilograms", "riceVariety", "farmerIncome", "productAge"];
+export const types = ["Police", "Market", "Relief Operation"]
+
+export const filterTransactionStatus = (transaction) => {
+  return transaction.filter((obj) => {
+    return obj.status === "success"
+  })
+}
+
+export const monthDiff = (d1, d2) => {
+  var months;
+  months = (d2.getFullYear() - d1.getFullYear()) * 12;
+  months -= d1.getMonth();
+  months += d2.getMonth();
+  return months <= 0 ? 0 : months;
+}
 
 export const sortFarmerIncome = (product, sortType) => {
   const sortedData = product.sort((a, b) => {
@@ -14,12 +29,12 @@ export const sortTypes = ["descend", "ascend"];
 export const sortRiceVariety = (a, b) =>
   a.riceVariety < b.riceVariety ? 1 : -1;
 
-//**return all pending items
-export const pendingItems = (cartItems) => {
-  return cartItems.filter((obj) => {
-    return obj.itemStatus === "pending";
-  });
-};
+// //**return all pending items
+// export const pendingItems = (cartItems) => {
+//   return cartItems.filter((obj) => {
+//     return obj.itemStatus === "pending";
+//   });
+// };
 
 //*Filter Transaction by Rice Variety
 export const filterTransaction = (transaction, riceVariety) => {
@@ -42,20 +57,31 @@ export const filtered = (productItems, currentUseriId) => {
   });
 };
 
-//**filtered transaction by owners id and biddingStatus equal to true */
+//**filtered Farmer transaction by owners id and biddingStatus equal to true */
 export const filteredTransaction = (transaction, currentUseriId) => {
   return transaction.filter((obj) => {
     return obj.farmerId === currentUseriId.uid && obj.biddingStatus === true;
   });
 };
 
-//**filtered transaction by owners id and BiddingStatus Equal to false */
+//**filtered Farmer transaction by owners id and BiddingStatus Equal to false */
 export const filteredDoneTransaction = (transaction, currentUseriId) => {
   return transaction.filter((obj) => {
     return (
       obj.farmerId === currentUseriId.uid &&
       obj.biddingStatus === false &&
-      obj.owned === "won"
+      obj.owned === "won" &&
+      obj.status === "success"
+    );
+  });
+};
+
+//**filtered NFA transaction status is equal to pending */
+export const filteredPendingTransaction = (transaction, currentUseriId) => {
+  return transaction.filter((obj) => {
+    return (
+      obj.uid === currentUseriId.uid &&
+      obj.status === "pending"
     );
   });
 };
@@ -79,7 +105,7 @@ export const onSearch = (value, items) => {
 };
 
 export const filterTotal = (dataArray) => {
-  const subTotal = dataArray.reduce((a, b) => a + b.biddingPrice, 0);
+  const subTotal = dataArray.reduce((a, b) => a + b.price, 0);
 
   return subTotal;
 };

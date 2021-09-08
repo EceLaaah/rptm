@@ -11,26 +11,29 @@ import { RiceVarietyProvider } from "./Context/RiceVarietyProvider";
 import { FarmLocationProvider } from "./Context/FarmLocationProvider";
 import { ProcurementProvider } from "./Context/ProcurementProvider";
 import { DistributionProvider } from "./Context/DistributionProvider";
+import { TargetProcurementProvider } from './Context/TargetProcurementProvider'
 
 ReactDOM.render(
   <React.StrictMode>
-    <DistributionProvider>
-      <UserProvider>
-        <ProcurementProvider>
-          <FarmLocationProvider>
-            <RiceVarietyProvider>
-              <ProductProvider>
-                <AuthProvider>
-                  <TranscationProvider>
-                    <App />
-                  </TranscationProvider>
-                </AuthProvider>
-              </ProductProvider>
-            </RiceVarietyProvider>
-          </FarmLocationProvider>
-        </ProcurementProvider>
-      </UserProvider>
-    </DistributionProvider>
+    <TargetProcurementProvider>
+      <DistributionProvider>
+        <UserProvider>
+          <ProcurementProvider>
+            <FarmLocationProvider>
+              <RiceVarietyProvider>
+                <ProductProvider>
+                  <AuthProvider>
+                    <TranscationProvider>
+                      <App />
+                    </TranscationProvider>
+                  </AuthProvider>
+                </ProductProvider>
+              </RiceVarietyProvider>
+            </FarmLocationProvider>
+          </ProcurementProvider>
+        </UserProvider>
+      </DistributionProvider>
+    </TargetProcurementProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

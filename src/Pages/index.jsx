@@ -11,5 +11,6 @@ export { default as Dashboard } from "./Dashboard/Dashboard";
 export { default as Inventory } from "./Inventory/Inventory";
 export { default as Distribution } from "./Distribution/Distribution";
 export { default as Procurement } from "./Procurement/Procurement";
-export { default as Produce } from "./Produce/Produce";
+export { default as TargetProcurement } from "./TargetProcurement/TargetProcurement";
+export { default as NFACart } from './Cart/NFACart'
 //export { default as BiddingReview } from "./BiddingReview/BiddingReview";

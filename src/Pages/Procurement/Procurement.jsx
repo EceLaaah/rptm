@@ -4,7 +4,7 @@ import {
   AddProcurement,
   UpdateProcurement,
 } from "../../components";
-import { Space, Popconfirm, Input } from "antd";
+import { Space, Popconfirm, Input, Tag } from "antd";
 import { arraySlice, onSearch } from "../../Utils/ReusableSyntax";
 import { Edit3, Trash2, PlusCircle } from "react-feather";
 import { ProcurementContext } from "../../Context/ProcurementProvider";
@@ -56,7 +56,14 @@ export default function Procurement() {
     {
       title: "Procurement Date",
       dataIndex: "procurementDate",
-      key: "ownersName",
+      key: "procurementDate",
+      render: (procurementDate) => {
+        return (
+          <Tag color="geekblue">
+            {procurementDate}
+          </Tag>
+        )
+      }
     },
     {
       title: "Palay Variety",
