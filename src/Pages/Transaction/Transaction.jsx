@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { Tabs, Tag, Popconfirm, Table } from "antd";
+import { Tabs, Tag, Popconfirm, Table, Divider } from "antd";
 import { TransactionHistory } from "../../components";
 import {
   filteredTransaction,
@@ -8,6 +8,7 @@ import {
   filterTotal,
   sortTypes,
   sortRiceVariety,
+  onUpdateProduct
 } from "../../Utils/ReusableSyntax";
 import { TransactionContext } from "../../Context/TransactionProvider";
 import { RiceVarietyContext } from "../../Context/RiceVarietyProvider";
@@ -57,36 +58,8 @@ const Transaction = () => {
     }
   };
 
-  const onUpdateProduct = (productId, NumOfSocks) => {
-    try {
-      (async () => {
-        const document = app.firestore().collection("product").doc(productId);
-
-        const getValue = await document.get();
-
-        if (getValue) {
-          const newSocks = getValue.data().socks - NumOfSocks;
-
-          console.log(newSocks)
-
-          await document.update({
-            socks: newSocks
-          })
-        }
-      })()
-
-      // document.update({
-      //   socks : 
-      // })
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-
   const onSubmit = async (event, id, riceVariety, productId, socks) => {
     event.preventDefault();
-
-    console.log(productId, socks)
 
     try {
       const document = app
@@ -103,7 +76,7 @@ const Transaction = () => {
           if (Review) {
             if (snapshot.id === id) {
               onUpdateData(id, "won", riceVariety);
-              onUpdateProduct(productId, socks);
+              onUpdateProduct(productId, socks, app);
             } else {
               onUpdateData(snapshot.id, "lose", riceVariety);
             }
@@ -329,6 +302,7 @@ const Transaction = () => {
           ? "Transaction Information"
           : "Transaction History"}
       </h1>
+      <Divider />
       <div className="text-right mb-4"></div>
       {info.role === "Farmer" ? (
         <Tabs defaultActiveKey={1}>

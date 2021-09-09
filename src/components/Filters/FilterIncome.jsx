@@ -1,5 +1,5 @@
 import { ChevronRight, ChevronDown } from 'react-feather'
-import { sortIncome } from '../../Utils/ReusableSyntax'
+import { sortElements } from '../../Utils/ReusableSyntax'
 
 export default function FilterIncome(props) {
 
@@ -7,7 +7,7 @@ export default function FilterIncome(props) {
         <div>
             <div className="flex items-center gap-2 mt-1 cursor-pointer" onClick={props.isIncomeToggle}>
                 {" "}
-                <h1 className="text-lg mb-1 text-gray-400">Sory By </h1>
+                <h1 className="text-lg mb-1 text-gray-400">Sort By </h1>
                 {props.toggleIncome ? (
                     <ChevronDown className="text-gray-400" />
                 ) : (
@@ -20,7 +20,7 @@ export default function FilterIncome(props) {
             >
                 <div>
                     <div className="rounded-md bg-white shadow-xs">
-                        {sortIncome.map((obj) => (
+                        {sortElements.map((obj) => (
                             <span
                                 onClick={(event) => props.sortIncome(event, obj)}
                                 className="rounded-md block cursor-pointer px-4 py-2 text-sm leading-5 text-gray-700 hover:text-gray-900 focus:outline-none focus:text-gray-900"

@@ -13,4 +13,5 @@ export { default as Distribution } from "./Distribution/Distribution";
 export { default as Procurement } from "./Procurement/Procurement";
 export { default as TargetProcurement } from "./TargetProcurement/TargetProcurement";
 export { default as NFACart } from './Cart/NFACart'
+export { default as ProductPurchased } from './NFAProductPruchased/ProductPurchased'
 //export { default as BiddingReview } from "./BiddingReview/BiddingReview";

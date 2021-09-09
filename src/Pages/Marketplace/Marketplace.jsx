@@ -9,8 +9,9 @@ import {
 } from "../../components";
 import MarketCard from "./MarketCard";
 import { Search, PlusCircle } from "react-feather";
-import { onSearch } from "../../Utils/ReusableSyntax";
+import { onSearch, sortNumber, map } from "../../Utils/ReusableSyntax";
 import RolesHook from "../../lib/RolesHook";
+import { Divider } from 'antd'
 import UseTargetPocurement from "../../lib/UseTargetPocurement";
 
 const Marketplace = () => {
@@ -50,30 +51,9 @@ const Marketplace = () => {
   const sortIncome = (event, types) => {
     event.preventDefault();
 
-    const map = {
-      kilograms: "kilograms",
-      riceVariety: "riceVariety",
-      farmerIncome: "farmerIncome",
-      productAge: "productAge",
-    };
-
     const sortType = map[types];
 
-    const sorted = product.sort((a, b) => {
-      if (
-        sortType === "farmerIncome" ||
-        sortType === "kilograms" ||
-        sortType === "productAge"
-      ) {
-        return a[sortType] - b[sortType];
-      } else {
-        return a.riceVariety !== b.riceVariety
-          ? a.riceVariety < b.riceVariety
-            ? -1
-            : 1
-          : 0;
-      }
-    });
+    const sorted = sortNumber(product, sortType);
     setToggleIncome(false);
     setSortData(sorted);
   };
@@ -111,7 +91,7 @@ const Marketplace = () => {
         />
       )}
       <div className="max-w-content mx-auto px-4 bg-gray-100">
-        <div className="pb-8 ">
+        <div className="pb-8">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold mb-3">Market Place</h1>
             {info.role === "NFA" && (
@@ -163,6 +143,7 @@ const Marketplace = () => {
             )}
           </div>
         </section>
+        <Divider />
         <MarketCard
           productData={sortData !== null ? sortData : productData}
           isToggle={isToggle}

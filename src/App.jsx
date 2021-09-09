@@ -18,7 +18,8 @@ import {
   UpdateProduct,
   Rice,
   TargetProcurement,
-  NFACart
+  NFACart,
+  ProductPurchased
 } from "./Pages";
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
           <PrivateRoute exact path="/products" component={Products} />
           <PrivateRoute exact path="/rice" component={Rice} />
           <PrivateRoute exact path="/nfacart" component={NFACart} />
+          <PrivateRoute exact path="/productPurchased" component={ProductPurchased} />
         </Switch>
       </Router>
     </Suspense>

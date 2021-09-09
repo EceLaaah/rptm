@@ -1,5 +1,12 @@
-export const sortIncome = ["kilograms", "riceVariety", "farmerIncome", "productAge"];
+export const sortElements = ["kilograms", "riceVariety", "farmerIncome", "productAge"];
 export const types = ["Police", "Market", "Relief Operation"]
+
+export const map = {
+  kilograms: "kilograms",
+  riceVariety: "riceVariety",
+  farmerIncome: "farmerIncome",
+  productAge: "productAge",
+};
 
 export const filterTransactionStatus = (transaction) => {
   return transaction.filter((obj) => {
@@ -13,6 +20,26 @@ export const monthDiff = (d1, d2) => {
   months -= d1.getMonth();
   months += d2.getMonth();
   return months <= 0 ? 0 : months;
+}
+
+export const onUpdateProduct = (productId, NumOfSocks, app) => {
+  try {
+    (async () => {
+      const document = app.firestore().collection("product").doc(productId);
+
+      const getValue = await document.get();
+
+      if (getValue) {
+        const newSocks = getValue.data().socks - NumOfSocks;
+
+        await document.update({
+          socks: newSocks
+        })
+      }
+    })()
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 export const sortFarmerIncome = (product, sortType) => {
@@ -109,6 +136,24 @@ export const filterTotal = (dataArray) => {
 
   return subTotal;
 };
+
+export const sortNumber = (product, sortType) => {
+  return product.sort((a, b) => {
+    if (
+      sortType === "farmerIncome" ||
+      sortType === "kilograms" ||
+      sortType === "productAge"
+    ) {
+      return a[sortType] - b[sortType];
+    } else {
+      return a.riceVariety !== b.riceVariety
+        ? a.riceVariety < b.riceVariety
+          ? -1
+          : 1
+        : 0;
+    }
+  });
+}
 
 // //* return numerica and alphabetical sorted data
 // export const sortedIncome = (filterProduct, sortTypes) => {

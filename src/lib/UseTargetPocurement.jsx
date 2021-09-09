@@ -3,6 +3,7 @@ import { TargetProcurementContext } from '../Context/TargetProcurementProvider'
 
 export default function UseTargetPocurement() {
     const [getTarget, setTarget] = useState({
+        id: "",
         date_created: "",
         targetNumber: 0
     });
@@ -14,12 +15,12 @@ export default function UseTargetPocurement() {
 
         target.forEach((value) => {
             if (value.date_created === dateToday.toISOString().substring(0, 10)) {
-                setTarget({ date_created: value.date_created, targetNumber: value.targetNumber })
+                setTarget({ id: value.id, date_created: value.date_created, targetNumber: value.targetNumber })
             }
         })
     }
 
-    useEffect(fetchTarget, []);
+    useEffect(fetchTarget, [target]);
 
     return { getTarget };
 }

@@ -4,7 +4,7 @@ import {
   AddDistribution,
   UpdateDistribution,
 } from "../../components";
-import { Space, Popconfirm, Input } from "antd";
+import { Space, Popconfirm, Input, Divider } from "antd";
 import { arraySlice, onSearch } from "../../Utils/ReusableSyntax";
 import { Edit3, Trash2, PlusCircle } from "react-feather";
 import { app } from "../../config/firebase";
@@ -194,6 +194,7 @@ export default function Distribution() {
             />
           </div>
         </div>
+        <Divider />
         <AdminTable
           searchFilter={searchFilter}
           columns={columns}

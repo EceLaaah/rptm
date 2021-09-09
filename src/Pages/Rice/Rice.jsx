@@ -255,6 +255,7 @@ export default function Rice() {
             }}
           />
         </div>
+        <Divider />
         <div className="mt-4">
           <AdminTable
             searchFilter={searchFilter}

@@ -2,15 +2,17 @@ import { useState, useContext } from 'react';
 import { Trash2, } from "react-feather"
 import { AdminTable } from '../../components';
 import { TargetProcurementContext } from '../../Context/TargetProcurementProvider'
-import { Space, Popconfirm, Tag, Input } from "antd";
+import { Space, Popconfirm, Tag, Input, Divider } from "antd";
 import { arraySlice, onSearch } from "../../Utils/ReusableSyntax";
 import swal from 'sweetalert';
+import { withRouter, useHistory } from 'react-router-dom';
 import { app } from '../../config/firebase'
 
-export default function Produce() {
+const TargetProcurement = () => {
   const [current, setCurrent] = useState(1);
   const { target } = useContext(TargetProcurementContext);
   const [searchFilter, setSearchFilter] = useState(null);
+  const history = useHistory();
 
   const isDelete = (event, id) => {
     event.preventDefault();
@@ -23,6 +25,11 @@ export default function Produce() {
         button: "Ok",
       });
     })
+  }
+
+  const nextPage = (event, id) => {
+    event.preventDefault();
+    id && history.push(`/productPurchased?targetId=${id}`)
   }
 
   const columns = [
@@ -53,11 +60,10 @@ export default function Produce() {
     },
     {
       title: "Purchases",
-      dataIndex: "productArray",
-      key: "productArray",
-      render: (statusActivate) => {
+      key: "purchases",
+      render: (target) => {
         return (
-          <button className="bg-transparent border border-blue-500 text-blue-900 hover:bg-blue-200 rounded-sm py-1 px-4 text-white">
+          <button onClick={(event) => nextPage(event, target.id)} className="bg-transparent border border-blue-500 text-blue-900 hover:bg-blue-200 rounded-sm py-1 px-4 text-white">
             Review
           </button>
         )
@@ -86,7 +92,7 @@ export default function Produce() {
 
   return (
     <>
-      <div>
+      <div className="max-w-content mx-auto px-4">
         <div className="mb-3">
           <div className="flex justify-between mb-3 md:mb-0">
             <h1 className="text-2xl font-semibold">Target Procurement</h1>
@@ -101,6 +107,7 @@ export default function Produce() {
             />
           </div>
         </div>
+        <Divider />
         <div className="mt-3">
           <AdminTable
             searchFilter={searchFilter}
@@ -116,3 +123,5 @@ export default function Produce() {
     </>
   );
 }
+
+export default withRouter(TargetProcurement)

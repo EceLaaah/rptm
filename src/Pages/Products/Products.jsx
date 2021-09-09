@@ -9,6 +9,7 @@ import { Card } from "../../components";
 import { Link } from "react-router-dom";
 import { PlusCircle } from "react-feather";
 import ReactPaginate from "react-paginate";
+import { Divider } from "antd"
 
 const Products = () => {
   const [pageNumber, setPageNumber] = useState(0);
@@ -95,7 +96,7 @@ const Products = () => {
   return (
     <div className="max-w-content mx-auto px-4 bg-gray-100">
       <div className="flex text-center justify-between">
-        <h1 className="text-2xl pb-8 font-bold">Products Owned</h1>
+        <h1 className="text-2xl font-bold">Products Owned</h1>
         {product.product.length >= 0 ? (
           <Link to="/post">
             <button className="h-9 px-6 bg-primary text-white rounded-sm flex items-center justify-center gap-2 font-semibold">
@@ -104,6 +105,7 @@ const Products = () => {
           </Link>
         ) : null}
       </div>
+      <Divider />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 flex justify-center relative">
         {displayCards}
       </div>

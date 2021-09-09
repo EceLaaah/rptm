@@ -4,7 +4,7 @@ import {
   AddProcurement,
   UpdateProcurement,
 } from "../../components";
-import { Space, Popconfirm, Input, Tag } from "antd";
+import { Space, Popconfirm, Input, Tag, Divider } from "antd";
 import { arraySlice, onSearch } from "../../Utils/ReusableSyntax";
 import { Edit3, Trash2, PlusCircle } from "react-feather";
 import { ProcurementContext } from "../../Context/ProcurementProvider";
@@ -158,6 +158,7 @@ export default function Procurement() {
             />
           </div>
         </div>
+        <Divider />
         <AdminTable
           searchFilter={searchFilter}
           columns={columns}

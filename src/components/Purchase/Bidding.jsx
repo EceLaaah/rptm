@@ -6,8 +6,9 @@ import swal from "sweetalert";
 import { Spin } from "antd";
 import { ProductContext } from "../../Context/ProductProvider";
 import { AuthContext } from "../../Context/auth";
-import { objectAssign } from "../../Utils/ReusableSyntax";
+import { objectAssign, onUpdateProduct, updateTargetProcurement } from "../../Utils/ReusableSyntax";
 import RolesHook from "../../lib/RolesHook";
+import UseTargetPocurement from '../../lib/UseTargetPocurement'
 import { X } from "react-feather";
 
 //const date = new Date();
@@ -36,6 +37,7 @@ export default function Bidding({ open, onClose, id }) {
   const { fetchProd, setId } = useContext(ProductContext);
   const context = useContext(AuthContext);
   fetchProd && objectAssign(fetchProd, initialState);
+  const { getTarget } = UseTargetPocurement();
 
   const { info } = RolesHook();
 
@@ -50,15 +52,38 @@ export default function Bidding({ open, onClose, id }) {
     setSocks(0);
   };
 
+  const onUpdateTargetNumber = (socks) => {
+    const document = app.firestore().collection("targetProcurement").doc(getTarget.id);
+
+    const newTargetValue = getTarget.targetNumber - socks;
+
+    console.log(newTargetValue)
+
+    document.update({
+      targetNumber: newTargetValue
+    });
+  }
+
   const onSubmitNFA = (event) => {
     event.preventDefault();
 
     const document = app.firestore().collection("transaction").doc();
 
     const checkSocks = Number(getSocks) > Number(socks);
+    const isCheckTarget = Number(getSocks) > Number(getTarget.targetNumber)
+    const isTargetZero = Number(getTarget.targetNumber) === 0;
     const isZero = Number(getSocks) === 0;
 
     const total = price * getSocks
+
+    if (isTargetZero) {
+      return swal({
+        title: "Success",
+        text: `Target successfully ended, good job! :)`,
+        icon: "success",
+        button: "Ok",
+      });
+    }
 
     if (checkSocks || isZero) {
       return swal({
@@ -69,12 +94,22 @@ export default function Bidding({ open, onClose, id }) {
       });
     }
 
-    if (!checkSocks && !isZero) {
+    if (isCheckTarget) {
+      return swal({
+        title: "Warning!!!",
+        text: `Exceeding in target procurement`,
+        icon: "warning",
+        button: "Ok",
+      })
+    }
+
+    if (!checkSocks && !isZero && !isTargetZero) {
       Loading();
       document
         .set({
           owned: "won",
           imageUrl,
+          isNFA: true,
           socks: Number(getSocks),
           userEmail: context.email,
           productId: fetchProd[0].id,
@@ -88,11 +123,13 @@ export default function Bidding({ open, onClose, id }) {
           status: "pending",
         })
         .then(() => {
+          onUpdateTargetNumber(Number(getSocks));
+          onUpdateProduct(fetchProd[0].id, getSocks, app);
           setLoading(false);
           clearState();
           swal({
             title: "Successfully",
-            text: `Successfully added your bid`,
+            text: `Successfully added to your cart`,
             icon: "success",
             button: "Ok",
           });
@@ -132,6 +169,7 @@ export default function Bidding({ open, onClose, id }) {
         .set({
           owned: null,
           imageUrl,
+          isNFA: false,
           socks: Number(getSocks),
           userEmail: context.email,
           productId: fetchProd[0].id,

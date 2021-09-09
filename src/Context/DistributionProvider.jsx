@@ -13,7 +13,7 @@ const DistributionProvider = ({ children }) => {
     return documentDistribution.onSnapshot((snapshot) => {
       const distributionArray = [];
 
-      snapshot.forEach(async (distributionData) => {
+      snapshot.forEach((distributionData) => {
         distributionArray.push({
           ...distributionData.data(),
           id: distributionData.id,
