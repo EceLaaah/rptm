@@ -14,7 +14,7 @@ const DashboardCard = ({
             >
                 <div className="flex items-center justify-between mb-4">
                     <div>
-                        <div className="text-sm">{title}</div>
+                        <div className="text-lg">{title}</div>
                     </div>
                     <div className={`${iconColor} py-2 px-2 rounded-full`}>{icon}</div>
                 </div>

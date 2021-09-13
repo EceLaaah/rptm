@@ -4,7 +4,7 @@ const DashboardCards = ({ icon, title, numberData, iconColor, cardColor }) => {
   return (
     <>
       <section
-        className={`${cardColor} text-white shadow-lg rounded-sm px-6 py-4`}
+        className={`${cardColor} text-white rounded-lg px-6 py-4`}
       >
         <div className="flex items-center justify-between mb-4">
           <div>

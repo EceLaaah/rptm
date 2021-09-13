@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { app } from "../../config/firebase";
 import { MyModal, Textfield } from "../";
 import swal from "sweetalert";
 import { Spin } from "antd";
 import { MyDateString } from "../../Utils";
+import { AuthContext } from '../../Context/auth'
 
 const initialState = {
   procurementDate: "",
   palayVariety: "",
-  quantity: "",
+  quantity: 0,
   pricePerKilo: "",
   farmerName: "",
 };
@@ -19,6 +20,8 @@ export default function AddProcurement({ isOpen, isClose }) {
     setState,
   ] = useState(initialState);
   const [loading, setLoading] = useState(false);
+
+  const context = useContext(AuthContext);
 
   const onChange = (event) => {
     event.preventDefault();
@@ -38,15 +41,15 @@ export default function AddProcurement({ isOpen, isClose }) {
 
     Loading();
     const totalPrice = Number(quantity) * Number(pricePerKilo);
-    const priceKilo = Number(pricePerKilo);
     const document = app.firestore().collection("procurement").doc();
 
     document
       .set({
+        uid: context.uid,
         procurementDate,
         palayVariety,
-        quantity,
-        pricePerKilo: priceKilo,
+        quantity: Number(quantity),
+        pricePerKilo: Number(pricePerKilo),
         farmerName,
         totalPrice,
         date_created: MyDateString,
@@ -93,7 +96,7 @@ export default function AddProcurement({ isOpen, isClose }) {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <Textfield
-              type="text"
+              type="number"
               onChange={(event) => onChange(event)}
               value={quantity}
               label="Quantity"
@@ -101,7 +104,7 @@ export default function AddProcurement({ isOpen, isClose }) {
               placeholder="Quantity"
             />
             <Textfield
-              type="text"
+              type="number"
               onChange={(event) => onChange(event)}
               label="Price Per Kilo"
               value={pricePerKilo}

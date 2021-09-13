@@ -225,6 +225,9 @@ const Transaction = () => {
       key: "socks",
       setDirections: sortTypes,
       sorter: sortRiceVariety,
+      render: (socks) => {
+        return <span className="bg-blue-400 py-1 px-2 font-bold rounded-full text-white">{socks.toLocaleString()}</span>
+      }
     },
 
     {

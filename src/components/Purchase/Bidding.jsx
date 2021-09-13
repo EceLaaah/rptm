@@ -24,10 +24,14 @@ const initialState = {
   email: "",
   description: "",
   uid: "",
+  dateHarvested: {
+    seconds: 0,
+    nanoseconds: 0
+  },
 };
 
 export default function Bidding({ open, onClose, id }) {
-  const { imageUrl, socks, price, riceVariety, email, description, uid } =
+  const { imageUrl, socks, price, riceVariety, email, description, uid, dateHarvested } =
     initialState;
 
   const [bidding, setBidding] = useState(0);
@@ -38,6 +42,9 @@ export default function Bidding({ open, onClose, id }) {
   const context = useContext(AuthContext);
   fetchProd && objectAssign(fetchProd, initialState);
   const { getTarget } = UseTargetPocurement();
+  const dateToday = new Date();
+
+  console.log(fetchProd)
 
   const { info } = RolesHook();
 
@@ -56,8 +63,6 @@ export default function Bidding({ open, onClose, id }) {
     const document = app.firestore().collection("targetProcurement").doc(getTarget.id);
 
     const newTargetValue = getTarget.targetNumber - socks;
-
-    console.log(newTargetValue)
 
     document.update({
       targetNumber: newTargetValue
@@ -121,6 +126,9 @@ export default function Bidding({ open, onClose, id }) {
           uid: context.uid,
           farmerId: uid,
           status: "pending",
+          date_created: dateToday,
+          isMilled: false,
+          dateHarvested: new Date(dateHarvested.seconds * 1000)
         })
         .then(() => {
           onUpdateTargetNumber(Number(getSocks));
@@ -180,6 +188,9 @@ export default function Bidding({ open, onClose, id }) {
           uid: context.uid,
           farmerId: uid,
           status: "pending",
+          date_created: dateToday,
+          isMilled: false,
+          dateHarvested: new Date(dateHarvested.seconds * 1000)
         })
         .then(() => {
           setLoading(false);

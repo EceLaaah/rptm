@@ -6,6 +6,7 @@ const TransactionContext = createContext();
 const TranscationProvider = ({ children }) => {
   const [transaction, setTransaction] = useState([]);
   const [finishTransaction, setFinishTransaction] = useState([]);
+  const [riceMilled, setRiceMilled] = useState([]);
 
   const fetchTransaction = () => {
     const document = app.firestore().collection("transaction");
@@ -41,9 +42,26 @@ const TranscationProvider = ({ children }) => {
 
   useEffect(fetchDoneBidding, [])
 
+  const fetchRiceMilled = () => {
+    const document = app.firestore().collection("riceMilled").where("totalSocks", ">", 0)
+    return document.onSnapshot((snapshot) => {
+      const riceMilledArray = [];
+
+      snapshot.forEach((riceMilledData) => {
+        riceMilledArray.push({
+          ...riceMilledData.data(),
+          id: riceMilledData.id,
+        });
+      });
+      setRiceMilled(riceMilledArray);
+    });
+  }
+
+  useEffect(fetchRiceMilled, []);
+
   return (
     <TransactionContext.Provider
-      value={{ transaction, finishTransaction }}
+      value={{ transaction, finishTransaction, riceMilled }}
     >
       {children}
     </TransactionContext.Provider>

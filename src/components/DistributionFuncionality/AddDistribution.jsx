@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { app } from "../../config/firebase";
 import { MyModal, Textfield } from "../";
 import swal from "sweetalert";
 import { Spin } from "antd";
 import { MyDateString } from "../../Utils";
 import { types } from "../../Utils/ReusableSyntax"
+import { AuthContext } from '../../Context/auth'
 
 const initialState = {
   distributionDate: "",
@@ -34,7 +35,7 @@ const ACTIONS = {
   getRelief: "Relief Operation"
 }
 
-export default function AddDistribution({ isOpen, isClose }) {
+export default function AddDistribution({ isOpen, isClose, data }) {
   const [
     {
       distributionDate,
@@ -61,6 +62,8 @@ export default function AddDistribution({ isOpen, isClose }) {
   ] = useState(initialState);
   const [loading, setLoading] = useState(false);
   const [isTypes, setIsTypes] = useState({ police: false, market: false, relief: false })
+
+  const context = useContext(AuthContext);
 
   const onTypesSelect = () => {
     if (ACTIONS.getPolice === distributionType) {
@@ -139,17 +142,20 @@ export default function AddDistribution({ isOpen, isClose }) {
 
     document
       .set({
+        uid: context.uid,
         distributionTypeId: id,
         distributionDate,
         distributionName: name,
         distributionType,
         quantity: Number(quantity),
+        riceVariety: data.riceVariety,
         barangay,
         municipality,
         province,
         date_created: MyDateString,
       })
       .then(() => {
+        onUpdateRiceMilled();
         setLoading(false);
         clearState();
         swal({
@@ -159,6 +165,20 @@ export default function AddDistribution({ isOpen, isClose }) {
           button: "Ok",
         });
       });
+  }
+
+  const onUpdateRiceMilled = () => {
+    try {
+      const document = app.firestore().collection("riceMilled").doc(data.id);
+
+      const newSocks = Number(data.totalSocks) - Number(quantity);
+
+      document.update({
+        totalSocks: newSocks
+      })
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 
   const policeMarkdown = (
@@ -248,7 +268,7 @@ export default function AddDistribution({ isOpen, isClose }) {
           Distribution Information
         </h1>
         <form>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 flex items-center">
+          <div className="w-full">
             <Textfield
               type="date"
               onChange={(event) => onChange(event)}
@@ -256,6 +276,15 @@ export default function AddDistribution({ isOpen, isClose }) {
               value={distributionDate}
               name="distributionDate"
               placeholder="Distribution Date"
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 flex items-center">
+            <Textfield
+              type="text"
+              value={data.riceVariety}
+              label="Rice Variety"
+              name="riceVariety"
+              placeholder="Rice Variety"
             />
             <select value={distributionType} name="distributionType" onChange={(event) => onChange(event)} className="block w-full h-10 mt-8 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               <option value=""></option>

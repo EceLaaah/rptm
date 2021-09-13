@@ -1,3 +1,5 @@
+import theme from "./Theme";
+const { fonts } = theme;
 export const sortElements = ["kilograms", "riceVariety", "farmerIncome", "productAge"];
 export const types = ["Police", "Market", "Relief Operation"]
 
@@ -7,6 +9,70 @@ export const map = {
   farmerIncome: "farmerIncome",
   productAge: "productAge",
 };
+
+export const updated = (dataArray) => {
+  return Object.values(dataArray.reduce((obj, item) => {
+    var key = item.procurementDate
+
+    if (!obj[key]) {
+      obj[key] = Object.assign(item)
+    } else {
+      obj[key].totalPrice += item.totalPrice
+    }
+
+    return obj
+  }, {}))
+
+}
+
+export const filterDistribution = (dataArray, types) => {
+  return dataArray.filter((obj) => {
+    return obj.distributionType === types
+  })
+}
+
+export const buildScales = (axes) => {
+  const scales = {
+    xAxes: [
+      {
+        ticks: {
+          fontFamily: fonts.inter,
+          fontSize: 15,
+        },
+      },
+    ],
+    yAxes: [
+      {
+        ticks: {
+          beginAtZero: true,
+          fontFamily: fonts.inter,
+          fontSize: 12,
+        },
+      },
+    ],
+  };
+
+  return axes ? scales : null;
+};
+
+export const buildLegend = (legend) => {
+  const leg = {
+    position: "right",
+    align: "start",
+    labels: {
+      fontFamily: fonts.inter,
+    },
+  };
+
+  return legend ? leg : null;
+};
+
+
+export const filteredByNFA = (dataArray, context) => {
+  return dataArray.filter((obj) => {
+    return obj.isNFA === true && obj.uid === context.uid && obj.isMilled === false;
+  })
+}
 
 export const filterTransactionStatus = (transaction) => {
   return transaction.filter((obj) => {
@@ -22,6 +88,7 @@ export const monthDiff = (d1, d2) => {
   return months <= 0 ? 0 : months;
 }
 
+//**update product stocks*/
 export const onUpdateProduct = (productId, NumOfSocks, app) => {
   try {
     (async () => {

@@ -16,5 +16,8 @@ export { default as TransactionHistory } from './TransactionHistory/TransactionH
 export { default as FilterCategory } from "./Filters/FilterCategory"
 export { default as FilterIncome } from "./Filters/FilterIncome"
 export { default as DashboardCard } from "./DashboardCard/DashboardCard"
-export { default as BarChart } from './Barchart/BarChart'
 export { default as TargetProcurementModal } from './ProcurementTargetModal/ProcurementTargetModal'
+export { default as BarChart } from './Charts/BarChart'
+export { default as DisributionChart } from './Charts/DistributionChart'
+export { default as PieChart } from './Charts/PieChart'
+export { default as ProcuredPalayTable } from './InventoryTable/ProcuredPalayTable'

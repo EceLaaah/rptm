@@ -58,14 +58,14 @@ const Layout = ({ children }) => {
     <div className="md:flex flex-col md:flex-row md:min-h-screen relative">
       {/**Sidebar */}
       <div
-        className={`absolute inset-y-0 left-0 transform z-50 ${sidebarToggle && "-translate-x-full "
-          } md:relative md:translate-x-0 transition duration-200 ease-in-out py-8 px-2 flex flex-col h-full w-80 text-gray-700 bg-white dark-mode:text-gray-200 dark-mode:bg-gray-800`}
+        className={`fixed inset-y-0 left-0 transform z-50 ${sidebarToggle && "-translate-x-full "
+          } md:sticky md:translate-x-0 transition duration-200 ease-in-out py-8 px-2 flex flex-col h-screen w-80 text-gray-700 bg-primary dark-mode:text-gray-200 dark-mode:bg-gray-800`}
       >
         <div
           onClick={(event) => isSidebar(event)}
           className="absolute right-0 top-0 p-4 block md:hidden cursor-pointer"
         >
-          <X />
+          <X className="text-white" />
         </div>
         <Spin spinning={loading} delay={500}>
           <div className="flex items-center justify-center flex-col mb-5">
@@ -82,10 +82,10 @@ const Layout = ({ children }) => {
                 alt="profile"
               />
             )}
-            <div className="text-center mt-2">
+            <div className="text-center text-white mt-2">
               <span className="font-bold text-lg">{info.name}</span>
               <span className="text-sm block mb-2">{info.email}</span>
-              <span className="text-sm bg-green-500 text-white py-1 px-4 rounded-full font-semibold">
+              <span className="text-sm bg-blue-500 text-white py-1 px-4 rounded-full font-semibold">
                 {info.role}
               </span>
             </div>
@@ -95,7 +95,7 @@ const Layout = ({ children }) => {
               <Link
                 to={type.link}
                 key={index}
-                className="flex items-center block px-6 py-2 mt-2 text-sm font-semibold text-gray-800 bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                className="flex items-center block px-6 py-2 mt-2 text-sm font-semibold text-white bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-blue-500 dark-mode:focus:bg-blue-500 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-white hover:text-white focus:text-white hover:bg-blue-500 focus:bg-blue-500 focus:outline-none focus:shadow-outline"
               >
                 <i>{type.icon}</i>
                 <span className="mx-2 focus:text-gray-500">{type.name}</span>
@@ -106,9 +106,9 @@ const Layout = ({ children }) => {
       </div>
       {/**Sidebar */}
       {/**Content*/}
-      <section className="bg-gray-100 w-full">
+      <section className="bg-white w-full relative" style={{ backgroundColor: "#f6f6f8" }}>
         {/**Navbar */}
-        <div className={`w-full bg-white h-14 flex items-center`}>
+        <div className={`w-full bg-white h-14 flex items-center sticky top-0`}>
           {/* <div>
             <Search className="px-4" placeholder="Search..." />
           </div> */}
@@ -124,7 +124,7 @@ const Layout = ({ children }) => {
                 <Badge count={pendingtransaction.length}>
                   <Link to="/nfacart">
                     <span>
-                      <ShoppingCart className="hover:text-gray-600 text-gray-600" />
+                      <ShoppingCart className="hover:text-gray-600 text-gray-600" size="20" />
                     </span>
                   </Link>
                 </Badge>
@@ -132,7 +132,7 @@ const Layout = ({ children }) => {
               <div className="inline-block text-left relative">
                 <span
                   onClick={(event) => isToggle(event)}
-                  className="py-2 px-4 bg-gray-100 text-gray-600 rounded-full text-sm font-bold cursor-pointer"
+                  className="py-2 px-4  text-primary bg-gray-100 rounded-full text-sm font-bold cursor-pointer"
                 >
                   {context.email}
                 </span>
@@ -166,7 +166,7 @@ const Layout = ({ children }) => {
             </div>
           </div>
         </div>
-        <div className="p-8">{children}</div>
+        <div className="px-8 py-6 max-w-7xl mx-auto" style={{ width: "1100px" }}>{children}</div>
       </section>
     </div>
   );

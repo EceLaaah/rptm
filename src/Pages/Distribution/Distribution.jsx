@@ -1,14 +1,14 @@
 import { useState, useContext } from "react";
 import {
   AdminTable,
-  AddDistribution,
   UpdateDistribution,
 } from "../../components";
 import { Space, Popconfirm, Input, Divider } from "antd";
-import { arraySlice, onSearch } from "../../Utils/ReusableSyntax";
-import { Edit3, Trash2, PlusCircle } from "react-feather";
+import { arraySlice, onSearch, filtered, sortTypes, sortRiceVariety } from "../../Utils/ReusableSyntax";
+import { Edit3, Trash2 } from "react-feather";
 import { app } from "../../config/firebase";
 import { DistributionContext } from "../../Context/DistributionProvider";
+import { AuthContext } from '../../Context/auth'
 import swal from 'sweetalert'
 
 const typeName = {
@@ -24,28 +24,15 @@ const collectionName = {
 }
 
 export default function Distribution() {
-  const [open, setOpen] = useState(false);
   const [openUpdate, setOpnUpdate] = useState(false);
   const [id, setId] = useState("");
   const [searchFilter, setSearchFilter] = useState(null);
   const [current, setCurrent] = useState(1);
 
   const { distribution } = useContext(DistributionContext);
+  const context = useContext(AuthContext);
 
-  // const deleteProcure = (event, id) => {
-  //   event.preventDefault();
-  //   const document = app.firestore().collection("procurement").doc(id);
-  //   id && document.delete();
-  // };
-
-  const isToggle = (event) => {
-    event.preventDefault();
-    if (!open) {
-      setOpen(true);
-    } else {
-      setOpen(false);
-    }
-  };
+  const filteredDistribution = filtered(distribution, context);
 
   const isUpdateToggle = (event, id) => {
     event.preventDefault();
@@ -92,6 +79,8 @@ export default function Distribution() {
       title: "Unique Identification",
       dataIndex: "id",
       key: "id",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
       render: (text) => {
         return <span className="text-blue-500">{text}</span>;
       },
@@ -100,31 +89,46 @@ export default function Distribution() {
       title: "Distribution Type",
       dataIndex: "distributionType",
       key: "distributionType",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
     },
     {
       title: "Distribution Date",
       dataIndex: "distributionDate",
       key: "distributionDate",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
     },
     {
       title: "Quantity",
       dataIndex: "quantity",
       key: "quantity",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
+      render: (quantity) => {
+        return <span className="bg-blue-400 py-1 px-2 font-bold rounded-full text-white">{quantity.toLocaleString()}</span>
+      }
     },
     {
       title: "Barangay",
       dataIndex: "barangay",
       key: "barangay",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
     },
     {
       title: "Municipality",
       dataIndex: "municipality",
       key: "municipality",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
     },
     {
       title: "Province",
       dataIndex: "province",
       key: "province",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
     },
     {
       title: "Action",
@@ -156,13 +160,10 @@ export default function Distribution() {
 
   //** Data showed to the client
   const dataShowed = 5;
-  const currentData = arraySlice(distribution, current, dataShowed);
+  const currentData = arraySlice(filteredDistribution, current, dataShowed);
 
   return (
     <>
-      {open && (
-        <AddDistribution isOpen={open} isClose={(event) => isToggle(event)} />
-      )}
       {openUpdate && (
         <UpdateDistribution
           isOpen={openUpdate}
@@ -170,25 +171,16 @@ export default function Distribution() {
           id={id}
         />
       )}
-      <div className="max-w-content mx-auto bg-gray-100">
-        <h1 className="text-2xl font-semibold mb-4">Distribution</h1>
+      <div className="max-w-content mx-auto">
+        <h1 className="text-2xl font-semibold mb-4">Distribution Information</h1>
         <div className="mb-4">
-          <div className="flex justify-between mb-3 md:mb-0">
-            <button
-              onClick={(event) => isToggle(event)}
-              type="button"
-              id="add"
-              className="flex items-center gap-2 py-1 px-5 bg-primary hover:bg-primary-slight text-white font-semibold rounded-sm shadow-lg"
-            >
-              <PlusCircle size="20" />
-              Add Distribution
-            </button>
+          <div className="flex justify-end mb-3 md:mb-0">
             <Input.Search
               allowClear
               className="w-full md:max-w-xs"
               placeholder="Search..."
               onSearch={(nameSearch) => {
-                const sea = onSearch(nameSearch, distribution);
+                const sea = onSearch(nameSearch, filteredDistribution);
                 setSearchFilter(sea);
               }}
             />
@@ -199,7 +191,7 @@ export default function Distribution() {
           searchFilter={searchFilter}
           columns={columns}
           currentData={currentData}
-          DataArray={distribution}
+          DataArray={filteredDistribution}
           current={current}
           setCurrent={setCurrent}
           dataShowed={dataShowed}

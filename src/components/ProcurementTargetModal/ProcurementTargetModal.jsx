@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { app } from '../../config/firebase'
 import { MyModal } from '../'
 import swal from 'sweetalert';
 import { X } from 'react-feather'
+import { Months } from '../../Utils';
+import { AuthContext } from '../../Context/auth'
 
 const inputStyle =
     "text-sm appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-10";
@@ -11,6 +13,7 @@ const inputStyle =
 export default function TargetProcurementModal({ isOpen, isClose }) {
 
     const [targetNumber, setTargetNumber] = useState(0);
+    const context = useContext(AuthContext);
 
     const onSubmit = async (event) => {
         event.preventDefault();
@@ -31,9 +34,9 @@ export default function TargetProcurementModal({ isOpen, isClose }) {
                 .firestore()
                 .collection("targetProcurement")
                 .where(
-                    "date_created",
+                    "month",
                     "==",
-                    dateToday.toISOString().substring(0, 10)
+                    Months[dateToday.getMonth()]
                 );
 
             const docs = app
@@ -52,6 +55,7 @@ export default function TargetProcurementModal({ isOpen, isClose }) {
                 });
             }
 
+
             addTargetData(docs, dateToday);
 
         } catch (error) {
@@ -62,6 +66,8 @@ export default function TargetProcurementModal({ isOpen, isClose }) {
     const addTargetData = (document, dateToday) => {
         try {
             document.set({
+                uid: context.uid,
+                month: Months[dateToday.getMonth()],
                 targetNumber: Number(targetNumber),
                 date_created: dateToday.toISOString().substring(0, 10),
             }).then(() => {
@@ -108,7 +114,7 @@ export default function TargetProcurementModal({ isOpen, isClose }) {
                         Cancel
                     </button>
                     <button
-                        className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm"
+                        className="border border-primary bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm"
                     >
                         Save
                     </button>

@@ -10,8 +10,8 @@ import {
 import MarketCard from "./MarketCard";
 import { Search, PlusCircle } from "react-feather";
 import { onSearch, sortNumber, map } from "../../Utils/ReusableSyntax";
-import RolesHook from "../../lib/RolesHook";
 import { Divider } from 'antd'
+import RolesHook from "../../lib/RolesHook";
 import UseTargetPocurement from "../../lib/UseTargetPocurement";
 
 const Marketplace = () => {
@@ -90,7 +90,7 @@ const Marketplace = () => {
           id={id}
         />
       )}
-      <div className="max-w-content mx-auto px-4 bg-gray-100">
+      <div className="max-w-content mx-auto px-4">
         <div className="pb-8">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold mb-3">Market Place</h1>
@@ -99,17 +99,17 @@ const Marketplace = () => {
                 onClick={onTarget}
                 type="button"
                 id="add"
-                className="flex items-center gap-2 py-2 px-5 bg-primary hover:bg-primary-slight text-white font-semibold rounded-sm shadow-lg"
+                className="flex items-center gap-2 py-2 px-5 bg-primary hover:bg-primary-slight text-white font-semibold rounded-lg shadow-lg"
               >
                 <PlusCircle size="20" />
-                Add Target
+                Target
               </button>
             )}
           </div>
           {info.role === "NFA" && (
             <h1 className="text-sm flex items-center gap-2">
-              <span>Target Procurement :</span>
-              <strong className="px-3 text-blue-500 rounded-lg bg-transparent border border-blue-500">
+              <span>Monthly Target :</span>
+              <strong className="bg-primary py-1 px-3 font-bold rounded-full text-white">
                 {getTarget.targetNumber}
               </strong>
             </h1>

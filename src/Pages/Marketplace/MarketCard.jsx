@@ -23,7 +23,7 @@ export default function MarkerCard(props) {
     return (
         <>
             {props.productData.length > 0 && (
-                <FlipMove typeName="ul" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 flex justify-center relative">
+                <FlipMove typeName="ul" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 flex justify-center relative">
                     {props.productData
                         .slice(pagesVisited, pagesVisited + numberOfCards)
                         .map((type) => (
@@ -36,29 +36,32 @@ export default function MarkerCard(props) {
                                         className="w-full h-56 rounded-t-lg bg-cover bg-center relative"
                                         style={{ backgroundImage: `url(${type.imageUrl})` }}
                                     >
-                                        <span className="absolute top-2 left-2 rounded-full py-4 px-2 bg-primary text-white font-semibold text-sm">
-                                            {type.socks}/kg
-                                        </span>
+                                        {/* <div className="absolute top-2 left-2 rounded-lg h-16 px-3 bg-primary text-sm flex justify-center text-left flex-col transform -translate-y-8">
+                                            <h1 className="text-white font-semibold">Socks</h1>
+                                            <h2 className="text-white">
+                                                {type.socks}
+                                            </h2>
+                                        </div> */}
                                     </div>
                                     <div className="py-2 px-5 h-auto">
                                         <div className="flex justify-between items-center">
                                             <h1 className="text-xl font-bold">{type.riceVariety}</h1>
-                                            <h2 className="text-sm text-gray-400">{type.socks}kg</h2>
+                                            <h2 className="text-sm text-gray-400">{type.socks}socks</h2>
                                         </div>
                                         <section>
-                                            <span className="text-sm text-gray-400">{type.email}</span>
+                                            {/* <span className="text-sm text-gray-400">{type.email}</span> */}
                                             <div
                                                 className={`text-sm text-gray-400 my-2 truncate`}
                                                 dangerouslySetInnerHTML={{ __html: type.description }}
                                             />
                                             <div className="flex items-center justify-between">
-                                                <h1 className="text-gray-400">{type.productAge} Months Old</h1>
+                                                <h1 className="py-2 text-gray-400">{type.productAge} Months Old</h1>
                                                 <Popconfirm
                                                     title="Do you want to proceed?"
                                                     onConfirm={(event) => props.isToggle(event, type.id)}
                                                 >
-                                                    <button className="bg-primary hover:bg-primary-slight text-white px-8 py-1 text-sm my-3 font-semibold rounded-sm">
-                                                        Buy
+                                                    <button className="bg-primary text-right hover:bg-primary-slight text-white w-32 px-6 py-1 text-lg my-3 rounded-lg transform translate-x-9">
+                                                        PHP {type.price}
                                                     </button>
                                                 </Popconfirm>
                                             </div>
