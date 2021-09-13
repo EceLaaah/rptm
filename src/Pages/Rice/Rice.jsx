@@ -233,16 +233,20 @@ export default function Rice() {
         </div>
       </MyModal>
       <div className="max-w-content mx-auto px-4 bg-gray-100">
+        <div className=" mb-4">
+          <h1 className="text-2xl font-semibold">Rice Variety</h1>
+          <span className="text-gray-400">Different Palay Variety</span>
+        </div>
         <div className="md:flex items-center justify-between">
           <div className="flex justify-end mb-3 md:mb-0">
             <button
               onClick={(event) => isToggle(event)}
               type="button"
               id="add"
-              className="flex items-center gap-2 py-1 px-5 bg-primary hover:bg-primary-slight text-white font-semibold rounded-sm shadow-lg"
+              className="flex items-center gap-2 py-2 px-5 bg-primary hover:bg-primary-slight text-white font-semibold rounded-lg shadow-lg"
             >
               <PlusCircle size="20" />
-              Add Information
+              Variety
             </button>
           </div>
           <Input.Search

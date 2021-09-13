@@ -93,7 +93,10 @@ const Marketplace = () => {
       <div className="max-w-content mx-auto px-4">
         <div className="pb-8">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold mb-3">Market Place</h1>
+            <div className=" mb-3">
+              <h1 className="text-2xl font-bold">Market Place</h1>
+              <span className="text-gray-400">Farmer Product Marketplace</span>
+            </div>
             {info.role === "NFA" && (
               <button
                 onClick={onTarget}

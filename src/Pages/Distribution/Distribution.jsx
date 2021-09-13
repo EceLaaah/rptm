@@ -172,7 +172,10 @@ export default function Distribution() {
         />
       )}
       <div className="max-w-content mx-auto">
-        <h1 className="text-2xl font-semibold mb-4">Distribution Information</h1>
+        <div className=" mb-4">
+          <h1 className="text-2xl font-semibold">Distribution Information</h1>
+          <span className="text-gray-400">Data that needs to distribute in different sectors</span>
+        </div>
         <div className="mb-4">
           <div className="flex justify-end mb-3 md:mb-0">
             <Input.Search

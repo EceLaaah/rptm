@@ -95,8 +95,11 @@ const Products = () => {
 
   return (
     <div className="max-w-content mx-auto px-4 bg-gray-100">
-      <div className="flex text-center justify-between">
-        <h1 className="text-2xl font-bold">Products Owned</h1>
+      <div className="flex items-center justify-between">
+        <div className=" mb-4">
+          <h1 className="text-2xl font-semibold">Product Posted</h1>
+          <span className="text-gray-400">Different produce that is owned by the farmer</span>
+        </div>
         {product.product.length >= 0 ? (
           <Link to="/post">
             <button className="h-9 px-6 bg-primary text-white rounded-sm flex items-center justify-center gap-2 font-semibold">

@@ -171,7 +171,10 @@ export default function Procurement() {
         />
       )}
       <div>
-        <h1 className="text-2xl font-semibold mb-4">Procurement Information</h1>
+        <div className=" mb-4">
+          <h1 className="text-2xl font-semibold">Procurement Information</h1>
+          <span className="text-gray-400">Procured Rice Data</span>
+        </div>
         <div className="mb-4">
           <div className="flex justify-between mb-3 md:mb-0">
             <button

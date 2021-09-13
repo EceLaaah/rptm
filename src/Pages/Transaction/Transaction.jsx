@@ -300,11 +300,14 @@ const Transaction = () => {
 
   return (
     <div className="max-w-content mx-auto px-4 bg-gray-100">
-      <h1 className="text-2xl mb-4 font-semibold">
-        {info.role === "Farmer"
-          ? "Transaction Information"
-          : "Transaction History"}
-      </h1>
+      <div className="mb-4">
+        <h1 className="text-2xl font-semibold">
+          {info.role === "Farmer"
+            ? "Transaction Information"
+            : "Transaction History"}
+        </h1>
+        <span className="text-gray-400">Transaction Information from traders product bids</span>
+      </div>
       <Divider />
       <div className="text-right mb-4"></div>
       {info.role === "Farmer" ? (

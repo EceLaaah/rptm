@@ -116,7 +116,10 @@ const TargetProcurement = () => {
       <div className="max-w-content mx-auto px-4">
         <div className="mb-3">
           <div className="flex justify-between mb-3 md:mb-0">
-            <h1 className="text-2xl font-semibold">Target Procurement</h1>
+            <div className=" mb-4">
+              <h1 className="text-2xl font-semibold">Monthl Target</h1>
+              <span className="text-gray-400">Monthl Target Procure Palay</span>
+            </div>
             <Input.Search
               allowClear
               className="w-full md:max-w-xs"

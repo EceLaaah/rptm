@@ -309,7 +309,10 @@ export default function Inventory() {
       )}
       <div>
         {" "}
-        <h1 className="text-2xl font-bold mb-3">Palay Informations</h1>
+        <div className=" mb-4">
+          <h1 className="text-2xl font-semibold">Palay Information</h1>
+          <span className="text-gray-400">Palay that is bought from marketplace</span>
+        </div>
         <Tabs defaultActiveKey={1}>
           <TabPane tab="Procured Palay" key={1}>
             <div className="mb-4 flex justify-end">
