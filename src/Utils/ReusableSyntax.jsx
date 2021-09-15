@@ -10,6 +10,21 @@ export const map = {
   productAge: "productAge",
 };
 
+export const updatedDistribution = (dataArray) => {
+  return Object.values(dataArray.reduce((obj, item) => {
+    var key = item.distributionDate
+
+    if (!obj[key]) {
+      obj[key] = Object.assign(item)
+    } else {
+      obj[key].totalPrice += item.totalPrice
+    }
+
+    return obj
+  }, {}))
+}
+
+
 export const updated = (dataArray) => {
   return Object.values(dataArray.reduce((obj, item) => {
     var key = item.procurementDate
@@ -22,7 +37,6 @@ export const updated = (dataArray) => {
 
     return obj
   }, {}))
-
 }
 
 export const filterDistribution = (dataArray, types) => {
@@ -67,7 +81,6 @@ export const buildLegend = (legend) => {
   return legend ? leg : null;
 };
 
-
 export const filteredByNFA = (dataArray, context) => {
   return dataArray.filter((obj) => {
     return obj.isNFA === true && obj.uid === context.uid && obj.isMilled === false;
@@ -86,6 +99,12 @@ export const monthDiff = (d1, d2) => {
   months -= d1.getMonth();
   months += d2.getMonth();
   return months <= 0 ? 0 : months;
+}
+
+export const palayMonths = (dataArray) => {
+  return dataArray.filter((obj) => {
+    return obj.productAge >= 9;
+  })
 }
 
 //**update product stocks*/

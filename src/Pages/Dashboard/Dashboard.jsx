@@ -1,8 +1,8 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import {
   TargetProcurementModal,
 } from "../../components";
-import { filteredByNFA } from '../../Utils/ReusableSyntax'
+import { filteredByNFA, palayMonths, filtered } from '../../Utils/ReusableSyntax'
 import { DollarSign, Truck, Package, Folder, Plus } from "react-feather";
 import { DashboardCard, BarChart, PieChart, DisributionChart, ProcuredPalayTable } from '../../components'
 import { ProcurementContext } from '../../Context/ProcurementProvider'
@@ -10,24 +10,52 @@ import { DistributionContext } from '../../Context/DistributionProvider'
 import { TransactionContext } from '../../Context/TransactionProvider'
 import UseTargetPocurement from "../../lib/UseTargetPocurement";
 import { AuthContext } from '../../Context/auth'
-import { Link } from 'react-router-dom'
-import { Divider } from 'antd';
+import { Link, withRouter, useHistory } from 'react-router-dom'
+import { Divider, notification } from 'antd';
+import { SmileOutlined } from '@ant-design/icons';
 
-export default function Dashboard() {
+function Dashboard() {
 
   const { distribution } = useContext(DistributionContext);
   const { fetchProcurement } = useContext(ProcurementContext);
   const { finishTransaction, riceMilled } = useContext(TransactionContext);
+  const history = useHistory();
   const context = useContext(AuthContext);
 
   const [isTarget, setTarget] = useState(false);
 
   const { getTarget } = UseTargetPocurement();
 
-  const filtered = filteredByNFA(finishTransaction, context);
-  const filterProcurement = filteredByNFA(fetchProcurement, context);
-  const filterDistribution = filteredByNFA(distribution, context);
-  const filterRiceMilled = filteredByNFA(riceMilled, context);
+  const filteredNFA = filteredByNFA(finishTransaction, context);
+
+  //**Palay that is equal or more than 9 months notification */
+  const palayAge = palayMonths(filteredNFA)
+
+  const filterProcurement = filtered(fetchProcurement, context);
+  const filterDistribution = filtered(distribution, context);
+  const filterRiceMilled = filtered(riceMilled, context);
+
+  const goToInventory = (event) => {
+    event.preventDefault();
+    history.push("/inventory");
+  }
+
+  const openNotification = () => {
+    const btn = (
+      <button onClick={goToInventory} type="primary" size="small" className="bg-blue-500 hover:bg-blue-400 py-1 px-4 rounded-lg text-white">
+        inventory
+      </button>
+    );
+    notification.open({
+      message: 'Palay that is ready to distribute',
+      description:
+        `You already have ${palayAge.length} ready to distribute`,
+      icon: <SmileOutlined style={{ color: '#108ee9' }} />,
+      btn
+    });
+  };
+
+  useEffect(openNotification, []);
 
   const onTarget = () => setTarget((isTarget) => !isTarget);
 
@@ -48,7 +76,7 @@ export default function Dashboard() {
     },
     {
       title: "Inventory",
-      numberData: filtered.length,
+      numberData: filteredNFA.length,
       icon: <Folder color="#FFF" size="25" />,
       iconColor: "bg-pink-300",
       cardColor: "bg-pink-400",
@@ -122,7 +150,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        {filtered.length > 0 && (
+        {filteredNFA.length > 0 && (
           <div className="rounded-lg lg:w-1/2 bg-white pt-8 pb-4 px-8 mt-4">
             <div className="mb-7 flex justify-between">
               <h1 className="text-sm flex items-center gap-2">
@@ -142,7 +170,7 @@ export default function Dashboard() {
             </div>
 
             <section className="py-2 flex flex-col gap-6 h-56 overflow-auto">
-              {filtered.map((type, index) => (
+              {filteredNFA.map((type, index) => (
                 <div className="flex items-center justify-between">
                   <div>filteredTransaction
                     <h1 className="text-sm text-primary">{type.riceVariety}</h1>
@@ -182,3 +210,5 @@ export default function Dashboard() {
     </div >
   )
 }
+
+export default withRouter(Dashboard);

@@ -40,6 +40,8 @@ export default function PieChart({
 
         const labels = filteredData.map((obj) => obj.distributionType);
 
+        console.log(labels)
+
         const borderColor = labels.map((type) => colors[type]);
         const backgroundColor = borderColor.map((color) => `${color}D3`);
 

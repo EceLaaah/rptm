@@ -33,40 +33,38 @@ export default function Inventory() {
   const onMilled = async (event, data) => {
     try {
       event.preventDefault();
-      const dateHarvested = new Date(data.dateHarvested.seconds * 1000);
-      const palayAge = monthDiff(dateHarvested, dateToday);
+      //const dateHarvested = new Date(data.dateHarvested.seconds * 1000);
+      //const palayAge = monthDiff(dateHarvested, dateToday);
 
       const document = app.firestore().collection("riceMilled").doc();
 
-      if (palayAge <= 5) {
-        return swal({
-          title: "Warning",
-          text: `Palay is not yet 6 months old`,
-          icon: "warning",
+      // if (palayAge <= 5) {
+      //   return swal({
+      //     title: "Warning",
+      //     text: `Palay is not yet 6 months old`,
+      //     icon: "warning",
+      //     button: "Ok",
+      //   });
+      // }
+
+      return await document.set({
+        procuredPalayId: data.id,
+        dateMilled: dateToday,
+        riceVariety: data.riceVariety,
+        totalSocks: data.socks,
+        email: data.userEmail,
+        uid: data.uid,
+        price: data.price,
+        date_created: dateToday
+      }).then(() => {
+        palayisMilled(data.id)
+        swal({
+          title: "Success",
+          text: `Successfully Milled`,
+          icon: "success",
           button: "Ok",
         });
-      }
-
-      if (palayAge >= 6) {
-        return await document.set({
-          procuredPalayId: data.id,
-          dateMilled: dateToday,
-          riceVariety: data.riceVariety,
-          totalSocks: data.socks,
-          email: data.userEmail,
-          uid: data.uid,
-          price: data.price,
-          date_created: dateToday
-        }).then(() => {
-          palayisMilled(data.id)
-          swal({
-            title: "Success",
-            text: `Successfully Milled`,
-            icon: "success",
-            button: "Ok",
-          });
-        })
-      }
+      })
     } catch (error) {
       console.log(error.message);
     }
@@ -106,28 +104,24 @@ export default function Inventory() {
     },
     {
       title: "Palay Months",
-      dataIndex: "dateHarvested",
-      key: "dateHarvested",
+      dataIndex: "productAge",
+      key: "productAge",
       setDirections: sortTypes,
       sorter: sortRiceVariety,
-      render: (dateHarvested) => {
-        const date = dateHarvested !== undefined && new Date(dateHarvested.seconds * 1000)
+      render: (productAge) => {
+        let color = productAge <= 5 && 'lime';
 
-        const palayAge = monthDiff(date, dateToday);
-
-        let color = palayAge <= 5 && 'lime';
-
-        if (palayAge >= 6) {
+        if (productAge >= 6) {
           color = 'orange'
         }
 
-        if (palayAge >= 9) {
+        if (productAge >= 9) {
           color = 'red'
         }
 
         return (
           <Tag color={color}>
-            <span>{palayAge} Months</span>
+            <span>{productAge} Months</span>
           </Tag>
         )
       }

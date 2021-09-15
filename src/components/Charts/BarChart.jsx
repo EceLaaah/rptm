@@ -60,8 +60,6 @@ const Analytics = ({
                 }
             });
 
-            console.log(dataArray)
-
             return () => {
                 myBarChart.destroy()
             }

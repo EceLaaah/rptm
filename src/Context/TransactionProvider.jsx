@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import { monthDiff } from '../Utils/ReusableSyntax'
 import { app } from "../config/firebase";
 
 const TransactionContext = createContext();
@@ -27,13 +28,17 @@ const TranscationProvider = ({ children }) => {
 
   const fetchDoneBidding = () => {
     const document = app.firestore().collection("transaction").where("biddingStatus", "==", false)
+    const dateToday = new Date();
     return document.onSnapshot((snapshot) => {
       const transactionArray = [];
 
       snapshot.forEach((transactionData) => {
+        const dateHarv = new Date(transactionData.data().dateHarvested.seconds * 1000);
+        const productAge = monthDiff(dateHarv, dateToday);
         transactionArray.push({
           ...transactionData.data(),
           id: transactionData.id,
+          productAge: productAge
         });
       });
       setFinishTransaction(transactionArray);

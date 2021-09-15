@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 import Chart from 'chart.js/auto'
 import theme from '../../Utils/Theme'
-import { buildScales, buildLegend, updated } from '../../Utils/ReusableSyntax'
+import { buildScales, buildLegend, updatedDistribution } from '../../Utils/ReusableSyntax'
 import { backgroundColor, borderColor, Months } from "../../Utils/index";
 
 export default function DistributionChart({
@@ -16,11 +16,11 @@ export default function DistributionChart({
 
     const chartDistribution = useRef(null);
 
-    const updatedData = updated(dataArray);
-
     useEffect(() => {
         const ctx = chartDistribution.current;
         const sortTypes = "quantity"
+
+        const updatedData = updatedDistribution(dataArray);
 
         //*Sort data from highest to lowest
         const sortedData = updatedData.sort(
@@ -70,7 +70,6 @@ export default function DistributionChart({
             return () => {
                 myBarChart.destroy()
             }
-
         }
 
     }, [dataArray]);
