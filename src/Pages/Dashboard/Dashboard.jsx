@@ -113,11 +113,6 @@ function Dashboard() {
           <div className="lg:w-3/6 w-full bg-white rounded-lg">
             <PieChart
               distribution={filterDistribution}
-              width="30vw"
-              height="30vw"
-              axes={false}
-              legend={false}
-              chartType="doughnut"
             />
           </div>
         )}

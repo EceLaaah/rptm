@@ -1,7 +1,8 @@
-import { useRef, useEffect } from "react";
-import Chart from 'chart.js/auto'
-import { buildScales, buildLegend, filterDistribution } from '../../Utils/ReusableSyntax'
-import { colors } from "../../Utils";
+import { useRef, useEffect, useState } from "react";
+import { Pie } from '@ant-design/charts';
+// import Chart from 'chart.js/auto'
+import { filterDistribution } from '../../Utils/ReusableSyntax'
+// import { colors } from "../../Utils";
 
 export default function PieChart({
     distribution,
@@ -14,15 +15,16 @@ export default function PieChart({
 
 
     const distributionChart = useRef(null);
+    const [data, setData] = useState([]);
 
     useEffect(async () => {
-        const ctx = distributionChart.current;
+        // const ctx = distributionChart.current;
 
-        const filteredData = distribution.filter((thing, index, self) => {
-            return index === self.findIndex((t) => (
-                t.distributionType === thing.distributionType
-            ))
-        })
+        // const filteredData = distribution.filter((thing, index, self) => {
+        //     return index === self.findIndex((t) => (
+        //         t.distributionType === thing.distributionType
+        //     ))
+        // })
 
         const police = filterDistribution(distribution, "Police")
         const market = filterDistribution(distribution, "Market")
@@ -36,55 +38,55 @@ export default function PieChart({
 
         const data = await Promise.all([policeTotal, marketTotal, reliefTotal]);
 
-        //const sampleData = distribution.map((obj) => obj.quantity);
+        //const labels = filteredData.map((obj) => obj.distributionType);
 
-        const labels = filteredData.map((obj) => obj.distributionType);
+        var datas = [
+            {
+                type: "Police",
+                value: data[0],
+            },
+            {
+                type: "Market",
+                value: data[1],
+            },
+            {
+                type: "Relief Operation",
+                value: data[2],
+            },
+        ];
 
-        console.log(labels)
-
-        const borderColor = labels.map((type) => colors[type]);
-        const backgroundColor = borderColor.map((color) => `${color}D3`);
-
-        if (data.length > 0) {
-            const textTitle = "Distribution Chart";
-            var myBarChart = new Chart(ctx, {
-                type: chartType,
-                data: {
-                    labels,
-                    datasets: [
-                        {
-                            data,
-                            backgroundColor,
-                            borderColor,
-                            borderWidth: 1,
-                        }
-                    ]
-                },
-                options: {
-                    plugins: {
-                        scales: buildScales(axes),
-                        legend: buildLegend(legend),
-                        title: {
-                            display: false,
-                            text: textTitle,
-                            fontSize: 25,
-                        },
-                    },
-                }
-            });
-
-            return () => {
-                myBarChart.destroy()
-            }
-        }
+        setData(datas)
     }, [distribution]);
+
+    var config = {
+        appendPadding: 10,
+        data: data,
+        angleField: 'value',
+        colorField: 'type',
+        radius: 1,
+        legend: false,
+        label: {
+            type: 'inner',
+            offset: '-30%',
+            content: function content(_ref) {
+                var percent = _ref.percent;
+                return ''.concat((percent * 100).toFixed(0), '%');
+            },
+            style: {
+                fontSize: 14,
+                textAlign: 'center',
+            },
+        },
+        interactions: [{ type: 'element-active' }],
+    };
 
 
     return (
         <div className="container mx-auto px-8 py-4 bg-white rounded-lg">
             <h1 className="text-2xl font-bold text-center py-3 text-primary">Distribution Pie Chart</h1>
             <div className="">
-                <canvas ref={distributionChart} height={width} width={height} />
+                <Pie {...config} />;
+                {/* <canvas ref={distributionChart} height={width} width={height} /> */}
             </div>
         </div>
     )
