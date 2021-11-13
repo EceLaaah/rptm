@@ -134,7 +134,7 @@ export default function Inventory() {
       sorter: sortRiceVariety,
     },
     {
-      title: "Socks Purchased",
+      title: "Sacks Purchased",
       dataIndex: "socks",
       key: "socks",
       setDirections: sortTypes,
@@ -263,7 +263,7 @@ export default function Inventory() {
       sorter: sortRiceVariety,
     },
     {
-      title: "Total Socks",
+      title: "Total Sacks",
       dataIndex: "totalSocks",
       key: "totalSocks",
       setDirections: sortTypes,
