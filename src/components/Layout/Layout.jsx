@@ -108,7 +108,7 @@ const Layout = ({ children }) => {
       {/**Content*/}
       <section className="bg-white w-full relative" style={{ backgroundColor: "#f6f6f8" }}>
         {/**Navbar */}
-        <div className={`w-full bg-white h-14 flex items-center sticky top-0`}>
+        <div className={`z-50 w-full bg-white h-14 flex items-center sticky top-0`}>
           {/* <div>
             <Search className="px-4" placeholder="Search..." />
           </div> */}

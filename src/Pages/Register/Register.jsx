@@ -76,6 +76,8 @@ const Register = () => {
 
     const userEmail = email.toLowerCase();
 
+    //console.log(gender);
+
     if (password === confirmPassword) {
       app
         .auth()
@@ -191,15 +193,35 @@ const Register = () => {
               </select>
             </div>
           </div>
-          <div className="grid grid-cols-1  sm:grid-cols-3 gap-4">
-            <Textfield
+          <div className="flex items-center grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* <Textfield
               onChange={(event) => onChange(event)}
               value={gender}
               label="Gender"
               type="text"
               placeholder="Gender"
               name="gender"
-            />
+            /> */}
+            <div className="mt-2">
+              <label
+                className="block text-sm font-semibold text-gray-700"
+                for="gender"
+              >
+                Gender
+              </label>
+              <select
+                id="gender"
+                name="gender"
+                autoComplete="gender"
+                vlaue={gender}
+                onChange={(event) => onChange(event)}
+                className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              >
+                <option value=""></option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
             <Textfield
               onChange={(event) => onChange(event)}
               value={date}

@@ -134,7 +134,7 @@ const Transaction = () => {
       sorter: sortRiceVariety,
     },
     {
-      title: "Number of Socks",
+      title: "Number of Sacks",
       dataIndex: "socks",
       key: "socks",
       setDirections: sortTypes,
@@ -220,7 +220,7 @@ const Transaction = () => {
       sorter: sortRiceVariety,
     },
     {
-      title: "Socks",
+      title: "Sacks",
       dataIndex: "socks",
       key: "socks",
       setDirections: sortTypes,

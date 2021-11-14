@@ -55,13 +55,15 @@ export default function TransactionHistory({ length, Total, column, Transaction 
                     </select>
                 </div>
             </section>
-            <Table
-                className="overflow-auto"
-                columns={column}
-                rowKey={(Transaction) => Transaction.id}
-                dataSource={variety}
-                pagination={false}
-            />
+            <div className="z-10">
+                <Table
+                    className="overflow-auto"
+                    columns={column}
+                    rowKey={(Transaction) => Transaction.id}
+                    dataSource={variety}
+                    pagination={false}
+                />
+            </div>
         </>
     )
 }

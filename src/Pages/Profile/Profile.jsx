@@ -319,8 +319,8 @@ const Profile = () => {
               <h1 className="text-2xl font-bold text-gray-400">
                 User Information
               </h1>
-              <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 gap-4">
-                <UpdateTextField
+              <div className="flex items-center grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 gap-4">
+                {/* <UpdateTextField
                   className="mb-1 sm:mb-4 mt-1 sm:mt-6"
                   onChange={(event) => onChange(event)}
                   defaultValue={gender}
@@ -328,7 +328,27 @@ const Profile = () => {
                   type="text"
                   placeholder="Gender"
                   name="gender"
-                />
+                /> */}
+                <div className="mt-2">
+                  <label
+                    className="block text-sm font-semibold text-gray-700"
+                    for="gender"
+                  >
+                    Gender
+                  </label>
+                  <select
+                    id="gender"
+                    name="gender"
+                    autoComplete="gender"
+                    value={gender}
+                    onChange={(event) => onChange(event)}
+                    className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  >
+                    <option value=""></option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                </div>
                 <UpdateTextField
                   className="mb-1 sm:mb-4 mt-1 sm:mt-6"
                   onChange={(event) => onChange(event)}

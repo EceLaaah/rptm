@@ -22,7 +22,7 @@ const Post = () => {
   const [loading, setLoading] = useState(false);
   const [myFile, setMyFile] = useState([]);
   const [
-    { riceVariety, socks, price, description },
+    { riceVariety, socks, price, description, dateHarvested },
     setState,
   ] = useState(information);
 
@@ -100,7 +100,9 @@ const Post = () => {
   const onSubmit = (event) => {
     event.preventDefault();
 
-    const date = new Date();
+    const date = new Date(dateHarvested);
+
+    console.log(date)
 
     loadingState();
 
@@ -147,7 +149,7 @@ const Post = () => {
         <h1 className="text-2xl font-bold">Post Bidding</h1>
         <section className="flex flex-col sm:flex-row justify-center gap-4">
           <div className="w-full md:w-1/2">
-            <div className="flex items-center grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex items-center grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="mt-2">
                 <label
                   className="block text-gray-700 text-sm font-semibold mb-2"
@@ -177,22 +179,22 @@ const Post = () => {
                 placeholder="Owner Email"
                 name="email"
               />
-              {/* <Textfield
+              <Textfield
                 onChange={(event) => onChange(event)}
                 value={dateHarvested}
                 label="Date Harvested"
                 type="date"
                 placeholder="Date Harvested"
                 name="dateHarvested"
-              /> */}
+              />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Textfield
                 value={socks}
                 onChange={(event) => onChange(event)}
-                label="Number of Socks"
+                label="Number of Sacks"
                 type="number"
-                placeholder="Socks"
+                placeholder="Sacks"
                 name="socks"
               />
               <Textfield
