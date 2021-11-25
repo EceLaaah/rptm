@@ -102,7 +102,14 @@ const Post = () => {
 
     const date = new Date(dateHarvested);
 
-    console.log(date)
+    if (riceVariety === undefined || socks === "" || price === undefined || description === undefined || dateHarvested === null) {
+      return swal({
+        title: "Warning",
+        text: `Some of the fields is empty :(`,
+        icon: "warning",
+        button: "Ok",
+      });
+    }
 
     loadingState();
 

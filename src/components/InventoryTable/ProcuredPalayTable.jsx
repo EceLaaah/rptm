@@ -75,7 +75,7 @@ export default function ProcuredPalayTable({ riceMilled }) {
             sorter: sortRiceVariety,
         },
         {
-            title: "Total Socks",
+            title: "Total Sacks",
             dataIndex: "totalSocks",
             key: "totalSocks",
             setDirections: sortTypes,

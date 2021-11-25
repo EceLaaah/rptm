@@ -291,7 +291,7 @@ export default function Bidding({ open, onClose, id }) {
                 <div className={`${info.role === "NFA" ? "w-full mt-3" : "mt-2 grid grid-cols-2 gap-4"}`}>
                   <div>
                     <label htmlFor="" className="font-bold text-sm">
-                      Number of Socks
+                      Number of Sacks
                     </label>
                     <input
                       required

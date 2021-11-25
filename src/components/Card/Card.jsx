@@ -21,14 +21,14 @@ const Card = ({
       >
         {kilograms !== 0 && (
           <span className="absolute top-2 left-2 rounded-full py-4 px-2 bg-primary text-white font-semibold text-sm">
-            {kilograms}/socks
+            {kilograms}/sacks
           </span>
         )}
       </div>
       <div className="py-2 px-5 h-auto">
         <div className="flex justify-between items-center">
           <h1 className="text-xl font-bold">{riceVariety}</h1>
-          <h2 className="text-sm text-gray-400">{kilograms}socks</h2>
+          <h2 className="text-sm text-gray-400">{kilograms}sacks</h2>
         </div>
         <section>
           <span className="text-sm text-gray-400">{email}</span>

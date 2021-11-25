@@ -226,7 +226,7 @@ const Transaction = () => {
       setDirections: sortTypes,
       sorter: sortRiceVariety,
       render: (socks) => {
-        return <span className="bg-blue-400 py-1 px-2 font-bold rounded-full text-white">{socks.toLocaleString()}</span>
+        return <span className="bg-blue-400 py-1 px-2 font-bold rounded-full text-white">{socks}</span>
       }
     },
 
@@ -306,7 +306,22 @@ const Transaction = () => {
             ? "Transaction Information"
             : "Transaction History"}
         </h1>
-        <span className="text-gray-400">Transaction Information from traders product bids</span>
+        <span className="text-gray-400">
+          Transaction Information from traders product bids
+        </span>
+        {filteredTransact.length > 0 && (
+          <div
+            class="bg-green-500 border-green-600 border-l-4 text-white p-4 my-4"
+            role="alert"
+          >
+            <p class="font-bold">New Transaction!</p>
+            <p>
+              you have a {filteredTransact.length} pending transaction please use
+              the <strong className="underline font-bold">Filter</strong> to show
+              all new transactions
+            </p>
+          </div>
+        )}
       </div>
       <Divider />
       <div className="text-right mb-4"></div>

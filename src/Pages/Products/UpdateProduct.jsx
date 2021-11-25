@@ -122,7 +122,7 @@ const UpdateProduct = (props) => {
               <Textfield
                 value={socks}
                 onChange={(event) => onChange(event)}
-                label="Number of Socks"
+                label="Number of Sacks"
                 type="number"
                 placeholder="Socks"
                 name="socks"

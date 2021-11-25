@@ -46,7 +46,7 @@ export default function MarkerCard(props) {
                                     <div className="py-2 px-5 h-auto">
                                         <div className="flex justify-between items-center">
                                             <h1 className="text-xl font-bold">{type.riceVariety}</h1>
-                                            <h2 className="text-sm text-gray-400">{type.socks}socks</h2>
+                                            <h2 className="text-sm text-gray-400">{type.socks}sacks</h2>
                                         </div>
                                         <section>
                                             {/* <span className="text-sm text-gray-400">{type.email}</span> */}
