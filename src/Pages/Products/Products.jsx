@@ -67,7 +67,7 @@ const Products = () => {
               </div>
             ) : (
               <div onClick={(event) => getProductId(event, type.id)} className="text-center py-2 my-2 bg-primary opacity-80 hover:opacity-50 font-bold text-white rounded-lg cursor-pointer">
-                Empty Socks :(
+                Empty Sacks :(
               </div>
             )}
           </Card>

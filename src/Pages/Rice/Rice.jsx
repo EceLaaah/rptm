@@ -48,14 +48,6 @@ export default function Rice() {
 
   const columns = [
     {
-      title: "Unique Identification",
-      dataIndex: "id",
-      key: "id",
-      render: (text) => {
-        return <span className="text-blue-500">{text}</span>;
-      },
-    },
-    {
       title: "Rice variety",
       dataIndex: "variety",
       key: "variety",

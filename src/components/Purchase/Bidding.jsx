@@ -44,8 +44,6 @@ export default function Bidding({ open, onClose, id }) {
   const { getTarget } = UseTargetPocurement();
   const dateToday = new Date();
 
-  console.log(fetchProd)
-
   const { info } = RolesHook();
 
   const Loading = () => setLoading(true);
@@ -79,6 +77,8 @@ export default function Bidding({ open, onClose, id }) {
     const isTargetZero = Number(getTarget.targetNumber) === 0;
     const isZero = Number(getSocks) === 0;
 
+    console.log(checkSocks, isCheckTarget, isTargetZero, isZero)
+
     const total = price * getSocks
 
     if (isTargetZero) {
@@ -107,6 +107,7 @@ export default function Bidding({ open, onClose, id }) {
         button: "Ok",
       })
     }
+
 
     if (!checkSocks && !isZero && !isTargetZero) {
       Loading();
@@ -179,6 +180,7 @@ export default function Bidding({ open, onClose, id }) {
           imageUrl,
           isNFA: false,
           socks: Number(getSocks),
+          farmerEmail: email,
           userEmail: context.email,
           productId: fetchProd[0].id,
           riceVariety: riceVariety,

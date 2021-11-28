@@ -9,10 +9,13 @@ import {
   filtered,
   sortTypes,
   sortRiceVariety,
+  nineMonthsMilled,
+  sixMonthsMilled,
 } from "../../Utils/ReusableSyntax";
-import { AdminTable, AddDistribution } from '../../components'
+import { AdminTable, AddDistribution, DashboardCard } from '../../components'
 import { app } from '../../config/firebase'
 import { Popconfirm, Input, Tag, Tabs, Table } from 'antd'
+import { CheckSquare } from 'react-feather'
 import swal from 'sweetalert';
 
 export default function Inventory() {
@@ -28,6 +31,10 @@ export default function Inventory() {
   const [current, setCurrent] = useState(1);
 
   const filteredTransaction = filteredByNFA(finishTransaction, context);
+
+  const nineMonths = nineMonthsMilled(filteredTransaction);
+  const sixMonths = sixMonthsMilled(filteredTransaction)
+
   const filteredRiceMilled = filtered(riceMilled, context);
 
   const onMilled = async (event, data) => {
@@ -93,17 +100,7 @@ export default function Inventory() {
 
   const procuredPalayColumn = [
     {
-      title: "Unique Identification",
-      dataIndex: "id",
-      key: "id",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-      render: (text) => {
-        return <span className="text-blue-500">{text}</span>;
-      },
-    },
-    {
-      title: "Palay Months",
+      title: "Age of Palay",
       dataIndex: "productAge",
       key: "productAge",
       setDirections: sortTypes,
@@ -143,16 +140,16 @@ export default function Inventory() {
         return <span className="bg-blue-400 py-1 px-2 font-bold rounded-full text-white">{socks}</span>
       }
     },
-    {
-      title: "Total",
-      dataIndex: "total",
-      key: "total",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-      render: (total) => {
-        return <span>{total.toLocaleString()}</span>
-      }
-    },
+    // {
+    //   title: "Total",
+    //   dataIndex: "total",
+    //   key: "total",
+    //   setDirections: sortTypes,
+    //   sorter: sortRiceVariety,
+    //   render: (total) => {
+    //     return <span>{total.toLocaleString()}</span>
+    //   }
+    // },
     {
       title: "Email",
       dataIndex: "userEmail",
@@ -196,16 +193,6 @@ export default function Inventory() {
   //**Rice Milled */
   const riceMilledColumn = [
     {
-      title: "Unique Identification",
-      dataIndex: "id",
-      key: "id",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-      render: (text) => {
-        return <span className="text-blue-500">{text}</span>;
-      },
-    },
-    {
       title: "Age of Rice Milled",
       dataIndex: "dateMilled",
       key: "dateMilled",
@@ -248,20 +235,20 @@ export default function Inventory() {
         )
       }
     },
-    {
-      title: "Rice Variety",
-      dataIndex: "riceVariety",
-      key: "riceVariety",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-    },
+    // {
+    //   title: "Rice Variety",
+    //   dataIndex: "riceVariety",
+    //   key: "riceVariety",
+    //   setDirections: sortTypes,
+    //   sorter: sortRiceVariety,
+    // },
+    // {
+    //   title: "Email",
+    //   dataIndex: "email",
+    //   key: "email",
+    //   setDirections: sortTypes,
+    //   sorter: sortRiceVariety,
+    // },
     {
       title: "Total Sacks",
       dataIndex: "totalSocks",
@@ -292,6 +279,23 @@ export default function Inventory() {
     },
   ];
 
+  const cardData = [
+    {
+      title: "Nine Months Old Palay",
+      numberData: nineMonths.length,
+      icon: <CheckSquare color="#FFF" size="25" />,
+      iconColor: "bg-red-300",
+      cardColor: "bg-red-400",
+    },
+    {
+      title: "Six Months Old Palay",
+      numberData: sixMonths.length,
+      icon: <CheckSquare color="#FFF" size="25" />,
+      iconColor: "bg-yellow-400",
+      cardColor: "bg-yellow-500",
+    },
+  ];
+
   //** Data showed to the client
   const dataShowed = 5;
   const currentData = arraySlice(filteredTransaction, current, dataShowed);
@@ -306,6 +310,18 @@ export default function Inventory() {
         <div className=" mb-4">
           <h1 className="text-2xl font-semibold">Palay Information</h1>
           <span className="text-gray-400">Palay that is bought from marketplace</span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {cardData.map((data, index) => (
+            <DashboardCard
+              key={index}
+              icon={data.icon}
+              title={data.title}
+              numberData={data.numberData}
+              iconColor={data.iconColor}
+              cardColor={data.cardColor}
+            />
+          ))}
         </div>
         <Tabs defaultActiveKey={1}>
           <TabPane tab="Procured Palay" key={1}>

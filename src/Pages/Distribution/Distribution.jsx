@@ -76,16 +76,6 @@ export default function Distribution() {
 
   const columns = [
     {
-      title: "Unique Identification",
-      dataIndex: "id",
-      key: "id",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-      render: (text) => {
-        return <span className="text-blue-500">{text}</span>;
-      },
-    },
-    {
       title: "Distribution Type",
       dataIndex: "distributionType",
       key: "distributionType",
@@ -127,6 +117,13 @@ export default function Distribution() {
       title: "Province",
       dataIndex: "province",
       key: "province",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
+    },
+    {
+      title: "Receiver",
+      dataIndex: "receiver",
+      key: "receiver",
       setDirections: sortTypes,
       sorter: sortRiceVariety,
     },

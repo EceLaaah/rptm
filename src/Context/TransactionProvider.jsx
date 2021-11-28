@@ -9,6 +9,7 @@ const TranscationProvider = ({ children }) => {
   const [finishTransaction, setFinishTransaction] = useState([]);
   const [riceMilled, setRiceMilled] = useState([]);
 
+
   const fetchTransaction = () => {
     const document = app.firestore().collection("transaction");
     return document.onSnapshot((snapshot) => {

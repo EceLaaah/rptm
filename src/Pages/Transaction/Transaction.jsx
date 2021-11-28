@@ -117,16 +117,6 @@ const Transaction = () => {
   //*Bidding Transaction
   const columns = [
     {
-      title: "Unique Identification",
-      dataIndex: "id",
-      key: "id",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-      render: (text) => {
-        return <span className="text-blue-500">{text}</span>;
-      },
-    },
-    {
       title: "Email",
       dataIndex: "userEmail",
       key: "userEmail",
@@ -203,19 +193,9 @@ const Transaction = () => {
   //*Traders Transaction
   const transactionColumn = [
     {
-      title: "Product Identification",
-      dataIndex: "productId",
-      key: "productId",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-      render: (text) => {
-        return <span className="text-blue-500">{text}</span>;
-      },
-    },
-    {
       title: "Email",
-      dataIndex: "userEmail",
-      key: "userEmail",
+      dataIndex: "farmerEmail",
+      key: "farmerEmail",
       setDirections: sortTypes,
       sorter: sortRiceVariety,
     },

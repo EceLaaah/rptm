@@ -12,19 +12,15 @@ const initialState = {
   distributionName: "",
   distributionTypeId: "",
 
-  organization: "",
-  receiver: "",
   policeAddress: "",
 
-  marketName: "",
-  marketAddress: "",
-  price: 0,
+  storeName: "",
 
-  calamity: "",
-  calamityAddress: "",
-  personInChange: "",
+  reliefEvent: "",
+  organization: "",
 
   quantity: "",
+  receiver: "",
   barangay: "",
   municipality: "",
   province: "",
@@ -50,19 +46,15 @@ export default function UpdateDistribution({ isOpen, isClose, id }) {
       distributionName,
       distributionTypeId,
 
-      organization,
-      receiver,
       policeAddress,
 
-      marketName,
-      marketAddress,
-      price,
+      storeName,
 
-      calamity,
-      calamityAddress,
-      personInChange,
+      reliefEvent,
+      organization,
 
       quantity,
+      receiver,
       barangay,
       municipality,
       province,
@@ -116,16 +108,14 @@ export default function UpdateDistribution({ isOpen, isClose, id }) {
 
     Loading();
 
-    const marketTotal = quantity * price;
+    //const marketTotal = quantity * price;
 
     if (ACTIONS.getPolice === distributionType) {
       return await document
         .collection("policeDistribution")
         .doc(distributionTypeId)
         .update({
-          organization,
-          receiver,
-          policeAddress,
+          policeAddress
         })
         .then(() => {
           onUpdateDistribution();
@@ -137,10 +127,7 @@ export default function UpdateDistribution({ isOpen, isClose, id }) {
         .collection("marketDistribution")
         .doc(distributionTypeId)
         .update({
-          marketName,
-          marketAddress,
-          price: Number(price),
-          total: Number(marketTotal),
+          storeName
         })
         .then(() => {
           onUpdateDistribution();
@@ -152,9 +139,8 @@ export default function UpdateDistribution({ isOpen, isClose, id }) {
         .collection("reliefDistribution")
         .doc(distributionTypeId)
         .update({
-          calamity,
-          calamityAddress,
-          personInChange,
+          reliefEvent,
+          organization
         })
         .then(() => {
           onUpdateDistribution();
@@ -170,6 +156,7 @@ export default function UpdateDistribution({ isOpen, isClose, id }) {
         distributionDate,
         distributionType,
         quantity,
+        receiver,
         barangay,
         municipality,
         province,
@@ -188,24 +175,10 @@ export default function UpdateDistribution({ isOpen, isClose, id }) {
   };
 
   const policeMarkdown = (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="w-full">
       <Textfield
         type="text"
-        placeholder="Organization"
-        name="organization"
-        value={organization}
-        onChange={(event) => onChange(event)}
-      />
-      <Textfield
-        type="text"
-        placeholder="Receiver"
-        name="receiver"
-        value={receiver}
-        onChange={(event) => onChange(event)}
-      />
-      <Textfield
-        type="text"
-        placeholder="Address"
+        placeholder="address"
         name="policeAddress"
         value={policeAddress}
         onChange={(event) => onChange(event)}
@@ -214,51 +187,30 @@ export default function UpdateDistribution({ isOpen, isClose, id }) {
   );
 
   const marketMarkdown = (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="w-full">
       <Textfield
         type="text"
-        placeholder="Market Name"
-        name="marketName"
-        value={marketName}
-        onChange={(event) => onChange(event)}
-      />
-      <Textfield
-        type="text"
-        placeholder="Market Address"
-        name="marketAddress"
-        value={marketAddress}
-        onChange={(event) => onChange(event)}
-      />
-      <Textfield
-        type="number"
-        placeholder="Price Per Kilo"
-        name="price"
-        value={price}
+        placeholder="Store name"
+        name="storeName"
+        value={storeName}
         onChange={(event) => onChange(event)}
       />
     </div>
   );
 
   const reliefMarkdown = (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid grid-cols-2 gap-4">
       <Textfield
-        placeholder="Calamity"
-        name="calamity"
-        value={calamity}
+        placeholder="Event"
+        name="reliefEvent"
+        value={reliefEvent}
         onChange={(event) => onChange(event)}
       />
       <Textfield
         type="text"
-        placeholder="Address"
-        name="calamityAddress"
-        value={calamityAddress}
-        onChange={(event) => onChange(event)}
-      />
-      <Textfield
-        type="text"
-        placeholder="Person in Change"
-        name="personInChange"
-        value={personInChange}
+        placeholder="Organization"
+        name="organization"
+        value={organization}
         onChange={(event) => onChange(event)}
       />
     </div>
@@ -283,18 +235,19 @@ export default function UpdateDistribution({ isOpen, isClose, id }) {
               name="distributionDate"
               placeholder="Distribution Date"
             />
-            <select
-              disabled
-              value={distributionType}
-              name="distributionType"
-              onChange={(event) => onChange(event)}
-              className="block w-full h-10 mt-8 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            >
-              <option value=""></option>
-              {types.map((type) => (
-                <option value={type}>{type}</option>
-              ))}
-            </select>
+            <div className="mt-2">
+              <label
+                className="block mb-2 text-gray-700 text-sm font-semibold"
+              >
+                Distribution Type
+              </label>
+              <select value={distributionType} name="distributionType" onChange={(event) => onChange(event)} className="block w-full h-10 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <option value=""></option>
+                {types.map((type) => (
+                  <option value={type}>{type}</option>
+                ))}
+              </select>
+            </div>
             {/* <Textfield
               type="text"
               onChange={(event) => onChange(event)}
@@ -304,14 +257,22 @@ export default function UpdateDistribution({ isOpen, isClose, id }) {
               placeholder="Distribution Type"
             /> */}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             <Textfield
               type="text"
               onChange={(event) => onChange(event)}
               value={quantity}
-              label="Quantity"
+              label="Number of sacks"
               name="quantity"
               placeholder="Quantity"
+            />
+            <Textfield
+              type="text"
+              placeholder="Receiver"
+              name="receiver"
+              label="Receiver"
+              value={receiver}
+              onChange={(event) => onChange(event)}
             />
             <Textfield
               type="text"

@@ -10,6 +10,7 @@ export const map = {
   productAge: "productAge",
 };
 
+
 export const updatedDistribution = (dataArray) => {
   return Object.values(dataArray.reduce((obj, item) => {
     var key = item.distributionDate
@@ -42,6 +43,19 @@ export const updated = (dataArray) => {
 export const filterDistribution = (dataArray, types) => {
   return dataArray.filter((obj) => {
     return obj.distributionType === types
+  })
+}
+
+
+export const nineMonthsMilled = (dataArray) => {
+  return dataArray.filter((obj) => {
+    return obj.productAge >= 9
+  })
+}
+
+export const sixMonthsMilled = (dataArray) => {
+  return dataArray.filter((obj) => {
+    return obj.productAge === 6;
   })
 }
 
@@ -83,7 +97,7 @@ export const buildLegend = (legend) => {
 
 export const filteredByNFA = (dataArray, context) => {
   return dataArray.filter((obj) => {
-    return obj.isNFA === true && obj.uid === context.uid && obj.isMilled === false;
+    return obj.isNFA === true && obj.uid === context.uid && obj.isMilled === false && obj.status === "success";
   })
 }
 
