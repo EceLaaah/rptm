@@ -311,7 +311,7 @@ export default function Inventory() {
           <h1 className="text-2xl font-semibold">Palay Information</h1>
           <span className="text-gray-400">Palay that is bought from marketplace</span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 my-8">
           {cardData.map((data, index) => (
             <DashboardCard
               key={index}
