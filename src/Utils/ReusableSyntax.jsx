@@ -25,6 +25,14 @@ export const updatedDistribution = (dataArray) => {
   }, {}))
 }
 
+export function getQuarter(d) {
+  d = d || new Date();
+  var m = Math.floor(d.getMonth() / 3) + 2;
+  m -= m > 4 ? 4 : 0;
+  //var y = d.getFullYear() + (m == 1 ? 1 : 0);
+  return m;
+}
+
 
 export const updated = (dataArray) => {
   return Object.values(dataArray.reduce((obj, item) => {
@@ -56,6 +64,12 @@ export const nineMonthsMilled = (dataArray) => {
 export const sixMonthsMilled = (dataArray) => {
   return dataArray.filter((obj) => {
     return obj.productAge === 6;
+  })
+}
+
+export const threeMonthsOld = (dataArray) => {
+  return dataArray.filter((obj) => {
+    return obj.productAge === 3;
   })
 }
 

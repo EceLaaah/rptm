@@ -3,7 +3,7 @@ import { app } from "../../config/firebase";
 import { MyModal, Textfield } from "../";
 import swal from "sweetalert";
 import { Spin } from "antd";
-import { objectAssign } from "../../Utils/ReusableSyntax";
+import { objectAssign, getQuarter } from "../../Utils/ReusableSyntax";
 import { MyDateString } from "../../Utils";
 
 const initialState = {
@@ -45,12 +45,15 @@ export default function AddProcurement({ isOpen, isClose, id }) {
     const priceKilo = Number(pricePerKilo);
     const document = app.firestore().collection("procurement").doc(id);
 
+    const quarter = getQuarter(new Date(procurementDate));
+
     document
       .update({
         procurementDate,
         palayVariety,
         quantity,
         pricePerKilo: priceKilo,
+        quarter: `Q${quarter}`,
         farmerName,
         totalPrice,
         date_updated: MyDateString,

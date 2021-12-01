@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Chart from 'chart.js/auto'
 import { buildScales, buildLegend, updated } from '../../Utils/ReusableSyntax'
 import { backgroundColor, borderColor, Months } from "../../Utils/index";
@@ -11,17 +11,15 @@ const Analytics = ({
     legend,
     chartType,
 }) => {
+    const [getQuarter, setQuarter] = useState("Q1");
     const procurement = useRef(null);
 
     const updatedData = updated(dataArray);
 
-    // function sortByMonth(arr) {
+    const quarterFilter = updatedData.filter((obj) => obj.quarter === getQuarter)
 
-    //     arr.sort(function(a, b){
-    //         return Months.indexOf(a.values.Month.displayValue)
-    //              - Months.indexOf(b.values.Month.displayValue);
-    //     });
-    //   }
+    console.log(quarterFilter)
+
 
     useEffect(() => {
         const ctx = procurement.current;
@@ -32,7 +30,7 @@ const Analytics = ({
         //     (a, b) => a[sortTypes] - b[sortTypes]
         // );
 
-        const sortedDate = updatedData.sort((a, b) => {
+        const sortedDate = quarterFilter.sort((a, b) => {
             return new Date(a.procurementDate) - new Date(b.procurementDate)
         });
 
@@ -41,7 +39,7 @@ const Analytics = ({
             return Months[date.getMonth()]
         })
 
-        const data = updatedData.map((data) => data[sortTypes]);
+        const data = quarterFilter.map((data) => data[sortTypes]);
 
 
         if (data.length > 0) {
@@ -83,11 +81,32 @@ const Analytics = ({
                 myBarChart.destroy()
             }
         }
-    }, []);
+    }, [getQuarter]);
+
+    const listQuarter = ["Q1", "Q2", "Q3", "Q4"]
 
     return (
         <div className="container mx-auto px-8 py-6 sm:block hidden bg-white rounded-lg">
-            <h1 className="text-2xl font-bold text-center text-primary">Procurement Chart</h1>
+            <div className="mt-2 flex items-center justify-between">
+                <h1 className="text-2xl font-bold text-primary">Procurement Chart</h1>
+                <div className="flex items-center gap-2">
+                    <label
+                        className="block text-gray-700 text-lg font-semibold"
+                    >
+                        Filter
+                    </label>
+                    <select name="quarter" value={getQuarter} onChange={(event) => setQuarter(event.target.value)} className="block w-full h-10 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        {listQuarter.map((quarter) => (
+                            <option value={quarter}>{quarter}</option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+            {quarterFilter.length === 0 && (
+                <div className="text-center my-10">
+                    <span className="opacity-50 text-primary text-xl font-bold">No data this quarter</span>
+                </div>
+            )}
             <div className="">
                 <canvas ref={procurement} height={width} width={height} key={dataArray.length} />
             </div>

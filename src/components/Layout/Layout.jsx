@@ -8,7 +8,16 @@ import { Textfield } from "../";
 import { Menu, X, Smile, ShoppingCart, Sliders } from "react-feather";
 import { filteredTransaction, filteredPendingTransaction } from "../../Utils/ReusableSyntax";
 import { TransactionContext } from "../../Context/TransactionProvider";
+import swal from 'sweetalert';
 import RolesHook from '../../lib/RolesHook'
+import municipalities from '../../municipalities.json'
+
+const initialState = {
+  municipality: "",
+  population: 0,
+  perCapita: 36,
+  days: 0
+}
 
 const Layout = ({ children }) => {
   const context = useContext(AuthContext);
@@ -17,6 +26,8 @@ const Layout = ({ children }) => {
   const [toggleDrawer, setToggleDrawer] = useState(false);
   const [sidebarToggle, setSidebarToggle] = useState(false);
   const { transaction, finishTransaction } = useContext(TransactionContext);
+  const [{ municipality, population, perCapita, days }, setState] = useState(initialState);
+  const [demand, setDemand] = useState(0);
 
   const pendingtransaction = filteredPendingTransaction(finishTransaction, context);
 
@@ -25,6 +36,16 @@ const Layout = ({ children }) => {
   const { info, links } = RolesHook();
 
   const toggleDraw = () => setToggleDrawer((toggleDrawer) => !toggleDrawer);
+
+  // const getMunicipality = () => {
+  //   const popluation = municipalities.filter((obj) => {
+  //     return obj.municipality === municipality
+  //   })
+
+  //   setPopulation(popluation);
+  // }
+
+  // useEffect(getMunicipality, [municipality]);
 
   const isSidebar = (event) => {
     event.preventDefault();
@@ -54,6 +75,32 @@ const Layout = ({ children }) => {
 
   useEffect(openNotification, [specificTransaction.length, info.role])
 
+  const onChange = (event) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+    setState((prevState) => ({ ...prevState, [name]: value }));
+  }
+
+  const onCalculate = () => {
+    if (days === 0 || population === 0) {
+      swal({
+        title: "Warning",
+        text: `Fields cannot be empty or 0`,
+        icon: "warning",
+        button: "Ok",
+      });
+    } else {
+      const demand = perCapita * population * days;
+      setDemand(demand);
+    }
+
+  }
+
+  const reCalculate = () => {
+    setState({ ...initialState })
+    setDemand(0);
+  };
+
   if (context.length > 0) {
     return setLoading(false);
   }
@@ -67,33 +114,60 @@ const Layout = ({ children }) => {
           >
             Distribution Type
           </label>
-          <select value="Sample" name="distributionType" className="block w-full h-10 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          <select value={municipality} name="municipality" onChange={(event) => onChange(event)} className="mb-4 block w-full h-10 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             <option value=""></option>
-            <option value="">Sample</option>
+            {municipalities.map((type) => (
+              <option value={type.municipality}>{type.municipality}</option>
+            ))}
           </select>
         </div>
         <Textfield
           type="number"
-          label="Population"
-          placeholder="Population"
+          value={population}
+          onChange={(event) => onChange(event)}
           name="population"
+          label="Population"
         />
+        <div className="my-2">
+          <label
+            className="block mb-2 text-gray-700 text-sm font-semibold"
+          >
+            Per capita consumption per day
+          </label>
+          <input type="text" value={perCapita} readOnly={true} name="perCapita" className="px-3 rounded-sm w-full bg-gray-100 leading-tight focus:outline-none focus:shadow-outline h-10" />
+        </div>
         <Textfield
           type="number"
-          label="Per capita consumption per day"
-          placeholder="Per capita"
-          name="per-capita"
-        />
-        <Textfield
-          type="number"
+          value={days}
+          onChange={(event) => onChange(event)}
+          name="days"
           label="Days"
           placeholder="Days"
-          name="days"
         />
         <Divider />
-        <div className="flex items-center justify-between">
-          <span className="font-bold text-lg">Demand</span>
-          <span className="font-bold text-lg">25kg</span>
+        {demand !== 0 && (
+          <div className="flex items-center justify-between">
+            <span className="font-bold text-lg">Demand</span>
+            <span className="font-bold text-lg">{demand.toLocaleString()}kg</span>
+          </div>
+        )}
+        <div className="my-8 flex items-center justify-end gap-4">
+          <button
+            onClick={reCalculate}
+            type="button"
+            id="add"
+            className="float-right py-2 px-5 border border-primary text-primary rounded-lg shadow-lg"
+          >
+            Re-calculate
+          </button>
+          <button
+            onClick={onCalculate}
+            type="button"
+            id="add"
+            className="float-right py-2 px-5 bg-primary hover:bg-primary-slight text-white font-semibold rounded-lg shadow-lg"
+          >
+            calculate
+          </button>
         </div>
       </Drawer>
       <div className="md:flex flex-col md:flex-row md:min-h-screen relative">
@@ -168,6 +242,7 @@ const Layout = ({ children }) => {
             >
               <Menu />
             </div>
+            <span className="mx-4 font-bold text-lg text-primary">Rice Procurement and Transportation Management System</span>
             <div className="mx-4 absolute right-0">
               <div className="flex items-center gap-4">
                 {info.role === "NFA" && (

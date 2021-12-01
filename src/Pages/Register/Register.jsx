@@ -94,7 +94,7 @@ const Register = () => {
                 imageUrl,
                 firstname,
                 lastname,
-                role,
+                role: role === "" ? "NFA" : role,
                 gender,
                 dateOfBirth: date,
                 age,
@@ -189,7 +189,7 @@ const Register = () => {
                 <option value=""></option>
                 <option value="Farmer">Farmer</option>
                 <option value="Trader">Trader</option>
-                <option value="NFA">NFA</option>
+                {/* <option value="NFA">NFA</option> */}
               </select>
             </div>
           </div>

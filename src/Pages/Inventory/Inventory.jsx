@@ -11,6 +11,7 @@ import {
   sortRiceVariety,
   nineMonthsMilled,
   sixMonthsMilled,
+  threeMonthsOld
 } from "../../Utils/ReusableSyntax";
 import { AdminTable, AddDistribution, DashboardCard } from '../../components'
 import { app } from '../../config/firebase'
@@ -34,6 +35,7 @@ export default function Inventory() {
 
   const nineMonths = nineMonthsMilled(filteredTransaction);
   const sixMonths = sixMonthsMilled(filteredTransaction)
+  const threeMonths = threeMonthsOld(filteredTransaction)
 
   const filteredRiceMilled = filtered(riceMilled, context);
 
@@ -294,6 +296,13 @@ export default function Inventory() {
       iconColor: "bg-yellow-400",
       cardColor: "bg-yellow-500",
     },
+    {
+      title: "Three Months Old Palay",
+      numberData: threeMonths.length,
+      icon: <CheckSquare color="#FFF" size="25" />,
+      iconColor: "bg-green-400",
+      cardColor: "bg-green-500",
+    },
   ];
 
   //** Data showed to the client
@@ -311,7 +320,7 @@ export default function Inventory() {
           <h1 className="text-2xl font-semibold">Palay Information</h1>
           <span className="text-gray-400">Palay that is bought from marketplace</span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 my-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 my-8">
           {cardData.map((data, index) => (
             <DashboardCard
               key={index}

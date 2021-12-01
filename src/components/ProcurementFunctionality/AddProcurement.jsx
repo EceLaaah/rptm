@@ -3,6 +3,7 @@ import { app } from "../../config/firebase";
 import { MyModal, Textfield } from "../";
 import swal from "sweetalert";
 import { Spin } from "antd";
+import { getQuarter } from "../../Utils/ReusableSyntax";
 import { MyDateString } from "../../Utils";
 import { AuthContext } from '../../Context/auth'
 
@@ -36,12 +37,15 @@ export default function AddProcurement({ isOpen, isClose }) {
 
   const Loading = () => setLoading(true);
 
+
   const onSubmit = (event) => {
     event.preventDefault();
 
     Loading();
     const totalPrice = Number(quantity) * Number(pricePerKilo);
     const document = app.firestore().collection("procurement").doc();
+
+    const quarter = getQuarter(new Date(procurementDate))
 
     document
       .set({
@@ -50,6 +54,7 @@ export default function AddProcurement({ isOpen, isClose }) {
         palayVariety,
         quantity: Number(quantity),
         pricePerKilo: Number(pricePerKilo),
+        quarter: `Q${quarter}`,
         farmerName,
         totalPrice,
         date_created: MyDateString,
