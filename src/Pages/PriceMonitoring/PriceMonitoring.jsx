@@ -20,7 +20,7 @@ export default function PriceMonitoring() {
             sorter: sortRiceVariety,
         },
         {
-            title: "Rice Variety",
+            title: "Palay Variety",
             dataIndex: "riceVariety",
             key: "riceVariety",
             setDirections: sortTypes,
@@ -38,6 +38,13 @@ export default function PriceMonitoring() {
             title: "Max",
             dataIndex: "max",
             key: "max",
+            setDirections: sortTypes,
+            sorter: sortRiceVariety,
+        },
+        {
+            title: "Average",
+            dataIndex: "average",
+            key: "average",
             setDirections: sortTypes,
             sorter: sortRiceVariety,
         },
@@ -87,6 +94,8 @@ export default function PriceMonitoring() {
         const max = Math.max.apply(null, type.map((a) => a.price))
         const min = Math.min.apply(null, type.map((a) => a.price))
 
+        const average = max + min / arr.length;
+
         const arr2 = type.filter((v, i, a) => {
             return a.findIndex(t => (t.riceVariety === v.riceVariety)) === i
         })
@@ -96,6 +105,7 @@ export default function PriceMonitoring() {
             riceVariety: arr2[0].riceVariety,
             max,
             min,
+            average,
             date_created: arr2[0].date_created
         }
     }));

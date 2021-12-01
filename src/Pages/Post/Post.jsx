@@ -162,7 +162,7 @@ const Post = () => {
                   className="block text-gray-700 text-sm font-semibold mb-2"
                   htmlFor="riceVariety"
                 >
-                  Rice Variety
+                  Palay Variety
                 </label>
                 <select
                   id="riceVariety"

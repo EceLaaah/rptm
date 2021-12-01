@@ -48,7 +48,7 @@ export default function Rice() {
 
   const columns = [
     {
-      title: "Rice variety",
+      title: "Palay variety",
       dataIndex: "variety",
       key: "variety",
     },
@@ -226,7 +226,7 @@ export default function Rice() {
       </MyModal>
       <div className="max-w-content mx-auto px-4 bg-gray-100">
         <div className=" mb-4">
-          <h1 className="text-2xl font-semibold">Rice Variety</h1>
+          <h1 className="text-2xl font-semibold">Palay Variety</h1>
           <span className="text-gray-400">Different Palay Variety</span>
         </div>
         <div className="md:flex items-center justify-between">

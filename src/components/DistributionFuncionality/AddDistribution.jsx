@@ -235,7 +235,7 @@ export default function AddDistribution({ isOpen, isClose, data }) {
             <Textfield
               type="text"
               value={data.riceVariety}
-              label="Rice Variety"
+              label="Palay Variety"
               name="riceVariety"
               placeholder="Rice Variety"
             />

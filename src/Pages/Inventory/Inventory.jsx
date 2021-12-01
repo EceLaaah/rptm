@@ -124,7 +124,7 @@ export default function Inventory() {
       }
     },
     {
-      title: "Rice Variety",
+      title: "Palay Variety",
       dataIndex: "riceVariety",
       key: "riceVariety",
       setDirections: sortTypes,
@@ -177,7 +177,7 @@ export default function Inventory() {
       render: (data) => {
         return (
           <Popconfirm
-            title="Do you want to milled this rice?"
+            title="Do you want to milled this palay?"
             onConfirm={(event) => onMilled(event, data)}
           >
             <button className="bg-transparent border border-blue-500 text-blue-900 hover:bg-blue-200 rounded-sm py-1 px-4 text-white">
@@ -267,7 +267,7 @@ export default function Inventory() {
       render: (data) => {
         return (
           <Popconfirm
-            title="Do you want to milled this rice?"
+            title="Do you want to milled this palay?"
             onConfirm={(event) => onDistribute(event, data)}
           >
             <button className="bg-transparent border border-blue-500 text-blue-900 hover:bg-blue-200 rounded-sm py-1 px-4 text-white">

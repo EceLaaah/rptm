@@ -95,9 +95,9 @@ const UpdateProduct = (props) => {
               <Textfield
                 value={riceVariety}
                 onChange={(event) => onChange(event)}
-                label="Rice Variety"
+                label="Palay Variety"
                 type="text"
-                placeholder="Rice Variety"
+                placeholder="Palay Variety"
                 name="riceVariety"
               />
               <Textfield

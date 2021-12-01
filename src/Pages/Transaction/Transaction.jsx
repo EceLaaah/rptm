@@ -137,7 +137,7 @@ const Transaction = () => {
     },
 
     {
-      title: "Rice variety",
+      title: "Palay variety",
       dataIndex: "riceVariety",
       key: "riceVariety",
       setDirections: sortTypes,
@@ -194,8 +194,8 @@ const Transaction = () => {
   const transactionColumn = [
     {
       title: "Email",
-      dataIndex: "farmerEmail",
-      key: "farmerEmail",
+      dataIndex: "userEmail",
+      key: "userEmail",
       setDirections: sortTypes,
       sorter: sortRiceVariety,
     },
@@ -211,7 +211,7 @@ const Transaction = () => {
     },
 
     {
-      title: "Rice variety",
+      title: "Palay variety",
       dataIndex: "riceVariety",
       key: "riceVariety",
       setDirections: sortTypes,

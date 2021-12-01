@@ -15,31 +15,50 @@ const Analytics = ({
 
     const updatedData = updated(dataArray);
 
+    // function sortByMonth(arr) {
+
+    //     arr.sort(function(a, b){
+    //         return Months.indexOf(a.values.Month.displayValue)
+    //              - Months.indexOf(b.values.Month.displayValue);
+    //     });
+    //   }
+
     useEffect(() => {
         const ctx = procurement.current;
         const sortTypes = "totalPrice";
 
         //*Sort data from highest to lowest
-        const sortedData = updatedData.sort(
-            (a, b) => a[sortTypes] - b[sortTypes]
-        );
+        // const sortedData = updatedData.sort(
+        //     (a, b) => a[sortTypes] - b[sortTypes]
+        // );
 
-        const labels = sortedData.map((label) => {
-            const date = new Date(label.procurementDate)
-            return Months[date.getMonth()]
+        const sortedDate = updatedData.sort((a, b) => {
+            return new Date(a.procurementDate) - new Date(b.procurementDate)
         });
 
-        const data = sortedData.map((data) => data[sortTypes]);
+        const labels = sortedDate.map((labels) => {
+            const date = new Date(labels.procurementDate);
+            return Months[date.getMonth()]
+        })
+
+        const data = updatedData.map((data) => data[sortTypes]);
 
 
         if (data.length > 0) {
             const textTitle = "Procurement Chart";
             var myBarChart = new Chart(ctx, {
-                type: chartType,
                 data: {
                     labels,
                     datasets: [
                         {
+                            type: chartType,
+                            data,
+                            backgroundColor,
+                            borderColor,
+                            borderWidth: 1,
+                        },
+                        {
+                            type: "line",
                             data,
                             backgroundColor,
                             borderColor,

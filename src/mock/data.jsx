@@ -99,7 +99,7 @@ const farmerLinks = [
   },
   {
     id: 3,
-    name: "Rice Variety",
+    name: "Palay Variety",
     icon: <FileText className="w-4 h-4" />,
     link: "/rice",
   },

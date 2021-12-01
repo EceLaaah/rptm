@@ -18,21 +18,25 @@ export default function DistributionChart({
 
     useEffect(() => {
         const ctx = chartDistribution.current;
-        const sortTypes = "quantity"
+        //const sortTypes = "quantity"
 
         const updatedData = updatedDistribution(dataArray);
 
         //*Sort data from highest to lowest
-        const sortedData = updatedData.sort(
-            (a, b) => a[sortTypes] - b[sortTypes]
-        );
+        // const sortedData = updatedData.sort(
+        //     (a, b) => a[sortTypes] - b[sortTypes]
+        // );
 
-        const labels = sortedData.map((type) => {
+        const sortedDate = updatedData.sort((a, b) => {
+            return new Date(a.distributionDate) - new Date(b.distributionDate)
+        });
+
+        const labels = sortedDate.map((type) => {
             const date = new Date(type.distributionDate);
             return Months[date.getMonth()];
         })
 
-        const data = sortedData.map((type) => type.quantity);
+        const data = updatedData.map((type) => type.quantity);
 
         if (data.length > 0) {
             const textTitle = "Distribution Chart";

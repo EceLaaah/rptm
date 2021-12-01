@@ -44,16 +44,6 @@ const TargetProcurement = () => {
 
   const columns = [
     {
-      title: "Unique Identification",
-      dataIndex: "id",
-      key: "id",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-      render: (text) => {
-        return <span className="text-blue-500">{text}</span>;
-      },
-    },
-    {
       title: "Target Number",
       dataIndex: "targetNumber",
       key: "targetNumber",
@@ -117,8 +107,8 @@ const TargetProcurement = () => {
         <div className="mb-3">
           <div className="flex justify-between mb-3 md:mb-0">
             <div className=" mb-4">
-              <h1 className="text-2xl font-semibold">Monthl Target</h1>
-              <span className="text-gray-400">Monthl Target Procure Palay</span>
+              <h1 className="text-2xl font-semibold">Monthly Target</h1>
+              <span className="text-gray-400">Monthly Target Procure Palay</span>
             </div>
             <Input.Search
               allowClear
