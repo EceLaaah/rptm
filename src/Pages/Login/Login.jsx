@@ -77,7 +77,7 @@ const Login = () => {
               <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">
                 Log in to your account
               </h1>
-              <form className="mt-6" action="#" method="POST">
+              <form className="mt-6" onSubmit={onSubmit}>
                 <div>
                   <label className="block text-gray-700">Email Address</label>
                   <input
@@ -112,8 +112,7 @@ const Login = () => {
                 </div>
 
                 <button
-                  type="button"
-                  onClick={onSubmit}
+                  type="submit"
                   className="w-full block bg-primary hover:opacity-80 text-white font-semibold rounded-lg
         px-4 py-3 mt-6"
                 >
