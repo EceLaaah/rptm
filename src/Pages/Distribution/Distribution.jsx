@@ -90,7 +90,7 @@ export default function Distribution() {
       sorter: sortRiceVariety,
     },
     {
-      title: "Quantity",
+      title: "Number of Sacks",
       dataIndex: "quantity",
       key: "quantity",
       setDirections: sortTypes,
@@ -121,9 +121,16 @@ export default function Distribution() {
       sorter: sortRiceVariety,
     },
     {
-      title: "Receiver",
+      title: "Recipient Name",
       dataIndex: "receiver",
       key: "receiver",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
+    },
+    {
+      title: "Event Purpose",
+      dataIndex: "eventPurpose",
+      key: "eventPurpose",
       setDirections: sortTypes,
       sorter: sortRiceVariety,
     },

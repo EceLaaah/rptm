@@ -12,12 +12,14 @@ const initialState = {
   distributionName: "",
   distributionTypeId: "",
 
-  policeAddress: "",
+  eventPurpose: "",
 
-  storeName: "",
+  // policeAddress: "",
 
-  reliefEvent: "",
-  organization: "",
+  // storeName: "",
+
+  // reliefEvent: "",
+  // organization: "",
 
   quantity: "",
   receiver: "",
@@ -26,32 +28,32 @@ const initialState = {
   province: "",
 };
 
-const collectionTypes = {
-  police: "policeDistribution",
-  market: "marketDistribution",
-  relief: "reliefDistribution",
-};
+// const collectionTypes = {
+//   police: "policeDistribution",
+//   market: "marketDistribution",
+//   relief: "reliefDistribution",
+// };
 
-const ACTIONS = {
-  getPolice: "Police",
-  getMarket: "Market",
-  getRelief: "Relief Operation",
-};
+// const ACTIONS = {
+//   getPolice: "Police",
+//   getMarket: "Market",
+//   getRelief: "Relief Operation",
+// };
 
 export default function UpdateDistribution({ isOpen, isClose, id }) {
   const [
     {
       distributionDate,
       distributionType,
-      distributionName,
-      distributionTypeId,
 
-      policeAddress,
+      eventPurpose,
 
-      storeName,
+      // policeAddress,
 
-      reliefEvent,
-      organization,
+      // storeName,
+
+      // reliefEvent,
+      // organization,
 
       quantity,
       receiver,
@@ -104,57 +106,17 @@ export default function UpdateDistribution({ isOpen, isClose, id }) {
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    const document = app.firestore();
+    //const document = app.firestore();
 
     Loading();
 
-    //const marketTotal = quantity * price;
-
-    if (ACTIONS.getPolice === distributionType) {
-      return await document
-        .collection("policeDistribution")
-        .doc(distributionTypeId)
-        .update({
-          policeAddress
-        })
-        .then(() => {
-          onUpdateDistribution();
-        });
-    }
-
-    if (ACTIONS.getMarket === distributionType) {
-      return await document
-        .collection("marketDistribution")
-        .doc(distributionTypeId)
-        .update({
-          storeName
-        })
-        .then(() => {
-          onUpdateDistribution();
-        });
-    }
-
-    if (ACTIONS.getRelief === distributionType) {
-      return await document
-        .collection("reliefDistribution")
-        .doc(distributionTypeId)
-        .update({
-          reliefEvent,
-          organization
-        })
-        .then(() => {
-          onUpdateDistribution();
-        });
-    }
-  };
-
-  const onUpdateDistribution = () => {
     const document = app.firestore().collection("distribution").doc(id);
 
     document
       .update({
         distributionDate,
         distributionType,
+        eventPurpose,
         quantity,
         receiver,
         barangay,
@@ -172,49 +134,114 @@ export default function UpdateDistribution({ isOpen, isClose, id }) {
           button: "Ok",
         });
       });
+
+    //const marketTotal = quantity * price;
+
+    // if (ACTIONS.getPolice === distributionType) {
+    //   return await document
+    //     .collection("policeDistribution")
+    //     .doc(distributionTypeId)
+    //     .update({
+    //       policeAddress
+    //     })
+    //     .then(() => {
+    //       onUpdateDistribution();
+    //     });
+    // }
+
+    // if (ACTIONS.getMarket === distributionType) {
+    //   return await document
+    //     .collection("marketDistribution")
+    //     .doc(distributionTypeId)
+    //     .update({
+    //       storeName
+    //     })
+    //     .then(() => {
+    //       onUpdateDistribution();
+    //     });
+    // }
+
+    // if (ACTIONS.getRelief === distributionType) {
+    //   return await document
+    //     .collection("reliefDistribution")
+    //     .doc(distributionTypeId)
+    //     .update({
+    //       reliefEvent,
+    //       organization
+    //     })
+    //     .then(() => {
+    //       onUpdateDistribution();
+    //     });
+    // }
   };
 
-  const policeMarkdown = (
-    <div className="w-full">
-      <Textfield
-        type="text"
-        placeholder="address"
-        name="policeAddress"
-        value={policeAddress}
-        onChange={(event) => onChange(event)}
-      />
-    </div>
-  );
+  // const onUpdateDistribution = () => {
+  //   const document = app.firestore().collection("distribution").doc(id);
 
-  const marketMarkdown = (
-    <div className="w-full">
-      <Textfield
-        type="text"
-        placeholder="Store name"
-        name="storeName"
-        value={storeName}
-        onChange={(event) => onChange(event)}
-      />
-    </div>
-  );
+  //   document
+  //     .update({
+  //       distributionDate,
+  //       distributionType,
+  //       quantity,
+  //       receiver,
+  //       barangay,
+  //       municipality,
+  //       province,
+  //       date_updated: MyDateString,
+  //     })
+  //     .then(() => {
+  //       setLoading(false);
+  //       clearState();
+  //       swal({
+  //         title: "Success",
+  //         text: `Successfully Updated`,
+  //         icon: "success",
+  //         button: "Ok",
+  //       });
+  //     });
+  // };
 
-  const reliefMarkdown = (
-    <div className="grid grid-cols-2 gap-4">
-      <Textfield
-        placeholder="Event"
-        name="reliefEvent"
-        value={reliefEvent}
-        onChange={(event) => onChange(event)}
-      />
-      <Textfield
-        type="text"
-        placeholder="Organization"
-        name="organization"
-        value={organization}
-        onChange={(event) => onChange(event)}
-      />
-    </div>
-  );
+  // const policeMarkdown = (
+  //   <div className="w-full">
+  //     <Textfield
+  //       type="text"
+  //       placeholder="address"
+  //       name="policeAddress"
+  //       value={policeAddress}
+  //       onChange={(event) => onChange(event)}
+  //     />
+  //   </div>
+  // );
+
+  // const marketMarkdown = (
+  //   <div className="w-full">
+  //     <Textfield
+  //       type="text"
+  //       placeholder="Store name"
+  //       name="storeName"
+  //       value={storeName}
+  //       onChange={(event) => onChange(event)}
+  //     />
+  //   </div>
+  // );
+
+  // const reliefMarkdown = (
+  //   <div className="grid grid-cols-2 gap-4">
+  //     <Textfield
+  //       placeholder="Event"
+  //       name="reliefEvent"
+  //       value={reliefEvent}
+  //       onChange={(event) => onChange(event)}
+  //     />
+  //     <Textfield
+  //       type="text"
+  //       placeholder="Organization"
+  //       name="organization"
+  //       value={organization}
+  //       onChange={(event) => onChange(event)}
+  //     />
+  //   </div>
+  // );
 
   return (
     <MyModal
@@ -226,7 +253,7 @@ export default function UpdateDistribution({ isOpen, isClose, id }) {
           Distribution Information
         </h1>
         <form>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 flex items-center">
+          {/* <div className="w-full">
             <Textfield
               type="date"
               onChange={(event) => onChange(event)}
@@ -235,19 +262,31 @@ export default function UpdateDistribution({ isOpen, isClose, id }) {
               name="distributionDate"
               placeholder="Distribution Date"
             />
-            <div className="mt-2">
-              <label
-                className="block mb-2 text-gray-700 text-sm font-semibold"
-              >
-                Distribution Type
-              </label>
-              <select value={distributionType} name="distributionType" onChange={(event) => onChange(event)} className="block w-full h-10 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                <option value=""></option>
-                {types.map((type) => (
-                  <option value={type}>{type}</option>
-                ))}
-              </select>
-            </div>
+          </div> */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 flex items-center">
+            {/* <Textfield
+              type="text"
+              value={data.riceVariety}
+              label="Palay Variety"
+              name="riceVariety"
+              placeholder="Rice Variety"
+            /> */}
+            <Textfield
+              type="date"
+              onChange={(event) => onChange(event)}
+              label="Distribution Date"
+              value={distributionDate}
+              name="distributionDate"
+              placeholder="Distribution Date"
+            />
+            <Textfield
+              type="number"
+              onChange={(event) => onChange(event)}
+              value={quantity}
+              label="Number of Sacks"
+              name="quantity"
+              placeholder="Quantity"
+            />
             {/* <Textfield
               type="text"
               onChange={(event) => onChange(event)}
@@ -257,42 +296,72 @@ export default function UpdateDistribution({ isOpen, isClose, id }) {
               placeholder="Distribution Type"
             /> */}
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             <Textfield
-              type="text"
+              type="number"
               onChange={(event) => onChange(event)}
               value={quantity}
-              label="Number of sacks"
+              label="Number of Sacks"
               name="quantity"
               placeholder="Quantity"
             />
-            <Textfield
-              type="text"
-              placeholder="Receiver"
-              name="receiver"
-              label="Receiver"
-              value={receiver}
-              onChange={(event) => onChange(event)}
-            />
-            <Textfield
-              type="text"
-              onChange={(event) => onChange(event)}
-              label="Barangay"
-              value={barangay}
-              name="barangay"
-              placeholder="Barangay"
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Textfield
-              type="text"
-              onChange={(event) => onChange(event)}
-              label="Municipality"
-              value={municipality}
-              name="municipality"
-              placeholder="Municipality"
-            />
-            <div className="w-full">
+          </div> */}
+          {/* {distributionType !== "" && (
+            <div className="my-2">
+              <h1 className="text-lg font-semibold">{distributionType} Details</h1>
+              {isTypes.police && policeMarkdown}
+              {isTypes.market && marketMarkdown}
+              {isTypes.relief && reliefMarkdown}
+            </div>
+          )} */}
+          <div className="my-2">
+            <h1 className="text-lg font-semibold">Recipient Details</h1>
+            <div className="flex items-center grid grid-cols-1 md:grid-cols-2 gap-3">
+              <Textfield
+                type="text"
+                placeholder="Recipient Name"
+                name="receiver"
+                label="Recipient Name"
+                value={receiver}
+                onChange={(event) => onChange(event)}
+              />
+              <div className="mt-2">
+                <label
+                  className="block mb-2 text-gray-700 text-sm font-semibold"
+                >
+                  Recipient Type
+                </label>
+                <select value={distributionType} name="distributionType" onChange={(event) => onChange(event)} className="block w-full h-10 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                  <option value=""></option>
+                  {types.map((type) => (
+                    <option value={type}>{type}</option>
+                  ))}
+                </select>
+              </div>
+              <Textfield
+                type="text"
+                placeholder="Event Purpose"
+                name="eventPurpose"
+                label="Event Purpose"
+                value={eventPurpose}
+                onChange={(event) => onChange(event)}
+              />
+              <Textfield
+                type="text"
+                onChange={(event) => onChange(event)}
+                label="Barangay"
+                value={barangay}
+                name="barangay"
+                placeholder="Barangay"
+              />
+              <Textfield
+                type="text"
+                onChange={(event) => onChange(event)}
+                label="Municipality"
+                value={municipality}
+                name="municipality"
+                placeholder="Municipality"
+              />
               <Textfield
                 type="text"
                 onChange={(event) => onChange(event)}
@@ -303,22 +372,12 @@ export default function UpdateDistribution({ isOpen, isClose, id }) {
               />
             </div>
           </div>
-          {distributionName !== undefined && (
-            <div className="my-2">
-              <h1 className="text-lg font-semibold">
-                {distributionType} Details
-              </h1>
-              {distributionName === collectionTypes.market && marketMarkdown}
-              {distributionName === collectionTypes.police && policeMarkdown}
-              {distributionName === collectionTypes.relief && reliefMarkdown}
-            </div>
-          )}
           <div className="flex items-center justify-end gap-2">
             <button
               onClick={(event) => isClose(event)}
               className="px-6 py-1 border border-primary bg-gray-100 hover:bg-gray-200 text-black text-sm rounded-sm focus:outline-none focus:shadow-outline "
             >
-              Close
+              Cancel
             </button>
             <button
               onClick={(event) => onSubmit(event)}

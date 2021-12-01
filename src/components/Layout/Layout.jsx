@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Spin, notification, Badge, Drawer, Divider } from "antd";
+import { Spin, notification, Badge, Drawer, Divider, Switch } from "antd";
 import { app } from "../../config/firebase";
 import { AuthContext } from "../../Context/auth";
 import { LogOut } from "react-feather";
@@ -9,13 +9,15 @@ import { Menu, X, Smile, ShoppingCart, Sliders } from "react-feather";
 import { filteredTransaction, filteredPendingTransaction } from "../../Utils/ReusableSyntax";
 import { TransactionContext } from "../../Context/TransactionProvider";
 import swal from 'sweetalert';
+import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import RolesHook from '../../lib/RolesHook'
 import municipalities from '../../municipalities.json'
+
 
 const initialState = {
   municipality: "",
   population: 0,
-  perCapita: 36,
+  perCapita: 0.36,
   days: 0
 }
 
@@ -27,6 +29,8 @@ const Layout = ({ children }) => {
   const [sidebarToggle, setSidebarToggle] = useState(false);
   const { transaction, finishTransaction } = useContext(TransactionContext);
   const [{ municipality, population, perCapita, days }, setState] = useState(initialState);
+  const [getPopulation, setPopulation] = useState([]);
+  const [isCheck, setCheck] = useState(false);
   const [demand, setDemand] = useState(0);
 
   const pendingtransaction = filteredPendingTransaction(finishTransaction, context);
@@ -35,17 +39,19 @@ const Layout = ({ children }) => {
 
   const { info, links } = RolesHook();
 
+  const onCheckSwitch = () => setCheck((isCheck) => !isCheck)
+
   const toggleDraw = () => setToggleDrawer((toggleDrawer) => !toggleDrawer);
 
-  // const getMunicipality = () => {
-  //   const popluation = municipalities.filter((obj) => {
-  //     return obj.municipality === municipality
-  //   })
+  const getMunicipality = () => {
+    const popluation = municipalities.filter((obj) => {
+      return obj.municipality === municipality
+    })
 
-  //   setPopulation(popluation);
-  // }
+    setPopulation(popluation);
+  }
 
-  // useEffect(getMunicipality, [municipality]);
+  useEffect(getMunicipality, [municipality]);
 
   const isSidebar = (event) => {
     event.preventDefault();
@@ -82,7 +88,7 @@ const Layout = ({ children }) => {
   }
 
   const onCalculate = () => {
-    if (days === 0 || population === 0) {
+    if (days === 0) {
       swal({
         title: "Warning",
         text: `Fields cannot be empty or 0`,
@@ -90,10 +96,11 @@ const Layout = ({ children }) => {
         button: "Ok",
       });
     } else {
-      const demand = perCapita * population * days;
+      const populationAuto = getPopulation.map((type) => type.population);
+      const populationCheck = isCheck ? populationAuto[0] : population
+      const demand = perCapita * populationCheck * days;
       setDemand(demand);
     }
-
   }
 
   const reCalculate = () => {
@@ -112,7 +119,7 @@ const Layout = ({ children }) => {
           <label
             className="block mb-2 text-gray-700 text-sm font-semibold"
           >
-            Distribution Type
+            Municipality
           </label>
           <select value={municipality} name="municipality" onChange={(event) => onChange(event)} className="mb-4 block w-full h-10 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             <option value=""></option>
@@ -121,13 +128,37 @@ const Layout = ({ children }) => {
             ))}
           </select>
         </div>
-        <Textfield
-          type="number"
-          value={population}
-          onChange={(event) => onChange(event)}
-          name="population"
-          label="Population"
-        />
+        <div className="float-right mb-2">
+          <Switch
+            checkedChildren={<CheckOutlined />}
+            unCheckedChildren={<CloseOutlined />}
+            onChange={onCheckSwitch}
+            checked={isCheck}
+            defaultChecked
+          />
+        </div>
+        {isCheck ? (
+          getPopulation.map((type) => (
+            <div className="my-2">
+              <label
+                className="block mb-2 text-gray-700 text-sm font-semibold"
+              >
+                Population
+              </label>
+              <input type="text" value={type.population} readOnly={true} name="getPopulation" className="px-3 rounded-sm w-full bg-gray-100 leading-tight focus:outline-none focus:shadow-outline h-10" />
+            </div>
+          )
+          )
+
+        ) : (
+          <Textfield
+            type="number"
+            value={population}
+            onChange={(event) => onChange(event)}
+            name="population"
+            label="Population"
+          />
+        )}
         <div className="my-2">
           <label
             className="block mb-2 text-gray-700 text-sm font-semibold"
@@ -242,7 +273,7 @@ const Layout = ({ children }) => {
             >
               <Menu />
             </div>
-            <span className="mx-4 font-bold text-lg text-primary">Rice Procurement and Transportation Management System</span>
+            <span className="mx-4 font-bold text-lg text-primary">Rice Procurement and Distribution Management System</span>
             <div className="mx-4 absolute right-0">
               <div className="flex items-center gap-4">
                 {info.role === "NFA" && (

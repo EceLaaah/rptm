@@ -6,7 +6,7 @@ import swal from "sweetalert";
 import { Spin } from "antd";
 import { ProductContext } from "../../Context/ProductProvider";
 import { AuthContext } from "../../Context/auth";
-import { objectAssign, onUpdateProduct, updateTargetProcurement } from "../../Utils/ReusableSyntax";
+import { objectAssign, onUpdateProduct, getQuarter } from "../../Utils/ReusableSyntax";
 import RolesHook from "../../lib/RolesHook";
 import UseTargetPocurement from '../../lib/UseTargetPocurement'
 import { X } from "react-feather";
@@ -108,6 +108,8 @@ export default function Bidding({ open, onClose, id }) {
       })
     }
 
+    const quarter = getQuarter(new Date(dateToday))
+
 
     if (!checkSocks && !isZero && !isTargetZero) {
       Loading();
@@ -126,6 +128,7 @@ export default function Bidding({ open, onClose, id }) {
           biddingStatus: false,
           uid: context.uid,
           farmerId: uid,
+          quarter: `Q${quarter}`,
           status: "pending",
           date_created: dateToday,
           isMilled: false,

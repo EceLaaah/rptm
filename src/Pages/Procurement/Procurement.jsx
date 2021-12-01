@@ -5,9 +5,10 @@ import {
   UpdateProcurement,
 } from "../../components";
 import { Space, Popconfirm, Input, Tag, Divider } from "antd";
-import { arraySlice, onSearch, filtered, sortTypes, sortRiceVariety } from "../../Utils/ReusableSyntax";
+import { arraySlice, onSearch, filtered, sortTypes, sortRiceVariety, filteredByNFA } from "../../Utils/ReusableSyntax";
 import { Edit3, Trash2, PlusCircle } from "react-feather";
-import { ProcurementContext } from "../../Context/ProcurementProvider";
+//import { ProcurementContext } from "../../Context/ProcurementProvider";
+import { TransactionContext } from "../../Context/TransactionProvider";
 import { AuthContext } from '../../Context/auth';
 import swal from 'sweetalert'
 import { app } from "../../config/firebase";
@@ -19,10 +20,13 @@ export default function Procurement() {
   const [searchFilter, setSearchFilter] = useState(null);
   const [current, setCurrent] = useState(1);
 
-  const { fetchProcurement } = useContext(ProcurementContext);
+  //const { fetchProcurement } = useContext(ProcurementContext);
   const context = useContext(AuthContext);
+  const { finishTransaction } = useContext(TransactionContext);
 
-  const filteredProcuremnt = filtered(fetchProcurement, context);
+  const filteredTransaction = filteredByNFA(finishTransaction, context);
+
+  //const filteredProcuremnt = filtered(fetchProcurement, context);
 
   const isToggle = (event) => {
     event.preventDefault();
@@ -45,7 +49,7 @@ export default function Procurement() {
 
   const deleteProcure = (event, id) => {
     event.preventDefault();
-    const document = app.firestore().collection("procurement").doc(id);
+    const document = app.firestore().collection("transaction").doc(id);
     id && document.delete().then(() => {
       swal({
         title: "Successfully",
@@ -58,73 +62,42 @@ export default function Procurement() {
 
   const columns = [
     {
-      title: "Unique Identification",
-      dataIndex: "id",
-      key: "id",
+      title: "Date Created",
+      dataIndex: "date_created",
+      key: "date_created",
       setDirections: sortTypes,
       sorter: sortRiceVariety,
-      render: (text) => {
-        return <span className="text-blue-500">{text}</span>;
-      },
-    },
-    {
-      title: "Procurement Date",
-      dataIndex: "procurementDate",
-      key: "procurementDate",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-      render: (procurementDate) => {
+      render: (date_created) => {
         return (
           <Tag color="geekblue">
-            {procurementDate}
+            <span>{new Date(date_created.seconds * 1000).toISOString().substring(0, 10)}</span>
           </Tag>
         )
       }
     },
     {
+      title: "Number of Sacks",
+      dataIndex: "socks",
+      key: "socks",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
+      render: (socks) => {
+        return <span className="bg-blue-400 py-1 px-2 font-bold rounded-full text-white">{socks}</span>
+      }
+    },
+    {
       title: "Palay Variety",
-      dataIndex: "palayVariety",
-      key: "palayVariety",
+      dataIndex: "riceVariety",
+      key: "riceVariety",
       setDirections: sortTypes,
       sorter: sortRiceVariety,
     },
     {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
+      title: "Price per kilo",
+      dataIndex: "price",
+      key: "price",
       setDirections: sortTypes,
       sorter: sortRiceVariety,
-      render: (quantity) => {
-        return (
-          <span className="bg-blue-400 py-1 px-2 font-bold rounded-full text-white">{quantity.toLocaleString()}</span>
-        )
-      }
-    },
-    {
-      title: "Price",
-      dataIndex: "pricePerKilo",
-      key: "pricePerKilo",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-    },
-    {
-      title: "Farmer Name",
-      dataIndex: "farmerName",
-      key: "farmerName",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-    },
-    {
-      title: "Total Price",
-      dataIndex: "totalPrice",
-      key: "totalPrice",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-      render: (totalPrice) => {
-        return (
-          <span className="bg-blue-400 py-1 px-2 font-bold rounded-full text-white">{totalPrice.toLocaleString()}</span>
-        )
-      }
     },
     {
       title: "Action",
@@ -132,7 +105,7 @@ export default function Procurement() {
       render: (procurement) => {
         return (
           <Space size="middle" key="action">
-            <Popconfirm
+            {/* <Popconfirm
               title="would you like to continue?"
               onConfirm={(event) => isUpdateToggle(event, procurement.id)}
             >
@@ -141,7 +114,7 @@ export default function Procurement() {
                 size="20"
                 id="update"
               />
-            </Popconfirm>
+            </Popconfirm> */}
             <Popconfirm
               title="Do you want to delete?"
               onConfirm={(event) => deleteProcure(event, procurement.id)}
@@ -156,7 +129,7 @@ export default function Procurement() {
 
   //** Data showed to the client
   const dataShowed = 5;
-  const currentData = arraySlice(filteredProcuremnt, current, dataShowed);
+  const currentData = arraySlice(filteredTransaction, current, dataShowed);
 
   return (
     <div className="max-w-content mx-auto px-4">
@@ -176,8 +149,8 @@ export default function Procurement() {
           <span className="text-gray-400">Procured Rice Data</span>
         </div>
         <div className="mb-4">
-          <div className="flex justify-between mb-3 md:mb-0">
-            <button
+          <div className="text-right mb-3 md:mb-0">
+            {/* <button
               onClick={(event) => isToggle(event)}
               type="button"
               id="add"
@@ -185,13 +158,13 @@ export default function Procurement() {
             >
               <PlusCircle size="20" />
               Add Information
-            </button>
+            </button> */}
             <Input.Search
               allowClear
               className="w-full md:max-w-xs"
               placeholder="Search..."
               onSearch={(nameSearch) => {
-                const sea = onSearch(nameSearch, filteredProcuremnt);
+                const sea = onSearch(nameSearch, filteredTransaction);
                 setSearchFilter(sea);
               }}
             />
@@ -202,7 +175,7 @@ export default function Procurement() {
           searchFilter={searchFilter}
           columns={columns}
           currentData={currentData}
-          DataArray={filteredProcuremnt}
+          DataArray={filteredTransaction}
           current={current}
           setCurrent={setCurrent}
           dataShowed={dataShowed}

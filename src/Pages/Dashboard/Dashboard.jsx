@@ -117,10 +117,10 @@ function Dashboard() {
           </div>
         )}
 
-        {filterProcurement.length > 0 && (
+        {filteredNFA.length > 0 && (
           <div className="lg:w-11/12 w-full bg-white rounded-lg">
             <BarChart
-              dataArray={filterProcurement}
+              dataArray={filteredNFA}
               width="40vw"
               height="70vw"
               axes={true}

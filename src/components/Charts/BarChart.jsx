@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import Chart from 'chart.js/auto'
-import { buildScales, buildLegend, updated } from '../../Utils/ReusableSyntax'
+import { buildScales, buildLegend, updated, monthDiff } from '../../Utils/ReusableSyntax'
 import { backgroundColor, borderColor, Months } from "../../Utils/index";
+import { update } from "lodash";
 
 const Analytics = ({
     dataArray,
@@ -18,12 +19,12 @@ const Analytics = ({
 
     const quarterFilter = updatedData.filter((obj) => obj.quarter === getQuarter)
 
-    console.log(quarterFilter)
-
 
     useEffect(() => {
         const ctx = procurement.current;
-        const sortTypes = "totalPrice";
+        const sortTypes = "total";
+
+        console.log(updatedData)
 
         //*Sort data from highest to lowest
         // const sortedData = updatedData.sort(
@@ -31,15 +32,26 @@ const Analytics = ({
         // );
 
         const sortedDate = quarterFilter.sort((a, b) => {
-            return new Date(a.procurementDate) - new Date(b.procurementDate)
+            const aDate = new Date(a.date_created.seconds * 1000).toISOString().substring(0, 10);
+            const bDate = new Date(b.date_created.seconds * 1000).toISOString().substring(0, 10)
+
+            return aDate - bDate;
         });
 
         const labels = sortedDate.map((labels) => {
-            const date = new Date(labels.procurementDate);
-            return Months[date.getMonth()]
+            const date = new Date(labels.date_created.seconds * 1000).toISOString().substring(0, 10);
+            //return Months[date.getMonth()]
+            const getDate = new Date(date);
+
+            return Months[getDate.getMonth()];
+
         })
 
         const data = quarterFilter.map((data) => data[sortTypes]);
+
+        const cumulativeSum = (sum => value => sum += value)(0);
+
+        const cumulativeResult = data.map(cumulativeSum)
 
 
         if (data.length > 0) {
@@ -57,7 +69,7 @@ const Analytics = ({
                         },
                         {
                             type: "line",
-                            data,
+                            data: cumulativeResult,
                             backgroundColor,
                             borderColor,
                             borderWidth: 1,

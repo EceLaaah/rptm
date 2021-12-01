@@ -152,13 +152,13 @@ export default function Inventory() {
     //     return <span>{total.toLocaleString()}</span>
     //   }
     // },
-    {
-      title: "Email",
-      dataIndex: "userEmail",
-      key: "userEmail",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-    },
+    // {
+    //   title: "Email",
+    //   dataIndex: "userEmail",
+    //   key: "userEmail",
+    //   setDirections: sortTypes,
+    //   sorter: sortRiceVariety,
+    // },
     {
       title: "Date Created",
       dataIndex: "date_created",
@@ -218,7 +218,7 @@ export default function Inventory() {
 
         return (
           <Tag color={color}>
-            <span>{milledAge} old</span>
+            <span>{milledAge} Months</span>
           </Tag>
         )
       }
