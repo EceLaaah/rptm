@@ -77,7 +77,7 @@ export default function Bidding({ open, onClose, id }) {
     const isTargetZero = Number(getTarget.targetNumber) === 0;
     const isZero = Number(getSocks) === 0;
 
-    console.log(checkSocks, isCheckTarget, isTargetZero, isZero)
+    //console.log(checkSocks, isCheckTarget, isTargetZero, isZero)
 
     const total = price * getSocks
 

@@ -39,7 +39,8 @@ const TranscationProvider = ({ children }) => {
         transactionArray.push({
           ...transactionData.data(),
           id: transactionData.id,
-          productAge: productAge
+          productAge: productAge,
+          date_format: new Date(transactionData.data().date_created.seconds * 1000).toISOString().substring(0, 10)
         });
       });
       setFinishTransaction(transactionArray);

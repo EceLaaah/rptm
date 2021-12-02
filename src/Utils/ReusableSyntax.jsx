@@ -36,7 +36,7 @@ export function getQuarter(d) {
 
 export const updated = (dataArray) => {
   return Object.values(dataArray.reduce((obj, item) => {
-    var key = item.date_created
+    var key = item.date_format;
 
     if (!obj[key]) {
       obj[key] = Object.assign(item)

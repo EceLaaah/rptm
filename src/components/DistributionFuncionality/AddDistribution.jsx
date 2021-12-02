@@ -56,26 +56,26 @@ export default function AddDistribution({ isOpen, isClose, data }) {
     setState,
   ] = useState(initialState);
   const [loading, setLoading] = useState(false);
-  const [isTypes, setIsTypes] = useState({ police: false, market: false, relief: false })
+  //const [isTypes, setIsTypes] = useState({ police: false, market: false, relief: false })
 
   const context = useContext(AuthContext);
 
-  const onTypesSelect = () => {
-    if (ACTIONS.getPolice === distributionType) {
-      return setIsTypes(({ police }) => ({ police: !police, market: false, relief: false }))
-    }
+  // const onTypesSelect = () => {
+  //   if (ACTIONS.getPolice === distributionType) {
+  //     return setIsTypes(({ police }) => ({ police: !police, market: false, relief: false }))
+  //   }
 
-    if (ACTIONS.getMarket === distributionType) {
-      return setIsTypes(({ market }) => ({ police: false, market: !market, relief: false }))
-    }
+  //   if (ACTIONS.getMarket === distributionType) {
+  //     return setIsTypes(({ market }) => ({ police: false, market: !market, relief: false }))
+  //   }
 
-    if (ACTIONS.getRelief === distributionType) {
-      return setIsTypes(({ relief }) => ({ police: false, market: false, relief: !relief }))
-    }
+  //   if (ACTIONS.getRelief === distributionType) {
+  //     return setIsTypes(({ relief }) => ({ police: false, market: false, relief: !relief }))
+  //   }
 
-  }
+  // }
 
-  useEffect(onTypesSelect, [distributionType])
+  //useEffect(onTypesSelect, [distributionType])
 
   const onChange = (event) => {
     event.preventDefault();

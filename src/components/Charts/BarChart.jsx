@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState } from "react";
 import Chart from 'chart.js/auto'
 import { buildScales, buildLegend, updated, monthDiff } from '../../Utils/ReusableSyntax'
 import { backgroundColor, borderColor, Months } from "../../Utils/index";
-import { update } from "lodash";
 
 const Analytics = ({
     dataArray,
@@ -19,12 +18,11 @@ const Analytics = ({
 
     const quarterFilter = updatedData.filter((obj) => obj.quarter === getQuarter)
 
-
     useEffect(() => {
         const ctx = procurement.current;
         const sortTypes = "total";
 
-        console.log(updatedData)
+        //console.log(updatedData)
 
         //*Sort data from highest to lowest
         // const sortedData = updatedData.sort(
@@ -32,10 +30,8 @@ const Analytics = ({
         // );
 
         const sortedDate = quarterFilter.sort((a, b) => {
-            const aDate = new Date(a.date_created.seconds * 1000).toISOString().substring(0, 10);
-            const bDate = new Date(b.date_created.seconds * 1000).toISOString().substring(0, 10)
 
-            return aDate - bDate;
+            return a.date_created.seconds - b.date_created.seconds;
         });
 
         const labels = sortedDate.map((labels) => {
@@ -44,7 +40,6 @@ const Analytics = ({
             const getDate = new Date(date);
 
             return Months[getDate.getMonth()];
-
         })
 
         const data = quarterFilter.map((data) => data[sortTypes]);
