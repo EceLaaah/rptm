@@ -343,7 +343,7 @@ export default function Bidding({ open, onClose, id }) {
                 </div>
               </div>
               <button className="mt-4 w-full bg-primary hover:bg-primary-slight text-white text-sm py-2 font-semibold rounded-sm focus:outline-none focus:shadow-outline h-10">
-                Place your bid
+                {info.role === "NFA" ? "Purchase palay" : "Place your bid"}
               </button>
             </form>
           </div>

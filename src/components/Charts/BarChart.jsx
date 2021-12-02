@@ -16,7 +16,6 @@ const Analytics = ({
 
     const updatedData = updated(dataArray);
 
-    //console.log(dataArray)
 
     const quarterFilter = updatedData.filter((obj) => obj.quarter === getQuarter)
 
