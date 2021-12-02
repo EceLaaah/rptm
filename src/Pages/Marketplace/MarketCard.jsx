@@ -50,6 +50,7 @@ export default function MarkerCard(props) {
                                         </div>
                                         <section>
                                             {/* <span className="text-sm text-gray-400">{type.email}</span> */}
+                                            <p className="text-sm text-gray-400">{type.kiloPerSack} Kilo per sack</p>
                                             <div
                                                 className={`text-sm text-gray-400 my-2 truncate`}
                                                 dangerouslySetInnerHTML={{ __html: type.description }}

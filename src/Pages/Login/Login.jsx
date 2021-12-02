@@ -60,19 +60,20 @@ const Login = () => {
   return (
     <>
       <Spin spinning={loading}>
-        {/* <img
-          src="/image/background.png"
-          className="absolute right-0 top-0 w-full h-full"
-          alt="Background"
-        /> */}
+
         <div class="p-20 h-screen w-screen flex flex-col-reverse md:flex-row items-center justify-center bg-gray-200">
+          <img
+            src="/image/background.png"
+            className="absolute right-0 top-0 w-full h-full z-10"
+            alt="Background"
+          />
           <div class="content text-3xl text-center md:text-left leading-5">
             <h1 class="text-5xl text-blue-500 font-bold">Rice Procurement and Distribution Management System</h1>
             <div className="leading-9">
               <p className="my-4">A convenient way to sell palay in Iloilo province</p>
             </div>
           </div>
-          <div class="container mx-auto flex flex-col items-center">
+          <div class="container mx-auto flex flex-col items-center z-50">
             <section className=" bg-white rounded-lg w-8/12 p-8">
               <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">
                 Log in to your account

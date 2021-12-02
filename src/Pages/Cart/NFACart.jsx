@@ -84,7 +84,7 @@ export default function NFACart() {
                             <div className="flex justify-between">
                                 <span className=" mb-2">{type.riceVariety} :</span>
                                 <span className="font-bold text-sm">
-                                    {type.socks.toLocaleString()} Socks
+                                    {type.socks.toLocaleString()} Sacks
                                 </span>
                             </div>
                         ))}

@@ -21,6 +21,7 @@ const initialState = {
   socks: "",
   price: "",
   riceVariety: "",
+  kiloPerSack: 0,
   email: "",
   description: "",
   uid: "",
@@ -31,7 +32,7 @@ const initialState = {
 };
 
 export default function Bidding({ open, onClose, id }) {
-  const { imageUrl, socks, price, riceVariety, email, description, uid, dateHarvested } =
+  const { imageUrl, socks, price, riceVariety, email, description, uid, dateHarvested, kiloPerSack } =
     initialState;
 
   const [bidding, setBidding] = useState(0);
@@ -72,14 +73,14 @@ export default function Bidding({ open, onClose, id }) {
 
     const document = app.firestore().collection("transaction").doc();
 
+    const total = getSocks * kiloPerSack
+
     const checkSocks = Number(getSocks) > Number(socks);
-    const isCheckTarget = Number(getSocks) > Number(getTarget.targetNumber)
+    const isCheckTarget = Number(total) > Number(getTarget.targetNumber)
     const isTargetZero = Number(getTarget.targetNumber) === 0;
     const isZero = Number(getSocks) === 0;
 
     //console.log(checkSocks, isCheckTarget, isTargetZero, isZero)
-
-    const total = price * getSocks
 
     if (isTargetZero) {
       return swal({
@@ -135,7 +136,7 @@ export default function Bidding({ open, onClose, id }) {
           dateHarvested: new Date(dateHarvested.seconds * 1000)
         })
         .then(() => {
-          onUpdateTargetNumber(Number(getSocks));
+          onUpdateTargetNumber(Number(total));
           onUpdateProduct(fetchProd[0].id, getSocks, app);
           setLoading(false);
           clearState();
@@ -221,6 +222,7 @@ export default function Bidding({ open, onClose, id }) {
       />
       <Spin spinning={loading}>
         <section className="md:flex gap-4 mt-60 md:mt-0">
+          <p>{kiloPerSack}</p>
           <Card
             imageUrl={imageUrl}
             kilograms={socks}

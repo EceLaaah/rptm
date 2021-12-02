@@ -13,6 +13,7 @@ const information = {
   riceVariety: "",
   socks: "",
   price: "",
+  kiloPerSack: 0,
   dateHarvested: null,
 };
 
@@ -22,7 +23,7 @@ const Post = () => {
   const [loading, setLoading] = useState(false);
   const [myFile, setMyFile] = useState([]);
   const [
-    { riceVariety, socks, price, description, dateHarvested },
+    { riceVariety, socks, kiloPerSack, price, description, dateHarvested },
     setState,
   ] = useState(information);
 
@@ -128,6 +129,7 @@ const Post = () => {
                 riceVariety: riceVariety,
                 email: context.email,
                 socks: Number(socks),
+                kiloPerSack: Number(kiloPerSack),
                 price: Number(price),
                 dateHarvested: date,
                 description: description,
@@ -195,7 +197,7 @@ const Post = () => {
                 name="dateHarvested"
               />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               <Textfield
                 value={socks}
                 onChange={(event) => onChange(event)}
@@ -203,6 +205,13 @@ const Post = () => {
                 type="number"
                 placeholder="Sacks"
                 name="socks"
+              />
+              <Textfield
+                value={kiloPerSack}
+                onChange={(event) => onChange(event)}
+                label="Kilo Per Sacks"
+                type="number"
+                name="kiloPerSack"
               />
               <Textfield
                 value={price}

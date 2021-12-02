@@ -12,6 +12,7 @@ const information = {
   email: "",
   socks: "",
   price: "",
+  kiloPerSack: 0,
   description: "",
 };
 
@@ -22,7 +23,7 @@ const UpdateProduct = (props) => {
   const id = params.get("id");
 
   const [
-    { riceVariety, email, socks, price, description },
+    { riceVariety, email, socks, price, description, kiloPerSack },
     setState,
   ] = useState(information);
 
@@ -56,6 +57,7 @@ const UpdateProduct = (props) => {
         email,
         socks: Number(socks),
         price: Number(price),
+        kiloPerSack: Number(kiloPerSack),
         description,
         id,
       })
@@ -109,16 +111,8 @@ const UpdateProduct = (props) => {
                 placeholder="Owner Email"
                 name="email"
               />
-              {/* <Textfield
-                onChange={(event) => onChange(event)}
-                value={dateHarvested}
-                label="Date Harvested"
-                type="date"
-                placeholder="Date Harvested"
-                name="dateHarvested"
-              /> */}
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               <Textfield
                 value={socks}
                 onChange={(event) => onChange(event)}
@@ -134,6 +128,13 @@ const UpdateProduct = (props) => {
                 type="number"
                 placeholder="Price"
                 name="price"
+              />
+              <Textfield
+                onChange={(event) => onChange(event)}
+                value={kiloPerSack}
+                label="Kilo Per Sacks"
+                type="number"
+                name="kiloPerSack"
               />
             </div>
             <label

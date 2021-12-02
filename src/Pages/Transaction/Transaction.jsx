@@ -8,7 +8,8 @@ import {
   filterTotal,
   sortTypes,
   sortRiceVariety,
-  onUpdateProduct
+  onUpdateProduct,
+  OrderByNFA
 } from "../../Utils/ReusableSyntax";
 import { TransactionContext } from "../../Context/TransactionProvider";
 import { RiceVarietyContext } from "../../Context/RiceVarietyProvider";
@@ -29,7 +30,9 @@ const Transaction = () => {
 
   const filteredTransact = filteredTransaction(transaction, context);
   const TransactionDone = filteredDoneTransaction(transaction, context);
+  //const TransactionNFA = OrderByNFA(TransactionDone, context);
   const tradersTransaction = filtered(transaction, context);
+  //const TotalNFA = filterTotal(TransactionNFA)
   const TotalBid = filterTotal(TransactionDone);
 
   const { info } = RolesHooks();
@@ -356,6 +359,14 @@ const Transaction = () => {
               column={transactionColumn}
             />
           </TabPane>
+          {/* <TabPane tab="Transaction History NFA" key={2}>
+            <TransactionHistory
+              length={TransactionNFA.length}
+              Total={TotalNFA}
+              Transaction={TransactionNFA}
+              column={transactionColumn}
+            />
+          </TabPane> */}
         </Tabs>
       ) : (
         <div>

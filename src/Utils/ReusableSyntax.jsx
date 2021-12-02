@@ -115,6 +115,12 @@ export const filteredByNFA = (dataArray, context) => {
   })
 }
 
+export const OrderByNFA = (dataArray, context) => {
+  return dataArray((obj) => {
+    return obj.isNFA === true && obj.uid === context.uid
+  })
+}
+
 export const filterTransactionStatus = (transaction) => {
   return transaction.filter((obj) => {
     return obj.status === "success"
