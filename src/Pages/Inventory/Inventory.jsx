@@ -42,9 +42,8 @@ export default function Inventory() {
   const onMilled = async (event, data) => {
     try {
       event.preventDefault();
-      //const dateHarvested = new Date(data.dateHarvested.seconds * 1000);
+      const dateHarvested = new Date(data.dateHarvested.seconds * 1000);
       //const palayAge = monthDiff(dateHarvested, dateToday);
-
       const document = app.firestore().collection("riceMilled").doc();
 
       // if (palayAge <= 5) {
@@ -58,12 +57,13 @@ export default function Inventory() {
 
       return await document.set({
         procuredPalayId: data.id,
-        dateMilled: dateToday,
+        dateMilled: dateHarvested,
         riceVariety: data.riceVariety,
         totalSocks: data.socks,
         email: data.userEmail,
         uid: data.uid,
         price: data.price,
+        totalKilograms: data.totalKilograms,
         date_created: dateToday
       }).then(() => {
         palayisMilled(data.id)
@@ -174,6 +174,16 @@ export default function Inventory() {
       }
     },
     {
+      title: "Total Kilogram",
+      dataIndex: "totalKilograms",
+      key: "totalKilograms",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
+      render: (totalKilogram) => {
+        return <span className="bg-blue-400 py-1 px-2 font-bold rounded-full text-white">{totalKilogram}</span>
+      }
+    },
+    {
       title: "Action",
       key: "action",
       render: (data) => {
@@ -261,6 +271,16 @@ export default function Inventory() {
         return (
           <span className="bg-blue-400 py-1 px-2 font-bold rounded-full text-white">{totalSocks && totalSocks.toLocaleString()}</span>
         )
+      }
+    },
+    {
+      title: "Total Kilogram",
+      dataIndex: "totalKilograms",
+      key: "totalKilograms",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
+      render: (totalKilogram) => {
+        return <span className="bg-blue-400 py-1 px-2 font-bold rounded-full text-white">{totalKilogram * 0.7}</span>
       }
     },
     {

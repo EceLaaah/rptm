@@ -26,17 +26,12 @@ export const updatedDistribution = (dataArray) => {
 }
 
 export function getQuarter(d) {
-  d = d || new Date();
-  var m = Math.floor(d.getMonth() / 3) + 2;
-  m -= m > 4 ? 4 : 0;
-  //var y = d.getFullYear() + (m == 1 ? 1 : 0);
-  return m;
+  return Math.floor(d.getMonth() / 3) + 1
 }
-
 
 export const updated = (dataArray) => {
   return Object.values(dataArray.reduce((obj, item) => {
-    var key = item.date_format;
+    var key = item.date_format && item.isNFA;
 
     if (!obj[key]) {
       obj[key] = Object.assign(item)

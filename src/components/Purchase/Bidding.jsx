@@ -73,10 +73,11 @@ export default function Bidding({ open, onClose, id }) {
 
     const document = app.firestore().collection("transaction").doc();
 
-    const total = getSocks * kiloPerSack
+    const totalKilo = getSocks * kiloPerSack
+    const subTotal = getSocks * kiloPerSack * price
 
     const checkSocks = Number(getSocks) > Number(socks);
-    const isCheckTarget = Number(total) > Number(getTarget.targetNumber)
+    const isCheckTarget = Number(totalKilo) > Number(getTarget.targetNumber)
     const isTargetZero = Number(getTarget.targetNumber) === 0;
     const isZero = Number(getSocks) === 0;
 
@@ -109,35 +110,36 @@ export default function Bidding({ open, onClose, id }) {
       })
     }
 
-    const quarter = getQuarter(new Date(dateToday))
-
+    const quarter = getQuarter(new Date())
 
     if (!checkSocks && !isZero && !isTargetZero) {
       Loading();
       document
         .set({
-          owned: "won",
+          owned: null,
           imageUrl,
           isNFA: true,
           socks: Number(getSocks),
           userEmail: context.email,
           productId: fetchProd[0].id,
           riceVariety: riceVariety,
-          price: Number(price),
-          total: Number(total),
-          reviewStatus: false,
-          biddingStatus: false,
+          price: 19,
+          totalKilograms: Number(totalKilo),
+          total: Number(subTotal),
+          reviewStatus: true,
+          biddingStatus: true,
           uid: context.uid,
           farmerId: uid,
+          kiloPerSack,
           quarter: `Q${quarter}`,
-          status: "success",
+          status: "pending",
           date_created: dateToday,
           isMilled: false,
           dateHarvested: new Date(dateHarvested.seconds * 1000)
         })
-        .then((response) => {
-          onUpdateTargetNumber(Number(total));
-          onUpdateProduct(fetchProd[0].id, getSocks, app);
+        .then(() => {
+          //onUpdateTargetNumber(Number(total));
+          //onUpdateProduct(fetchProd[0].id, getSocks, app);
           setLoading(false);
           clearState();
           swal({
@@ -162,6 +164,8 @@ export default function Bidding({ open, onClose, id }) {
 
   const onSubmit = (event) => {
     event.preventDefault();
+    const totalKilo = getSocks * kiloPerSack
+    const subTotal = getSocks * kiloPerSack * price
 
     const document = app.firestore().collection("transaction").doc();
 
@@ -199,10 +203,13 @@ export default function Bidding({ open, onClose, id }) {
           productId: fetchProd[0].id,
           riceVariety: riceVariety,
           price: Number(bidding),
+          totalKilograms: Number(totalKilo),
+          total: Number(subTotal),
           reviewStatus: true,
           biddingStatus: true,
           uid: context.uid,
           farmerId: uid,
+          kiloPerSack,
           status: "pending",
           date_created: dateToday,
           isMilled: false,
@@ -245,7 +252,7 @@ export default function Bidding({ open, onClose, id }) {
           <div className="w-full mt-4 md:mt-0">
             <h1 className="text-2xl font-bold">Bidding Information</h1>
             <h2 className="my-2 text-sm text-red-500">
-              Traders Email :{" "}
+              User Email :{" "}
               <strong className="text-red-500">{context.email}</strong>
             </h2>
             <form
@@ -317,8 +324,6 @@ export default function Bidding({ open, onClose, id }) {
                       value={getSocks}
                       type="number"
                       className={`${inputStyle} bg-gray-100 mt-2`}
-                      placeholder="Bidding price"
-                      name="biddingPrice"
                     />
                   </div>
                   {info.role !== "NFA" && (
@@ -332,15 +337,13 @@ export default function Bidding({ open, onClose, id }) {
                         value={bidding}
                         type="number"
                         className={`${inputStyle} bg-gray-100 mt-2`}
-                        placeholder="Bidding price"
-                        name="biddingPrice"
                       />
                     </div>
                   )}
                 </div>
               </div>
               <button className="mt-4 w-full bg-primary hover:bg-primary-slight text-white text-sm py-2 font-semibold rounded-sm focus:outline-none focus:shadow-outline h-10">
-                {info.role === "NFA" ? "Purchase Rice" : "Place your bid"}
+                Place your bid
               </button>
             </form>
           </div>

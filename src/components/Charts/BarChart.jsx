@@ -16,6 +16,8 @@ const Analytics = ({
 
     const updatedData = updated(dataArray);
 
+    console.log(updatedData);
+
     const quarterFilter = updatedData.filter((obj) => obj.quarter === getQuarter)
 
     useEffect(() => {
@@ -30,9 +32,9 @@ const Analytics = ({
         // );
 
         const sortedDate = quarterFilter.sort((a, b) => {
-
             return a.date_created.seconds - b.date_created.seconds;
         });
+
 
         const labels = sortedDate.map((labels) => {
             const date = new Date(labels.date_created.seconds * 1000).toISOString().substring(0, 10);

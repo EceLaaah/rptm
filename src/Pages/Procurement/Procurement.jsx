@@ -100,6 +100,16 @@ export default function Procurement() {
       sorter: sortRiceVariety,
     },
     {
+      title: "Total price",
+      dataIndex: "total",
+      key: "total",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
+      render: (total) => {
+        return <span className="bg-blue-400 py-1 px-2 font-bold rounded-full text-white">{total.toLocaleString()}</span>
+      }
+    },
+    {
       title: "Action",
       key: "action",
       render: (procurement) => {

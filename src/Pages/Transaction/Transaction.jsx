@@ -12,9 +12,11 @@ import {
 } from "../../Utils/ReusableSyntax";
 import { TransactionContext } from "../../Context/TransactionProvider";
 import { RiceVarietyContext } from "../../Context/RiceVarietyProvider";
+import { TargetProcurementContext } from '../../Context/TargetProcurementProvider'
 import { AuthContext } from "../../Context/auth";
 import { app } from "../../config/firebase";
 import RolesHooks from "../../lib/RolesHook";
+import UseTargetPocurement from '../../lib/UseTargetPocurement'
 import swal from "sweetalert";
 
 const Transaction = () => {
@@ -33,6 +35,8 @@ const Transaction = () => {
   const tradersTransaction = filtered(transaction, context);
   //const TotalNFA = filterTotal(TransactionNFA)
   const TotalBid = filterTotal(TransactionDone);
+
+  const { target } = useContext(TargetProcurementContext);
 
   const { info } = RolesHooks();
 
@@ -60,8 +64,30 @@ const Transaction = () => {
     }
   };
 
-  const onSubmit = async (event, id, riceVariety, productId, socks) => {
+
+  const onUpdateTargetNumber = (socks, uid) => {
+    const dateToday = new Date();
+
+    target.forEach((value) => {
+      if (value.date_created === dateToday.toISOString().substring(0, 10) && value.uid === uid) {
+        const newTargetValue = value.targetNumber - socks;
+
+        const document = app.firestore().collection("targetProcurement").doc(value.id);
+
+        document.update({
+          targetNumber: newTargetValue
+        });
+      }
+    })
+  }
+
+  const onSubmit = async (event, transaction) => {
     event.preventDefault();
+    const { id, uid, riceVariety, productId, socks, isNFA, kiloPerSack } = transaction;
+
+    const total = socks * kiloPerSack
+
+    //console.log(total)
 
     try {
       const document = app
@@ -79,6 +105,7 @@ const Transaction = () => {
             if (snapshot.id === id) {
               onUpdateData(id, "won", riceVariety);
               onUpdateProduct(productId, socks, app);
+              isNFA && onUpdateTargetNumber(total, uid)
             } else {
               onUpdateData(snapshot.id, "lose", riceVariety);
             }
@@ -137,7 +164,6 @@ const Transaction = () => {
         )
       }
     },
-
     {
       title: "Palay variety",
       dataIndex: "riceVariety",
@@ -180,7 +206,7 @@ const Transaction = () => {
           <Popconfirm
             title="Would you like to continue?"
             onConfirm={(event) =>
-              onSubmit(event, transaction.id, transaction.riceVariety, transaction.productId, transaction.socks)
+              onSubmit(event, transaction)
             }
           >
             <button className="bg-transparent border border-blue-500 text-blue-900 hover:bg-blue-200 rounded-sm py-1 px-4 text-white">
@@ -211,7 +237,6 @@ const Transaction = () => {
         return <span className="bg-blue-400 py-1 px-2 font-bold rounded-full text-white">{socks}</span>
       }
     },
-
     {
       title: "Palay variety",
       dataIndex: "riceVariety",
@@ -277,6 +302,16 @@ const Transaction = () => {
       render: (text) => {
         return <span>₱{text}</span>;
       },
+    },
+    {
+      title: "Total price",
+      dataIndex: "total",
+      key: "total",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
+      render: (total) => {
+        return <span className="bg-blue-400 py-1 px-2 font-bold rounded-full text-white">{total.toLocaleString()}</span>
+      }
     },
   ];
 
