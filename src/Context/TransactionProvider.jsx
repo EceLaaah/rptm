@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import { monthDiff } from '../Utils/ReusableSyntax'
+import { Months } from "../Utils";
 import { app } from "../config/firebase";
 
 const TransactionContext = createContext();
@@ -36,11 +37,12 @@ const TranscationProvider = ({ children }) => {
       snapshot.forEach((transactionData) => {
         const dateHarv = new Date(transactionData.data().dateHarvested.seconds * 1000);
         const productAge = monthDiff(dateHarv, dateToday);
+        const month = new Date(transactionData.data().date_created.seconds * 1000)
         transactionArray.push({
           ...transactionData.data(),
           id: transactionData.id,
           productAge: productAge,
-          date_format: new Date(transactionData.data().date_created.seconds * 1000).toISOString().substring(0, 10)
+          date_format: Months[month.getMonth()]
         });
       });
       setFinishTransaction(transactionArray);

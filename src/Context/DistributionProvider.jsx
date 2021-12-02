@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import { Months } from "../Utils";
 import { app } from "../config/firebase";
 
 const DistributionContext = createContext();
@@ -14,9 +15,12 @@ const DistributionProvider = ({ children }) => {
       const distributionArray = [];
 
       snapshot.forEach((distributionData) => {
+
+        const month = new Date(distributionData.data().distributionDate)
         distributionArray.push({
           ...distributionData.data(),
           id: distributionData.id,
+          date_format: Months[month.getMonth()]
         });
       });
 

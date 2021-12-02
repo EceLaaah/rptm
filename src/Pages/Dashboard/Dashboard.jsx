@@ -188,7 +188,7 @@ function Dashboard() {
         )}
       </div>
 
-      <div className="my-4 py-6 px-8 bg-white rounded-lg">
+      {/* <div className="my-4 py-6 px-8 bg-white rounded-lg">
         {filterRiceMilled.length > 0 && (
           <div className="flex items-center justify-between mb-4 mt-2 ">
             <h1 className="font-bold text-primary text-2xl">Rice Milled Summary</h1>
@@ -201,7 +201,7 @@ function Dashboard() {
           </div>
         )}
         <ProcuredPalayTable riceMilled={filterRiceMilled} />
-      </div>
+      </div> */}
     </div >
   )
 }

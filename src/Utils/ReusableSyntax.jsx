@@ -13,12 +13,12 @@ export const map = {
 
 export const updatedDistribution = (dataArray) => {
   return Object.values(dataArray.reduce((obj, item) => {
-    var key = item.distributionDate
+    var key = item.date_format
 
     if (!obj[key]) {
       obj[key] = Object.assign(item)
     } else {
-      obj[key].total += item.total
+      obj[key].quantity += item.quantity
     }
 
     return obj
@@ -31,7 +31,7 @@ export function getQuarter(d) {
 
 export const updated = (dataArray) => {
   return Object.values(dataArray.reduce((obj, item) => {
-    var key = item.date_format && item.isNFA;
+    var key = item.date_format;
 
     if (!obj[key]) {
       obj[key] = Object.assign(item)
@@ -42,6 +42,7 @@ export const updated = (dataArray) => {
     return obj
   }, {}))
 }
+
 
 export const filterDistribution = (dataArray, types) => {
   return dataArray.filter((obj) => {

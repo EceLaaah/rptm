@@ -16,11 +16,13 @@ export default function DistributionChart({
 
     const chartDistribution = useRef(null);
 
+    const updatedData = updatedDistribution(dataArray);
+
+    console.log(dataArray)
+
     useEffect(() => {
         const ctx = chartDistribution.current;
         //const sortTypes = "quantity"
-
-        const updatedData = updatedDistribution(dataArray);
 
         //*Sort data from highest to lowest
         // const sortedData = updatedData.sort(
