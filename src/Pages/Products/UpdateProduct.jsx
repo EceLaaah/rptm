@@ -157,6 +157,7 @@ const UpdateProduct = (props) => {
           </div>
           <div className="w-full md:w-1/2 flex justify-center">
             <Card
+              kiloPerSack={kiloPerSack}
               imageUrl={information.imageUrl}
               kilograms={socks}
               price={price}

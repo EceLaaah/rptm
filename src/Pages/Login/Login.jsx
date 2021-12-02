@@ -50,6 +50,7 @@ const Login = () => {
       })
       .catch((error) => {
         setError({ status: true, errorMessage: error.message });
+        setLoading(false)
       });
   };
 
@@ -106,12 +107,16 @@ const Login = () => {
                   />
                 </div>
 
-                <div className="text-right mt-2">
+                {/* <div className="text-right mt-2">
                   <button className="text-sm text-primary hover:opacity-50">
                     Forgot Password?
                   </button>
-                </div>
-
+                </div> */}
+                {error.status && (
+                  <div className="border-l-2 py-2 my-5 border-red-500 bg-red-300 text-white text-center">
+                    {error.errorMessage}
+                  </div>
+                )}
                 <button
                   type="submit"
                   className="w-full block bg-primary hover:opacity-80 text-white font-semibold rounded-lg

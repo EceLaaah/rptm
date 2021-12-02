@@ -113,7 +113,7 @@ const Marketplace = () => {
             <h1 className="text-sm flex items-center gap-2">
               <span>Monthly Target :</span>
               <strong className="bg-primary py-1 px-3 font-bold rounded-full text-white">
-                {getTarget.targetNumber}
+                {getTarget.targetNumber.toLocaleString()}
               </strong>
             </h1>
           )}

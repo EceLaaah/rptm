@@ -38,6 +38,7 @@ const Products = () => {
         type.uid === userContext.uid && (
           <Card
             cardStyle="truncate"
+            kiloPerSack={type.kiloPerSack}
             key={index}
             imageUrl={type.imageUrl}
             kilograms={type.socks}

@@ -8,7 +8,6 @@ import { app } from '../../config/firebase'
 import { Link } from 'react-router-dom'
 import UseTargetPocurement from '../../lib/UseTargetPocurement'
 import swal from 'sweetalert'
-import { Type } from 'react-feather';
 
 export default function NFACart() {
     const [isDrawer, setDrawer] = useState(false);
@@ -21,7 +20,7 @@ export default function NFACart() {
 
     const pendingTransactions = filteredPendingTransaction(finishTransaction, context);
 
-    const subTotal = pendingTransactions.reduce((a, b) => a + b.socks, 0);
+    const subTotal = pendingTransactions.reduce((a, b) => a + b.total, 0);
 
     const onSubmit = (event) => {
         event.preventDefault();

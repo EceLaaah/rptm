@@ -1,6 +1,7 @@
 import React from "react";
 
 const Card = ({
+  kiloPerSack,
   cardStyle,
   key,
   imageUrl,
@@ -30,8 +31,10 @@ const Card = ({
           <h1 className="text-xl font-bold">{riceVariety}</h1>
           <h2 className="text-sm text-gray-400">{kilograms}sacks</h2>
         </div>
+
         <section>
           <span className="text-sm text-gray-400">{email}</span>
+          <p className="text-sm text-gray-400">{kiloPerSack} Kilo Per Sack</p>
           <div
             className={`text-sm text-gray-400 my-2 ${cardStyle}`}
             dangerouslySetInnerHTML={{ __html: description }}

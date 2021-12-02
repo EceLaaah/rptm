@@ -130,12 +130,12 @@ export default function Bidding({ open, onClose, id }) {
           uid: context.uid,
           farmerId: uid,
           quarter: `Q${quarter}`,
-          status: "pending",
+          status: "success",
           date_created: dateToday,
           isMilled: false,
           dateHarvested: new Date(dateHarvested.seconds * 1000)
         })
-        .then(() => {
+        .then((response) => {
           onUpdateTargetNumber(Number(total));
           onUpdateProduct(fetchProd[0].id, getSocks, app);
           setLoading(false);
@@ -149,6 +149,16 @@ export default function Bidding({ open, onClose, id }) {
         });
     }
   };
+
+
+  // const transactionDocument = (id) => {
+  //   const documentTransaction = document.collection("transaction").doc(id);
+
+  //   documentTransaction.update({
+  //     status: "success"
+  //   });
+  // }
+
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -222,8 +232,9 @@ export default function Bidding({ open, onClose, id }) {
       />
       <Spin spinning={loading}>
         <section className="md:flex gap-4 mt-60 md:mt-0">
-          <p>{kiloPerSack}</p>
+          {/* <p>{kiloPerSack}</p> */}
           <Card
+            kiloPerSack={kiloPerSack}
             imageUrl={imageUrl}
             kilograms={socks}
             price={price}

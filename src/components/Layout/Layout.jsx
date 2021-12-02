@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Spin, notification, Badge, Drawer, Divider, Switch } from "antd";
+import { Spin, notification, Drawer, Divider, Switch } from "antd";
 import { app } from "../../config/firebase";
 import { AuthContext } from "../../Context/auth";
 import { LogOut } from "react-feather";
 import { Link } from "react-router-dom";
 import { Textfield } from "../";
-import { Menu, X, Smile, ShoppingCart, Sliders } from "react-feather";
-import { filteredTransaction, filteredPendingTransaction } from "../../Utils/ReusableSyntax";
+import { Menu, X, Smile, Sliders } from "react-feather";
+import { filteredTransaction } from "../../Utils/ReusableSyntax";
 import { TransactionContext } from "../../Context/TransactionProvider";
 import swal from 'sweetalert';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
@@ -27,13 +27,13 @@ const Layout = ({ children }) => {
   const [toggle, setToggle] = useState(false);
   const [toggleDrawer, setToggleDrawer] = useState(false);
   const [sidebarToggle, setSidebarToggle] = useState(false);
-  const { transaction, finishTransaction } = useContext(TransactionContext);
+  const { transaction } = useContext(TransactionContext);
   const [{ municipality, population, perCapita, days }, setState] = useState(initialState);
   const [getPopulation, setPopulation] = useState([]);
   const [isCheck, setCheck] = useState(false);
   const [demand, setDemand] = useState(0);
 
-  const pendingtransaction = filteredPendingTransaction(finishTransaction, context);
+  //const pendingtransaction = filteredPendingTransaction(finishTransaction, context);
 
   const specificTransaction = filteredTransaction(transaction, context);
 
@@ -276,7 +276,7 @@ const Layout = ({ children }) => {
             <span className="mx-4 font-bold text-lg text-primary">Rice Procurement and Distribution Management System</span>
             <div className="mx-4 absolute right-0">
               <div className="flex items-center gap-4">
-                {info.role === "NFA" && (
+                {/* {info.role === "NFA" && (
                   <Badge count={pendingtransaction.length}>
                     <Link to="/nfacart">
                       <span>
@@ -284,7 +284,7 @@ const Layout = ({ children }) => {
                       </span>
                     </Link>
                   </Badge>
-                )}
+                )} */}
                 <div className="inline-block text-left relative">
                   <span
                     onClick={(event) => isToggle(event)}

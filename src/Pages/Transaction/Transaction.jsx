@@ -9,7 +9,6 @@ import {
   sortTypes,
   sortRiceVariety,
   onUpdateProduct,
-  OrderByNFA
 } from "../../Utils/ReusableSyntax";
 import { TransactionContext } from "../../Context/TransactionProvider";
 import { RiceVarietyContext } from "../../Context/RiceVarietyProvider";
@@ -197,8 +196,8 @@ const Transaction = () => {
   const transactionColumn = [
     {
       title: "Email",
-      dataIndex: "userEmail",
-      key: "userEmail",
+      dataIndex: `${info.role === "Trader" ? "farmerEmail" : "userEmail"}`,
+      key: `${info.role === "Trader" ? "farmerEmail" : "userEmail"}`,
       setDirections: sortTypes,
       sorter: sortRiceVariety,
     },
@@ -359,14 +358,6 @@ const Transaction = () => {
               column={transactionColumn}
             />
           </TabPane>
-          {/* <TabPane tab="Transaction History NFA" key={2}>
-            <TransactionHistory
-              length={TransactionNFA.length}
-              Total={TotalNFA}
-              Transaction={TransactionNFA}
-              column={transactionColumn}
-            />
-          </TabPane> */}
         </Tabs>
       ) : (
         <div>

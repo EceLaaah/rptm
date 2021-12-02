@@ -125,13 +125,13 @@ export default function Inventory() {
         )
       }
     },
-    {
-      title: "Palay Variety",
-      dataIndex: "riceVariety",
-      key: "riceVariety",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-    },
+    // {
+    //   title: "Palay Variety",
+    //   dataIndex: "riceVariety",
+    //   key: "riceVariety",
+    //   setDirections: sortTypes,
+    //   sorter: sortRiceVariety,
+    // },
     {
       title: "Sacks Purchased",
       dataIndex: "socks",
