@@ -72,9 +72,11 @@ export default function Bidding({ open, onClose, id }) {
     event.preventDefault();
 
     const document = app.firestore().collection("transaction").doc();
-
+    const defaultNFAPrice = 19
     const totalKilo = getSocks * kiloPerSack
-    const subTotal = getSocks * kiloPerSack * price
+    const subTotal = getSocks * kiloPerSack * defaultNFAPrice
+
+    console.log(getSocks, kiloPerSack, price, subTotal);
 
     const checkSocks = Number(getSocks) > Number(socks);
     const isCheckTarget = Number(totalKilo) > Number(getTarget.targetNumber)
@@ -124,7 +126,7 @@ export default function Bidding({ open, onClose, id }) {
           userEmail: context.email,
           productId: fetchProd[0].id,
           riceVariety: riceVariety,
-          price: 19,
+          price: defaultNFAPrice,
           totalKilograms: Number(totalKilo),
           total: Number(subTotal),
           reviewStatus: true,

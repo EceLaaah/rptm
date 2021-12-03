@@ -106,13 +106,13 @@ export default function Procurement() {
         return <span className="bg-blue-400 py-1 px-2 font-bold rounded-full text-white">{socks}</span>
       }
     },
-    // {
-    //   title: "Palay Variety",
-    //   dataIndex: "riceVariety",
-    //   key: "riceVariety",
-    //   setDirections: sortTypes,
-    //   sorter: sortRiceVariety,
-    // },
+    {
+      title: "Kilo Per Sack",
+      dataIndex: "kiloPerSack",
+      key: "kiloPerSack",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
+    },
     {
       title: "Price per kilo",
       dataIndex: "price",
