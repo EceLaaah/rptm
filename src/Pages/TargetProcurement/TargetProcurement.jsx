@@ -65,19 +65,19 @@ const TargetProcurement = () => {
         )
       }
     },
-    {
-      title: "Purchases",
-      key: "purchases",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-      render: (target) => {
-        return (
-          <button onClick={(event) => nextPage(event, target.id)} className="bg-transparent border border-blue-500 text-blue-900 hover:bg-blue-200 rounded-sm py-1 px-4 text-white">
-            Review
-          </button>
-        )
-      }
-    },
+    // {
+    //   title: "Purchases",
+    //   key: "purchases",
+    //   setDirections: sortTypes,
+    //   sorter: sortRiceVariety,
+    //   render: (target) => {
+    //     return (
+    //       <button onClick={(event) => nextPage(event, target.id)} className="bg-transparent border border-blue-500 text-blue-900 hover:bg-blue-200 rounded-sm py-1 px-4 text-white">
+    //         Review
+    //       </button>
+    //     )
+    //   }
+    // },
     {
       title: "Action",
       key: "action",

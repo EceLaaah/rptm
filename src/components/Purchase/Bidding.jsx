@@ -168,7 +168,7 @@ export default function Bidding({ open, onClose, id }) {
   const onSubmit = (event) => {
     event.preventDefault();
     const totalKilo = getSocks * kiloPerSack
-    const subTotal = getSocks * kiloPerSack * price
+    const subTotal = getSocks * kiloPerSack * bidding
 
     const document = app.firestore().collection("transaction").doc();
 
