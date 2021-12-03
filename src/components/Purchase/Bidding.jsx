@@ -120,6 +120,7 @@ export default function Bidding({ open, onClose, id }) {
           imageUrl,
           isNFA: true,
           socks: Number(getSocks),
+          farmerEmail: email,
           userEmail: context.email,
           productId: fetchProd[0].id,
           riceVariety: riceVariety,

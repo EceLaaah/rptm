@@ -221,6 +221,18 @@ const Transaction = () => {
   //*Traders Transaction
   const transactionColumn = [
     {
+      title: "Transaction Date",
+      dataIndex: "date_created",
+      key: "date_created",
+      render: (date_created) => {
+        return (
+          <Tag color="geekblue" key={date_created}>
+            {date_created && new Date(date_created.seconds * 1000).toISOString().substring(0, 10)}
+          </Tag>
+        );
+      },
+    },
+    {
       title: "Email",
       dataIndex: `${info.role === "Trader" ? "farmerEmail" : "userEmail"}`,
       key: `${info.role === "Trader" ? "farmerEmail" : "userEmail"}`,
@@ -261,38 +273,38 @@ const Transaction = () => {
         );
       },
     },
-    {
-      title: "Review Status",
-      dataIndex: "reviewStatus",
-      key: "reviewStatus",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-      render: (reviewStatus) => {
-        return (
-          <Tag color={reviewStatus ? "green" : "volcano"} key={reviewStatus}>
-            {reviewStatus ? "In Progress" : "Finished"}
-          </Tag>
-        );
-      },
-    },
-    {
-      title: "Winner Status",
-      dataIndex: "owned",
-      key: "owned",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-      render: (owned) => {
-        return (
-          <Tag color={owned ? "green" : "volcano"} key={owned}>
-            {owned === null
-              ? "Pending"
-              : owned === "won"
-                ? "Won the Bet"
-                : "Lost The Bet"}
-          </Tag>
-        );
-      },
-    },
+    // {
+    //   title: "Review Status",
+    //   dataIndex: "reviewStatus",
+    //   key: "reviewStatus",
+    //   setDirections: sortTypes,
+    //   sorter: sortRiceVariety,
+    //   render: (reviewStatus) => {
+    //     return (
+    //       <Tag color={reviewStatus ? "green" : "volcano"} key={reviewStatus}>
+    //         {reviewStatus ? "In Progress" : "Finished"}
+    //       </Tag>
+    //     );
+    //   },
+    // },
+    // {
+    //   title: "Winner Status",
+    //   dataIndex: "owned",
+    //   key: "owned",
+    //   setDirections: sortTypes,
+    //   sorter: sortRiceVariety,
+    //   render: (owned) => {
+    //     return (
+    //       <Tag color={owned ? "green" : "volcano"} key={owned}>
+    //         {owned === null
+    //           ? "Pending"
+    //           : owned === "won"
+    //             ? "Won the Bet"
+    //             : "Lost The Bet"}
+    //       </Tag>
+    //     );
+    //   },
+    // },
     {
       title: "Price",
       dataIndex: "price",
@@ -301,6 +313,16 @@ const Transaction = () => {
       sorter: sortRiceVariety,
       render: (text) => {
         return <span>₱{text}</span>;
+      },
+    },
+    {
+      title: "Kilo per sack",
+      dataIndex: "kiloPerSack",
+      key: "kiloPerSack",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
+      render: (kiloPerSack) => {
+        return <span>{kiloPerSack.toLocaleString()}</span>;
       },
     },
     {

@@ -7,6 +7,7 @@ import { ProductContext } from "../../Context/ProductProvider";
 import swal from "sweetalert";
 
 const information = {
+  dateHarvestedFormat: "",
   imageUrl: "",
   riceVariety: "",
   email: "",
@@ -23,7 +24,7 @@ const UpdateProduct = (props) => {
   const id = params.get("id");
 
   const [
-    { riceVariety, email, socks, price, description, kiloPerSack },
+    { dateHarvestedFormat, riceVariety, email, socks, price, description, kiloPerSack },
     setState,
   ] = useState(information);
 
@@ -46,6 +47,7 @@ const UpdateProduct = (props) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    const dateTimeStamp = new Date(dateHarvestedFormat);
 
     Loading();
 
@@ -57,6 +59,8 @@ const UpdateProduct = (props) => {
         email,
         socks: Number(socks),
         price: Number(price),
+        dateHarvested: dateTimeStamp,
+        dateHarvestedFormat,
         kiloPerSack: Number(kiloPerSack),
         description,
         id,
@@ -87,13 +91,30 @@ const UpdateProduct = (props) => {
     //   });
   };
 
+
   return (
     <Spin spinning={loading}>
       <div className="max-w-5xl bg-white rounded-lg mx-auto w-full shadow-lg p-6">
         <h1 className="text-2xl font-bold">Update Product</h1>
         <section className="flex md:flex-row flex-col justify-center gap-4">
           <div className="w-full md:w-1/2">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex items-center grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <Textfield
+                value={dateHarvestedFormat}
+                onChange={(event) => onChange(event)}
+                label="Date Harvested"
+                type="date"
+                name="dateHarvestedFormat"
+              />
+              {/* <div className="mb-1 sm:mb-4 mt-1 sm:mt-6">
+                <label
+                  className="block text-gray-700 text-sm font-semibold mb-2"
+                  htmlFor="email"
+                >
+                  Date harvested
+                </label>
+                <input type="date" name="dateHarvested" onChange={(event) => onChange(event)} value={dateHarv} data-date="" data-date-format="YYYY-MM-DD" className=" text-sm appearance-none rounded w-full py-2 px-3 text-gray-700 bg-gray-100 leading-tight focus:outline-none focus:shadow-outline h-10" />
+              </div> */}
               <Textfield
                 value={riceVariety}
                 onChange={(event) => onChange(event)}

@@ -9,7 +9,7 @@ import {
   AdminTable,
 } from "../../components";
 import { app } from "../../config/firebase";
-import { MyDateString } from "../../Utils";
+//import { MyDateString } from "../../Utils";
 import { arraySlice, filtered, onSearch } from "../../Utils/ReusableSyntax";
 import { Edit3, Trash2, PlusCircle } from "react-feather";
 import swal from "sweetalert";
@@ -24,6 +24,8 @@ export default function Rice() {
   const [id, setId] = useState("");
   const [current, setCurrent] = useState(1);
   const filteredVariety = filtered(fetchVariety, context);
+
+  const dateToday = new Date();
 
   // const today = new Date();
   // const dateToday = `${
@@ -59,7 +61,7 @@ export default function Rice() {
       render: (date_created) => {
         return (
           <Tag color="geekblue" key={date_created}>
-            {date_created}
+            {new Date(date_created.seconds * 1000).toISOString().substring(0, 10)}
           </Tag>
         );
       },
@@ -71,7 +73,7 @@ export default function Rice() {
       render: (date_updated) => {
         return (
           <Tag color="volcano" key={date_updated}>
-            {date_updated}
+            {date_updated && new Date(date_updated.seconds * 1000).toISOString().substring(0, 10)}
           </Tag>
         );
       },
@@ -126,7 +128,7 @@ export default function Rice() {
     document
       .update({
         variety,
-        date_updated: MyDateString,
+        date_updated: dateToday,
       })
       .then(() => {
         setLoading(false);
@@ -152,7 +154,7 @@ export default function Rice() {
       .set({
         uid: context.uid,
         variety,
-        date_created: MyDateString,
+        date_created: dateToday,
       })
       .then(() => {
         setLoading(false);

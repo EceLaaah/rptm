@@ -65,9 +65,6 @@ export default function PriceMonitoring() {
     ];
 
 
-
-
-
     //Group by rice variety
     function groupBy(collection, property) {
         var i = 0, val, index,
@@ -94,7 +91,7 @@ export default function PriceMonitoring() {
         const max = Math.max.apply(null, type.map((a) => a.price))
         const min = Math.min.apply(null, type.map((a) => a.price))
 
-        const average = max + min / arr.length;
+        const average = (max + min / arr.length).toFixed(1);
 
         const arr2 = type.filter((v, i, a) => {
             return a.findIndex(t => (t.riceVariety === v.riceVariety)) === i

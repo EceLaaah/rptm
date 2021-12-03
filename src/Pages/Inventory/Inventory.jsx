@@ -142,16 +142,16 @@ export default function Inventory() {
         return <span className="bg-blue-400 py-1 px-2 font-bold rounded-full text-white">{socks}</span>
       }
     },
-    // {
-    //   title: "Total",
-    //   dataIndex: "total",
-    //   key: "total",
-    //   setDirections: sortTypes,
-    //   sorter: sortRiceVariety,
-    //   render: (total) => {
-    //     return <span>{total.toLocaleString()}</span>
-    //   }
-    // },
+    {
+      title: "Kilo Per Sack",
+      dataIndex: "kiloPerSack",
+      key: "kiloPerSack",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
+      render: (kiloPerSack) => {
+        return <span>{kiloPerSack}</span>
+      }
+    },
     // {
     //   title: "Email",
     //   dataIndex: "userEmail",

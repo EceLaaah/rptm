@@ -76,6 +76,27 @@ export default function Procurement() {
       }
     },
     {
+      title: "Harvest Date",
+      dataIndex: "dateHarvested",
+      key: "dateHarvested",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
+      render: (dateHarvested) => {
+        return (
+          <Tag color="geekblue">
+            <span>{new Date(dateHarvested.seconds * 1000).toISOString().substring(0, 10)}</span>
+          </Tag>
+        )
+      }
+    },
+    {
+      title: "Farmer Email",
+      dataIndex: "farmerEmail",
+      key: "farmerEmail",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
+    },
+    {
       title: "Number of Sacks",
       dataIndex: "socks",
       key: "socks",
@@ -85,13 +106,13 @@ export default function Procurement() {
         return <span className="bg-blue-400 py-1 px-2 font-bold rounded-full text-white">{socks}</span>
       }
     },
-    {
-      title: "Palay Variety",
-      dataIndex: "riceVariety",
-      key: "riceVariety",
-      setDirections: sortTypes,
-      sorter: sortRiceVariety,
-    },
+    // {
+    //   title: "Palay Variety",
+    //   dataIndex: "riceVariety",
+    //   key: "riceVariety",
+    //   setDirections: sortTypes,
+    //   sorter: sortRiceVariety,
+    // },
     {
       title: "Price per kilo",
       dataIndex: "price",

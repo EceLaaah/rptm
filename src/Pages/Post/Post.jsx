@@ -132,6 +132,7 @@ const Post = () => {
                 kiloPerSack: Number(kiloPerSack),
                 price: Number(price),
                 dateHarvested: date,
+                dateHarvestedFormat: dateHarvested,
                 description: description,
                 imageUrl: imageUrl,
                 farmerIncome: info.income === undefined ? 0 : info.income
