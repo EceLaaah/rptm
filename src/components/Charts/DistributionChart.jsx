@@ -18,7 +18,7 @@ export default function DistributionChart({
 
     const updatedData = updatedDistribution(dataArray);
 
-    console.log(dataArray)
+    //console.log(dataArray)
 
     useEffect(() => {
         const ctx = chartDistribution.current;

@@ -44,8 +44,8 @@ const TranscationProvider = ({ children }) => {
           productAge: productAge,
           date_format: Months[month.getMonth()]
         });
+        setFinishTransaction(transactionArray);
       });
-      setFinishTransaction(transactionArray);
     });
   }
 

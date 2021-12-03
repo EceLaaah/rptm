@@ -25,6 +25,7 @@ export const updatedDistribution = (dataArray) => {
   }, {}))
 }
 
+
 export function getQuarter(d) {
   return Math.floor(d.getMonth() / 3) + 1
 }

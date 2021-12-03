@@ -4,7 +4,7 @@ import {
 } from "../../components";
 import { filteredByNFA, palayMonths, filtered } from '../../Utils/ReusableSyntax'
 import { DollarSign, Truck, Package, Folder, Plus } from "react-feather";
-import { DashboardCard, BarChart, PieChart, DisributionChart, ProcuredPalayTable } from '../../components'
+import { DashboardCard, BarChart, PieChart, DisributionChart } from '../../components'
 import { ProcurementContext } from '../../Context/ProcurementProvider'
 import { DistributionContext } from '../../Context/DistributionProvider'
 import { TransactionContext } from '../../Context/TransactionProvider'
@@ -25,8 +25,8 @@ function Dashboard() {
   const [isTarget, setTarget] = useState(false);
 
   const { getTarget } = UseTargetPocurement();
-
   const filteredNFA = filteredByNFA(finishTransaction, context);
+
 
   //**Palay that is equal or more than 9 months notification */
   const palayAge = palayMonths(filteredNFA)
@@ -34,6 +34,18 @@ function Dashboard() {
   const filterProcurement = filtered(fetchProcurement, context);
   const filterDistribution = filtered(distribution, context);
   const filterRiceMilled = filtered(riceMilled, context);
+
+  // const total = filteredNFA.reduce((obj, item) => {
+  //   const key = item.date_format;
+
+  //   if (obj[key]) {
+  //     obj[key].total + item[key].total
+  //   }
+
+  //   return obj
+  // })
+
+  //console.log(filteredNFA)
 
   const goToInventory = (event) => {
     event.preventDefault();

@@ -1,6 +1,8 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useMemo } from "react";
 import Chart from 'chart.js/auto'
-import { buildScales, buildLegend, updated, monthDiff } from '../../Utils/ReusableSyntax'
+import { buildScales, buildLegend, updated } from '../../Utils/ReusableSyntax'
+// import { AuthContext } from '../../Context/auth'
+// import { TransactionContext } from '../../Context/TransactionProvider'
 import { backgroundColor, borderColor, Months } from "../../Utils/index";
 
 const Analytics = ({
@@ -14,16 +16,21 @@ const Analytics = ({
     const [getQuarter, setQuarter] = useState("Q1");
     const procurement = useRef(null);
 
-    const updatedData = updated(dataArray);
+    // const { finishTransaction } = useContext(TransactionContext);
+    // const context = useContext(AuthContext)
+
+    // const filtered = filteredByNFA(finishTransaction, context);
+
+    const updatedData = useMemo(() => {
+        return updated(dataArray)
+    }, [getQuarter]);
 
 
     const quarterFilter = updatedData.filter((obj) => obj.quarter === getQuarter)
 
-    useEffect(() => {
+    const barChart = () => {
         const ctx = procurement.current;
         const sortTypes = "total";
-
-        //console.log(updatedData)
 
         //*Sort data from highest to lowest
         // const sortedData = updatedData.sort(
@@ -89,7 +96,9 @@ const Analytics = ({
                 myBarChart.destroy()
             }
         }
-    }, [getQuarter]);
+    }
+
+    useEffect(barChart, [getQuarter]);
 
     const listQuarter = ["Q1", "Q2", "Q3", "Q4"]
 

@@ -22,11 +22,9 @@ export default function Procurement() {
 
   //const { fetchProcurement } = useContext(ProcurementContext);
   const context = useContext(AuthContext);
-  const { finishTransaction } = useContext(TransactionContext);
+  const { finishTransaction, transaction } = useContext(TransactionContext);
 
-  const filteredTransaction = filteredByNFA(finishTransaction, context);
-
-  //const filteredProcuremnt = filtered(fetchProcurement, context);
+  const filteredTransaction = filteredByNFA(transaction, context);
 
   const isToggle = (event) => {
     event.preventDefault();
