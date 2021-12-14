@@ -10,6 +10,9 @@ export const map = {
   productAge: "productAge",
 };
 
+export const removeDuplicates = (dataArray) => {
+  return dataArray.filter((ele, ind) => ind === dataArray.findIndex(elem => elem.riceVariety === ele.riceVariety))
+}
 
 export const updatedDistribution = (dataArray) => {
   return Object.values(dataArray.reduce((obj, item) => {
@@ -201,6 +204,19 @@ export const filtered = (productItems, currentUseriId) => {
   });
 };
 
+export const filteredWonTheBet = (productItems) => {
+  return productItems.filter((obj) => {
+    return obj.owned === "won";
+  });
+};
+
+export const filteredLoseTheBet = (productItems) => {
+  return productItems.filter((obj) => {
+    return obj.owned === "lose";
+  });
+};
+
+
 //**filtered Farmer transaction by owners id and biddingStatus equal to true */
 export const filteredTransaction = (transaction, currentUseriId) => {
   return transaction.filter((obj) => {
@@ -250,9 +266,14 @@ export const onSearch = (value, items) => {
 
 export const filterTotal = (dataArray) => {
   const subTotal = dataArray.reduce((a, b) => a + b.price, 0);
-
   return subTotal;
 };
+
+export const filterTotalRiceMilled = (dataArray) => {
+  const subTotal = dataArray.reduce((a, b) => a + b.totalKilograms, 0);
+  return subTotal;
+};
+
 
 export const sortNumber = (product, sortType) => {
   return product.sort((a, b) => {
@@ -271,6 +292,12 @@ export const sortNumber = (product, sortType) => {
     }
   });
 }
+
+// export const filterProduct = (filterProduct, context) => {
+//   return filterProduct.filter((obj) => {
+//     return obj.uid === context.uid;
+//   })
+// }
 
 // //* return numerica and alphabetical sorted data
 // export const sortedIncome = (filterProduct, sortTypes) => {

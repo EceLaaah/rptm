@@ -64,7 +64,7 @@ export default function PieChart({
         angleField: 'value',
         colorField: 'type',
         radius: 1,
-        legend: false,
+        legend: true,
         label: {
             type: 'inner',
             offset: '-30%',
@@ -85,7 +85,7 @@ export default function PieChart({
         <div className="container mx-auto px-8 py-4 bg-white rounded-lg">
             <h1 className="text-2xl font-bold text-center py-3 text-primary">Distribution Pie Chart</h1>
             <div className="">
-                <Pie {...config} />;
+                <Pie {...config} />
                 {/* <canvas ref={distributionChart} height={width} width={height} /> */}
             </div>
         </div>

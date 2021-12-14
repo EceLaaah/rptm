@@ -9,6 +9,7 @@ import {
   sortTypes,
   sortRiceVariety,
   onUpdateProduct,
+  removeDuplicates
 } from "../../Utils/ReusableSyntax";
 import { TransactionContext } from "../../Context/TransactionProvider";
 import { RiceVarietyContext } from "../../Context/RiceVarietyProvider";
@@ -16,7 +17,7 @@ import { TargetProcurementContext } from '../../Context/TargetProcurementProvide
 import { AuthContext } from "../../Context/auth";
 import { app } from "../../config/firebase";
 import RolesHooks from "../../lib/RolesHook";
-import UseTargetPocurement from '../../lib/UseTargetPocurement'
+//import UseTargetPocurement from '../../lib/UseTargetPocurement'
 import swal from "sweetalert";
 
 const Transaction = () => {
@@ -39,6 +40,8 @@ const Transaction = () => {
   const { target } = useContext(TargetProcurementContext);
 
   const { info } = RolesHooks();
+
+  const getRiceVariety = removeDuplicates(filteredTransact)
 
   const onUpdateData = (id, owned) => {
     try {
@@ -287,24 +290,24 @@ const Transaction = () => {
     //     );
     //   },
     // },
-    // {
-    //   title: "Winner Status",
-    //   dataIndex: "owned",
-    //   key: "owned",
-    //   setDirections: sortTypes,
-    //   sorter: sortRiceVariety,
-    //   render: (owned) => {
-    //     return (
-    //       <Tag color={owned ? "green" : "volcano"} key={owned}>
-    //         {owned === null
-    //           ? "Pending"
-    //           : owned === "won"
-    //             ? "Won the Bet"
-    //             : "Lost The Bet"}
-    //       </Tag>
-    //     );
-    //   },
-    // },
+    {
+      title: "Winner Status",
+      dataIndex: "owned",
+      key: "owned",
+      setDirections: sortTypes,
+      sorter: sortRiceVariety,
+      render: (owned) => {
+        return (
+          <Tag color={owned ? "green" : "volcano"} key={owned}>
+            {owned === null
+              ? "Pending"
+              : owned === "won"
+                ? "Won the Bet"
+                : "Lost The Bet"}
+          </Tag>
+        );
+      },
+    },
     {
       title: "Price",
       dataIndex: "price",
@@ -355,9 +358,8 @@ const Transaction = () => {
           >
             <p class="font-bold">New Transaction!</p>
             <p>
-              you have a {filteredTransact.length} pending transaction please use
-              the <strong className="underline font-bold">Filter</strong> to show
-              all new transactions
+              you have a {filteredTransact.length} pending transaction you can use
+              the <strong className="underline font-bold">Filter</strong> to filter it by category
             </p>
           </div>
         )}
@@ -383,19 +385,20 @@ const Transaction = () => {
                   onChange={(event) => setVariety(event.target.value)}
                 >
                   <option value=""></option>
-                  {fetchVariety.map((variety) => (
-                    <option value={variety.variety}>{variety.variety}</option>
+                  {getRiceVariety.map((variety) => (
+                    <option value={variety.riceVariety}>{variety.riceVariety}</option>
                   ))}
                 </select>
               </div>
             </div>
-            {searchFilter != null && biddingReview ? (
+
+            {filteredTransact.length > 0 || searchFilter === null && !biddingReview ? (
               <Table
                 className="overflow-auto"
                 columns={columns}
                 rowKey={(filteredTransact) => filteredTransact.id}
                 dataSource={
-                  searchFilter === null ? filteredTransact : searchFilter
+                  searchFilter !== null && biddingReview ? searchFilter : filteredTransact
                 }
                 pagination={false}
               />
@@ -406,6 +409,24 @@ const Transaction = () => {
                 </h1>
               </div>
             )}
+            {/*               
+            {searchFilter != null && biddingReview ? (
+              <Table
+                className="overflow-auto"
+                columns={columns}
+                rowKey={(filteredTransact) => filteredTransact.id}
+                dataSource={
+                  filteredTransact
+                }
+                pagination={false}
+              />
+            ) : (
+              <div className="text-center">
+                <h1 className="mt-6 text-gray-500 font-bold text-xl opacity-40">
+                  No Bidding Data
+                </h1>
+              </div>
+            )} */}
           </TabPane>
           <TabPane tab="Transaction History" key={2}>
             <TransactionHistory

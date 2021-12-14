@@ -1,39 +1,74 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useEffect } from "react";
+// import {
+//   TargetProcurementModal,
+// } from "../../components";
 import {
-  TargetProcurementModal,
+  filteredByNFA,
+  palayMonths,
+  filtered,
+  filteredTransaction,
+  filteredDoneTransaction,
+  filteredWonTheBet,
+  filteredLoseTheBet
+} from "../../Utils/ReusableSyntax";
+import {
+  DollarSign,
+  Truck,
+  Package,
+  Folder,
+  Plus,
+  File,
+  Archive,
+  Check,
+  X,
+} from "react-feather";
+import {
+  DashboardCard,
+  Barchart,
+  PieChart,
+  DisributionChart,
 } from "../../components";
-import { filteredByNFA, palayMonths, filtered } from '../../Utils/ReusableSyntax'
-import { DollarSign, Truck, Package, Folder, Plus } from "react-feather";
-import { DashboardCard, BarChart, PieChart, DisributionChart } from '../../components'
-import { ProcurementContext } from '../../Context/ProcurementProvider'
-import { DistributionContext } from '../../Context/DistributionProvider'
-import { TransactionContext } from '../../Context/TransactionProvider'
-import UseTargetPocurement from "../../lib/UseTargetPocurement";
-import { AuthContext } from '../../Context/auth'
-import { Link, withRouter, useHistory } from 'react-router-dom'
-import { Divider, notification } from 'antd';
-import { SmileOutlined } from '@ant-design/icons';
+import { ProcurementContext } from "../../Context/ProcurementProvider";
+import { DistributionContext } from "../../Context/DistributionProvider";
+import { TransactionContext } from "../../Context/TransactionProvider";
+import { RiceVarietyContext } from "../../Context/RiceVarietyProvider";
+import { ProductContext } from "../../Context/ProductProvider";
+//import UseTargetPocurement from "../../lib/UseTargetPocurement";
+import UseRoles from "../../lib/RolesHook";
+import { AuthContext } from "../../Context/auth";
+import { withRouter, useHistory } from "react-router-dom";
+import { Divider, notification } from "antd";
+import { SmileOutlined } from "@ant-design/icons";
 
 function Dashboard() {
-
   const { distribution } = useContext(DistributionContext);
   const { fetchProcurement } = useContext(ProcurementContext);
-  const { finishTransaction, riceMilled } = useContext(TransactionContext);
+  const { finishTransaction, riceMilled, transaction } =
+    useContext(TransactionContext);
+  const { fetchVariety } = useContext(RiceVarietyContext);
+  const product = useContext(ProductContext);
   const history = useHistory();
   const context = useContext(AuthContext);
 
-  const [isTarget, setTarget] = useState(false);
+  const { info } = UseRoles();
 
-  const { getTarget } = UseTargetPocurement();
+  // const [isTarget, setTarget] = useState(false);
+
+  // const { getTarget } = UseTargetPocurement();
   const filteredNFA = filteredByNFA(finishTransaction, context);
 
-
   //**Palay that is equal or more than 9 months notification */
-  const palayAge = palayMonths(filteredNFA)
+  const palayAge = palayMonths(filteredNFA);
 
   const filterProcurement = filtered(fetchProcurement, context);
   const filterDistribution = filtered(distribution, context);
   const filterRiceMilled = filtered(riceMilled, context);
+  const filterProduct = filtered(product.product, context);
+  const filteredTransact = filteredTransaction(transaction, context);
+  const TransactionDone = filteredDoneTransaction(transaction, context);
+  const tradersTransaction = filtered(transaction, context);
+  const tradersWonTotal = filteredWonTheBet(tradersTransaction);
+  const tradersLoseTotal = filteredLoseTheBet(tradersTransaction);
 
   // const total = filteredNFA.reduce((obj, item) => {
   //   const key = item.date_format;
@@ -50,26 +85,31 @@ function Dashboard() {
   const goToInventory = (event) => {
     event.preventDefault();
     history.push("/inventory");
-  }
+  };
 
   const openNotification = () => {
     const btn = (
-      <button onClick={goToInventory} type="primary" size="small" className="bg-blue-500 hover:bg-blue-400 py-1 px-4 rounded-lg text-white">
+      <button
+        onClick={goToInventory}
+        type="primary"
+        size="small"
+        className="bg-blue-500 hover:bg-blue-400 py-1 px-4 rounded-lg text-white"
+      >
         inventory
       </button>
     );
-    notification.open({
-      message: 'Palay that is ready to distribute',
-      description:
-        `You already have ${palayAge.length} ready to distribute`,
-      icon: <SmileOutlined style={{ color: '#108ee9' }} />,
-      btn
-    });
+    info.role === "NFA" &&
+      notification.open({
+        message: "Palay that is ready to distribute",
+        description: `You already have ${palayAge.length} ready to distribute`,
+        icon: <SmileOutlined style={{ color: "#108ee9" }} />,
+        btn,
+      });
   };
 
   useEffect(openNotification, []);
 
-  const onTarget = () => setTarget((isTarget) => !isTarget);
+  //const onTarget = () => setTarget((isTarget) => !isTarget);
 
   const cardData = [
     {
@@ -102,11 +142,96 @@ function Dashboard() {
     },
   ];
 
-  return (
+  const cardFarmer = [
+    {
+      title: "Palay Variety",
+      numberData: fetchVariety.length,
+      icon: <File color="#FFF" size="25" />,
+      iconColor: "bg-red-300",
+      cardColor: "bg-red-400",
+    },
+    {
+      title: "Products",
+      numberData: filterProduct.length,
+      icon: <Package color="#FFF" size="25" />,
+      iconColor: "bg-green-300",
+      cardColor: "bg-green-400",
+    },
+    {
+      title: "Bidding Transact",
+      numberData: filteredTransact.length,
+      icon: <DollarSign color="#FFF" size="25" />,
+      iconColor: "bg-pink-300",
+      cardColor: "bg-pink-400",
+    },
+    {
+      title: "Transact History",
+      numberData: TransactionDone.length,
+      icon: <Archive color="#FFF" size="25" />,
+      iconColor: "bg-blue-300",
+      cardColor: "bg-blue-400",
+    },
+  ];
+
+  const cardTrader = [
+    {
+      title: "Won the bet",
+      numberData: tradersWonTotal.length,
+      icon: <Check color="#FFF" size="25" />,
+      iconColor: "bg-red-300",
+      cardColor: "bg-red-400",
+    },
+    {
+      title: "Lose the bet",
+      numberData: tradersLoseTotal.length,
+      icon: <X color="#FFF" size="25" />,
+      iconColor: "bg-green-300",
+      cardColor: "bg-green-400",
+    },
+    {
+      title: "Total Transaction",
+      numberData: tradersTransaction.length,
+      icon: <Archive color="#FFF" size="25" />,
+      iconColor: "bg-pink-300",
+      cardColor: "bg-pink-400",
+    },
+  ];
+
+  const traderDashboard = (
+    <div className="grid grid-rows gap-3 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mb-4 w-full">
+      {cardTrader.map((data, index) => (
+        <DashboardCard
+          key={index}
+          icon={data.icon}
+          title={data.title}
+          numberData={data.numberData}
+          iconColor={data.iconColor}
+          cardColor={data.cardColor}
+        />
+      ))}
+    </div>
+  );
+
+  const farmerDashboard = (
+    <div className="grid grid-rows gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4 w-full">
+      {cardFarmer.map((data, index) => (
+        <DashboardCard
+          key={index}
+          icon={data.icon}
+          title={data.title}
+          numberData={data.numberData}
+          iconColor={data.iconColor}
+          cardColor={data.cardColor}
+        />
+      ))}
+    </div>
+  );
+
+  const nfaDashboard = (
     <div>
-      <TargetProcurementModal isOpen={isTarget} isClose={onTarget} />
+      {/* <TargetProcurementModal isOpen={isTarget} isClose={onTarget} /> */}
       <h1 className="font-bold text-2xl text-primary">Dashboard</h1>
-      <span className="text-gray-400">Procured Rice Data Summary</span>
+      <span className="text-gray-400">Summary of all data</span>
       <Divider />
       <div className="grid grid-rows gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4 w-full">
         {cardData.map((data, index) => (
@@ -123,15 +248,13 @@ function Dashboard() {
       <div className="lg:flex gap-4">
         {filterDistribution.length > 0 && (
           <div className="lg:w-3/6 w-full bg-white rounded-lg">
-            <PieChart
-              distribution={filterDistribution}
-            />
+            <PieChart distribution={filterDistribution} />
           </div>
         )}
 
         {filteredNFA.length > 0 && (
           <div className="lg:w-11/12 w-full bg-white rounded-lg">
-            <BarChart
+            <Barchart
               dataArray={filteredNFA}
               width="40vw"
               height="70vw"
@@ -143,9 +266,9 @@ function Dashboard() {
         )}
       </div>
       {/**Barchart and number of distributions */}
-      <div className="lg:flex gap-4">
+      <div>
         {filterDistribution.length > 0 && (
-          <div className="lg:w-11/12  w-full rounded-lg bg-white mt-4">
+          <div className="w-full rounded-lg bg-white mt-4">
             <DisributionChart
               dataArray={filterDistribution}
               width="20vw"
@@ -157,7 +280,7 @@ function Dashboard() {
           </div>
         )}
 
-        {filteredNFA.length > 0 && (
+        {/* {filteredNFA.length > 0 && (
           <div className="rounded-lg lg:w-1/2 bg-white pt-8 pb-4 px-8 mt-4">
             <div className="mb-7 flex justify-between">
               <h1 className="text-sm flex items-center gap-2">
@@ -197,7 +320,7 @@ function Dashboard() {
                 </button></Link>
             </div>
           </div>
-        )}
+        )} */}
       </div>
 
       {/* <div className="my-4 py-6 px-8 bg-white rounded-lg">
@@ -214,8 +337,16 @@ function Dashboard() {
         )}
         <ProcuredPalayTable riceMilled={filterRiceMilled} />
       </div> */}
-    </div >
-  )
+    </div>
+  );
+
+  return (
+    <>
+      {info.role === "NFA" && nfaDashboard}
+      {info.role === "Farmer" && farmerDashboard}
+      {info.role === "Trader" && traderDashboard}
+    </>
+  );
 }
 
 export default withRouter(Dashboard);

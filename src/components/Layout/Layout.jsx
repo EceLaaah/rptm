@@ -6,7 +6,7 @@ import { LogOut } from "react-feather";
 import { Link } from "react-router-dom";
 import { Textfield } from "../";
 import { Menu, X, Smile, Sliders } from "react-feather";
-import { filteredTransaction } from "../../Utils/ReusableSyntax";
+import { filteredTransaction, filtered, filterTotalRiceMilled } from "../../Utils/ReusableSyntax";
 import { TransactionContext } from "../../Context/TransactionProvider";
 import swal from 'sweetalert';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
@@ -27,13 +27,16 @@ const Layout = ({ children }) => {
   const [toggle, setToggle] = useState(false);
   const [toggleDrawer, setToggleDrawer] = useState(false);
   const [sidebarToggle, setSidebarToggle] = useState(false);
-  const { transaction } = useContext(TransactionContext);
+  const { transaction, riceMilled } = useContext(TransactionContext);
   const [{ municipality, population, perCapita, days }, setState] = useState(initialState);
   const [getPopulation, setPopulation] = useState([]);
   const [isCheck, setCheck] = useState(false);
   const [demand, setDemand] = useState(0);
 
   //const pendingtransaction = filteredPendingTransaction(finishTransaction, context);
+
+  const filteredRiceMilled = filtered(riceMilled, context);
+  const subTotalRiceMilled = filterTotalRiceMilled(filteredRiceMilled);
 
   const specificTransaction = filteredTransaction(transaction, context);
 
@@ -177,10 +180,16 @@ const Layout = ({ children }) => {
         />
         <Divider />
         {demand !== 0 && (
-          <div className="flex items-center justify-between">
-            <span className="font-bold text-lg">Demand</span>
-            <span className="font-bold text-lg">{demand.toLocaleString()}kg</span>
-          </div>
+          <section>
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-bold text-lg">Total Rice Milled</span>
+              <span className="font-bold text-lg"> {subTotalRiceMilled * 0.7}kg</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-lg">Demand</span>
+              <span className="font-bold text-lg">{demand.toLocaleString()}kg</span>
+            </div>
+          </section>
         )}
         <div className="my-8 flex items-center justify-end gap-4">
           <button

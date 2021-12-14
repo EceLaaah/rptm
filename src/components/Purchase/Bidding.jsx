@@ -14,7 +14,7 @@ import { X } from "react-feather";
 //const date = new Date();
 
 const inputStyle =
-  "text-sm appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-10";
+  "mt-2 text-sm appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-10";
 
 const initialState = {
   imageUrl: "",
@@ -264,47 +264,60 @@ export default function Bidding({ open, onClose, id }) {
                 info.role === "NFA" ? onSubmitNFA(event) : onSubmit(event)
               }
             >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                <input
-                  value={email}
-                  readOnly={true}
-                  required
-                  type="text"
-                  className={`${inputStyle} bg-gray-200 `}
-                  placeholder="email"
-                  name="email"
-                />
-                <input
-                  value={socks}
-                  readOnly={true}
-                  required
-                  type="number"
-                  className={`${inputStyle} bg-gray-200 `}
-                  placeholder="socks"
-                  name="socks"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                <div>
+                  <label className="font-bold text-sm">Email</label>
+                  <input
+                    value={email}
+                    readOnly={true}
+                    required
+                    type="text"
+                    className={`${inputStyle} bg-gray-200`}
+                    placeholder="email"
+                    name="email"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-sm">Number of sacks</label>
+                  <input
+                    value={socks}
+                    readOnly={true}
+                    required
+                    type="number"
+                    className={`${inputStyle} bg-gray-200`}
+                    placeholder="socks"
+                    name="socks"
+                  />
+                </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                <input
-                  value={price}
-                  readOnly={true}
-                  required
-                  type="number"
-                  className={`${inputStyle} bg-gray-200 `}
-                  placeholder="Price Per Kilo"
-                  name="pricePerKilo"
-                />
-                <input
-                  value={riceVariety}
-                  readOnly={true}
-                  required
-                  type="text"
-                  className={`${inputStyle} bg-gray-200 `}
-                  placeholder="Rice Variety"
-                  name="riceVarity"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                <div>
+                  <label className="font-bold text-sm">Price</label>
+                  <input
+                    value={price}
+                    readOnly={true}
+                    required
+                    type="number"
+                    className={`${inputStyle} bg-gray-200`}
+                    placeholder="Price Per Kilo"
+                    name="pricePerKilo"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-sm">Palay Variety</label>
+                  <input
+                    value={riceVariety}
+                    readOnly={true}
+                    required
+                    type="text"
+                    className={`${inputStyle} bg-gray-200`}
+                    placeholder="Rice Variety"
+                    name="riceVarity"
+                  />
+                </div>
               </div>
-              <div className="mt-4">
+              <div className="mt-2">
+                <label className="font-bold text-sm">Description</label>
                 <textarea
                   value={description}
                   readOnly={true}
@@ -312,7 +325,7 @@ export default function Bidding({ open, onClose, id }) {
                   required
                   name="description"
                   placeholder="Description..."
-                  className="text-sm appearance-none rounded w-full py-2 px-3 text-gray-700 bg-gray-200 leading-tight focus:outline-none focus:shadow-outline"
+                  className="mt-2 text-sm appearance-none rounded w-full py-2 px-3 text-gray-700 bg-gray-200 leading-tight focus:outline-none focus:shadow-outline"
                   cols={20}
                   rows={2}
                 />
